@@ -1,5 +1,5 @@
 'use client'
-import { FC, FormEvent, useState } from 'react'
+import { FC, FormEvent, useEffect, useState } from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { ERROR_CODES } from '@/lib/api'
 
@@ -31,6 +31,17 @@ const HomePage: FC = () => {
             }
         }
     }
+
+    useEffect(() => {
+        fetch('/api/post', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((res) => res.json())
+            .then((res) => console.log(res))
+    }, [])
 
     return (
         <main>

@@ -29,6 +29,7 @@ model Post {
     content    String       @db.Text
     createdAt  DateTime     @default(now())
     updatedAt  DateTime     @updatedAt
+    published  Boolean      @default(false)
     author     Admin        @relation(fields: [authorId], references: [id])
     authorId   String
     comments   Comment[]
