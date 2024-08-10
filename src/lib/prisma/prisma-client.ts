@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { createDefaultAdmin } from './initialize-data/admin'
+import { createDefaultAdmin } from '@/lib/prisma/initialize-data'
 
 const prismaClientSingleton = () => {
     const prisma = new PrismaClient()
