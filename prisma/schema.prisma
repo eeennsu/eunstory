@@ -1,0 +1,72 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Admin {
+    id       String    @id @default(cuid())
+    password String    @db.VarChar(255)
+    name     String    @db.VarChar(255)
+    posts    Post[]
+    comments Comment[]
+}
+
+model Visitor {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    comments  Comment[]
+}
+
+model Post {
+    id         String       @id @default(cuid())
+    categoryId Int
+    category   PostCategory @relation(fields: [categoryId], references: [id])
+    title      String       @db.VarChar(255)
+    content    String       @db.Text
+    createdAt  DateTime     @default(now())
+    updatedAt  DateTime     @updatedAt
+    author     Admin        @relation(fields: [authorId], references: [id])
+    authorId   String
+    comments   Comment[]
+
+    @@index([categoryId], name: "categoryId")
+    @@index([title])
+}
+
+model PostCategory {
+    id    Int    @id @default(autoincrement())
+    name  String
+    posts Post[]
+}
+
+model Comment {
+    id              String   @id @default(cuid())
+    content         String   @db.Text
+    postId          String
+    post            Post     @relation(fields: [postId], references: [id])
+    createdAt       DateTime @default(now())
+    adminId         String
+    visitorAuthor   Visitor? @relation(fields: [visitorAuthorId], references: [id])
+    visitorAuthorId String?
+    adminAuthor     Admin?   @relation(fields: [adminAuthorId], references: [id])
+    adminAuthorId   String?
+}
+
+// VarChar(255) 가변 길이 문자열, 최대 가능 길이 255
+// Char(10) 고정 길이 문자열, 고정된 문자 수 10
+// Text 큰 텍스트 데이터 저장
+// Boolean true, false
+// Int 32비트 정수
+// BigInt 64비트 정수, 큰 범위의 정수
+// Float 32비트 부동 소수점
+// Decimal(10, 2) 소수점 이하의 숫자를 정확하게 저장할 수 있는 Decimal 타입을 지정. 10은 전체 자리수, scale은 소수점 이하 자리수 
+// Date  날짜 데이터 지정
+// Time 시간 데이터 지정
+// DateTime 날짜와 시간 데이터 지정
+// Json JSON 데이터 저장
+// Binary 바이너리 데이터 저장
+// Enum 열거형 데이터 저장
