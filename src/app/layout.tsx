@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '@/lib/css/globals.css'
 import { RootProvider } from '@/lib/providers'
+import { TopLoadingBar } from '@/features/top-loading-bar'
+import { Suspense } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +20,12 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body className={inter.className}>
-                <RootProvider>{children}</RootProvider>
+                <RootProvider>
+                    <Suspense fallback={null}>
+                        <TopLoadingBar />
+                    </Suspense>
+                    {children}
+                </RootProvider>
             </body>
         </html>
     )

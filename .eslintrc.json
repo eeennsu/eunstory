@@ -1,5 +1,5 @@
 {
-    "extends": ["next", "next/core-web-vitals", "airbnb", "airbnb/hooks", "prettier"],
+    "extends": ["next", "next/core-web-vitals", "prettier"],
     "rules": {
         "eqeqeq": "error",
         "no-console": "warn",
@@ -9,7 +9,7 @@
         "import/order": ["error", { "groups": [["builtin", "external", "internal"]] }],
         "no-duplicate-imports": "error",
         "jsx-a11y/anchor-is-valid": "off",
-        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off"
     }
 }

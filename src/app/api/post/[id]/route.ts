@@ -25,7 +25,7 @@ export const GET = async (request: Request, { params }: Params) => {
             return NextResponse.json({ error: 'Post not found' }, { status: 404 })
         }
 
-        return NextResponse.json({ data: { post } })
+        return NextResponse.json({ post })
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 })
     }

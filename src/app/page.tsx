@@ -2,6 +2,8 @@
 import { FC, FormEvent, useEffect, useState } from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { ERROR_CODES } from '@/lib/api'
+import { client } from '@/lib/axios/client-instance'
+import Link from 'next/link'
 
 const HomePage: FC = () => {
     const [id, setId] = useState<string>('')
@@ -33,21 +35,14 @@ const HomePage: FC = () => {
     }
 
     useEffect(() => {
-        fetch('/api/post', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((res) => res.json())
-            .then((res) => console.log(res))
+        client.get('/api/post').then((res) => console.log(res))
     }, [])
 
     return (
         <main>
             {status === 'authenticated' ? (
                 <div>
-                    <p>'hello world!'</p>
+                    <p>hello world!</p>
                     <button onClick={() => signOut()}>Logout</button>
                 </div>
             ) : (
@@ -67,6 +62,7 @@ const HomePage: FC = () => {
                     <button type='submit'>submit</button>
                 </form>
             )}
+            <Link href={'/post'}>Go to post</Link>
         </main>
     )
 }

@@ -46,8 +46,6 @@ const authOptions: AuthOptions = {
             },
         }),
     ],
-
-    debug: true,
     session: {
         strategy: 'jwt',
         maxAge: 60 * 60 * 6, // 6 hours

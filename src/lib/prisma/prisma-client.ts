@@ -11,9 +11,11 @@ const prismaClientSingleton = () => {
 
     setInitializeData()
         .then(() => {
+            // eslint-disable-next-line no-console
             console.log('🚀 Prisma is ready')
         })
         .catch(() => {
+            // eslint-disable-next-line no-console
             console.log('Failed to ready about prisma')
             process.exit(1)
         })
