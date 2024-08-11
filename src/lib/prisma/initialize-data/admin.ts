@@ -9,7 +9,7 @@ export const createDefaultAdmin = async (prisma: PrismaClient) => {
         throw new Error('ADMIN_ID and ADMIN_PASSWORD must be set in .env')
     }
 
-    const adminCount = await prisma.admin.count()
+    const adminCount = await prisma.user.count()
 
     if (adminCount === 0) {
         bcrypt.hash(adminPassword, 10, async (err, hash) => {
@@ -17,7 +17,7 @@ export const createDefaultAdmin = async (prisma: PrismaClient) => {
                 throw new Error('Failed to hash password')
             }
 
-            await prisma.admin.create({
+            await prisma.user.create({
                 data: {
                     id: adminId,
                     password: hash,

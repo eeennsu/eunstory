@@ -7,12 +7,13 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Admin {
+model User {
     id       String    @id @default(cuid())
     password String    @db.VarChar(255)
     name     String    @db.VarChar(255)
     posts    Post[]
     comments Comment[]
+    isAdmin  Boolean   @default(false)
 }
 
 model Visitor {
@@ -30,7 +31,7 @@ model Post {
     createdAt  DateTime     @default(now())
     updatedAt  DateTime     @updatedAt
     published  Boolean      @default(false)
-    author     Admin        @relation(fields: [authorId], references: [id])
+    author     User         @relation(fields: [authorId], references: [id])
     authorId   String
     comments   Comment[]
 
@@ -53,8 +54,8 @@ model Comment {
     adminId         String
     visitorAuthor   Visitor? @relation(fields: [visitorAuthorId], references: [id])
     visitorAuthorId String?
-    adminAuthor     Admin?   @relation(fields: [adminAuthorId], references: [id])
-    adminAuthorId   String?
+    userAuthor      User?    @relation(fields: [userAuthorId], references: [id])
+    userAuthorId    String?
 }
 
 // VarChar(255) 가변 길이 문자열, 최대 가능 길이 255

@@ -14,9 +14,11 @@ const prismaClientSingleton = () => {
             // eslint-disable-next-line no-console
             console.log('🚀 Prisma is ready')
         })
-        .catch(() => {
+        .catch((error) => {
             // eslint-disable-next-line no-console
-            console.log('Failed to ready about prisma')
+            console.log('❌  Failed to ready about prisma')
+            // eslint-disable-next-line no-console
+            console.log(error)
             process.exit(1)
         })
 

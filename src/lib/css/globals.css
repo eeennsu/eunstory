@@ -67,3 +67,9 @@
         @apply bg-background text-foreground;
     }
 }
+
+@layer components {
+    .page-container {
+        @apply flex flex-col w-full flex-1;
+    }
+}
