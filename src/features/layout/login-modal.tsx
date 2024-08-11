@@ -6,15 +6,14 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { Fragment, useState, type FC, type ReactNode } from 'react'
+import { Fragment, PropsWithChildren, useState, type FC, type ReactNode } from 'react'
 
 interface Props {
-    trigger: ReactNode
     isTriggered: boolean
     close: () => void
 }
 
-export const LoginModal: FC<Props> = ({ trigger, isTriggered, close }) => {
+export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered, close }) => {
     const [id, setId] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const { status } = useSession()
@@ -46,7 +45,7 @@ export const LoginModal: FC<Props> = ({ trigger, isTriggered, close }) => {
         <Dialog
             open={isTriggered}
             modal>
-            <DialogTrigger className='cursor-default'>{trigger}</DialogTrigger>
+            <DialogTrigger className='cursor-default'>{children}</DialogTrigger>
             <DialogContent
                 className='sm:max-w-[425px]'
                 outsideClick={close}

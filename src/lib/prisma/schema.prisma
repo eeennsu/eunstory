@@ -8,7 +8,8 @@ datasource db {
 }
 
 model User {
-    id       String    @id @default(cuid())
+    id       String    @id @default(cuid()) // primary key
+    username String    @unique // user id
     password String    @db.VarChar(255)
     name     String    @db.VarChar(255)
     posts    Post[]
@@ -23,26 +24,18 @@ model Visitor {
 }
 
 model Post {
-    id         String       @id @default(cuid())
-    categoryId Int
-    category   PostCategory @relation(fields: [categoryId], references: [id])
-    title      String       @db.VarChar(255)
-    content    String       @db.Text
-    createdAt  DateTime     @default(now())
-    updatedAt  DateTime     @updatedAt
-    published  Boolean      @default(false)
-    author     User         @relation(fields: [authorId], references: [id])
-    authorId   String
-    comments   Comment[]
+    id        String    @id @default(cuid())
+    title     String    @db.VarChar(255)
+    content   String    @db.Text
+    tags      String[]  @default([])
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    published Boolean   @default(false)
+    author    User      @relation(fields: [authorId], references: [id])
+    authorId  String
+    comments  Comment[]
 
-    @@index([categoryId], name: "categoryId")
     @@index([title])
-}
-
-model PostCategory {
-    id    Int    @id @default(autoincrement())
-    name  String
-    posts Post[]
 }
 
 model Comment {

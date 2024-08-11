@@ -19,9 +19,10 @@ export const createDefaultAdmin = async (prisma: PrismaClient) => {
 
             await prisma.user.create({
                 data: {
-                    id: adminId,
+                    username: adminId,
                     password: hash,
                     name: 'Eunstory Admin',
+                    isAdmin: true,
                 },
             })
         })

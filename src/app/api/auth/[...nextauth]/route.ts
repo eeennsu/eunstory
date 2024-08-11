@@ -29,7 +29,7 @@ const authOptions: AuthOptions = {
                 }
 
                 const admin = await prisma.user.findFirst({
-                    where: { id },
+                    where: { username: id },
                 })
 
                 if (!admin) {
@@ -42,7 +42,7 @@ const authOptions: AuthOptions = {
                     throw new Error(ERROR_CODES.INCORRECT_PASSWORD)
                 }
 
-                return { name: admin.name, isAdmin: admin.isAdmin }
+                return { '@id': admin.id, name: admin.name, isAdmin: admin.isAdmin }
             },
         }),
     ],
@@ -57,12 +57,14 @@ const authOptions: AuthOptions = {
         jwt: async ({ token, user }) => {
             if (user) {
                 token.isAdmin = user.isAdmin
+                token['@id'] = user['@id']
             }
 
             return token
         },
         session: async ({ session, token }) => {
             session.user.isAdmin = token.isAdmin as boolean | undefined
+            session.user['@id'] = token['@id'] as string | undefined
 
             return session
         },

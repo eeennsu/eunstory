@@ -27,15 +27,13 @@ export const Header: FC = () => {
                     />
                 </Link>
                 <LoginModal
-                    trigger={
-                        <div
-                            className='absolute bottom-0 left-1/2 right-1/2 -translate-x-1/2 w-28 h-10'
-                            onClick={() => setCount((prev) => prev + 1)}
-                        />
-                    }
                     isTriggered={count === 3}
-                    close={() => setCount(0)}
-                />
+                    close={() => setCount(0)}>
+                    <div
+                        className='absolute bottom-0 left-1/2 right-1/2 -translate-x-1/2 w-40 h-14 '
+                        onClick={() => setCount((prev) => prev + 1)}
+                    />
+                </LoginModal>
                 <nav className='flex gap-4 py-4 justify-center'>
                     {NAV_LINKS.map((link) => (
                         <Button

@@ -11,6 +11,6 @@ export const NAV_LINKS = [
     },
     {
         title: 'Posts',
-        url: routePaths.post(),
+        url: routePaths.post.list(),
     },
 ]

@@ -1,3 +1,21 @@
+const post = {
+    root() {
+        return routePaths.root.concat('post')
+    },
+
+    list() {
+        return post.root()
+    },
+
+    create() {
+        return post.root().concat('/create')
+    },
+
+    detail(id: string) {
+        return post.root().concat(`/${id}`)
+    },
+}
+
 export const routePaths = {
     root: '/',
 
@@ -9,11 +27,9 @@ export const routePaths = {
         return routePaths.root.concat('about')
     },
 
-    post(id?: string) {
-        return routePaths.root.concat('post').concat(id ? `/${id}` : '')
-    },
-
     admin() {
         return routePaths.root.concat('admin')
     },
+
+    post,
 }
