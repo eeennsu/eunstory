@@ -56,7 +56,7 @@ export const PostForm: FC = () => {
     }
 
     return (
-        <section className='flex w-full flex-1'>
+        <section className='flex w-full flex-1 bg-blue-300'>
             <form onSubmit={onSubmit}>
                 <Input
                     className='w-72'
