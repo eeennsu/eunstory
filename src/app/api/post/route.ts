@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma/prisma-client'
 import { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 
+// get post list
 export const GET = async (request: Request) => {
     const searchParams = new URL(request.url).searchParams
     const perPage = Number(searchParams.get('perPage')) || 5
@@ -29,6 +30,7 @@ export const GET = async (request: Request) => {
     }
 }
 
+// create post
 export const POST = async (request: NextRequest) => {
     try {
         const body = await request.json()
