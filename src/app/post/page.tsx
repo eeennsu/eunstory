@@ -1,15 +1,18 @@
 'use client'
 
+import { useAdminAuth } from '@/lib/hooks/useAdminAuth'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/shared/ui/button'
-import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import type { FC } from 'react'
 
 const PostListPage: FC = () => {
-    const { data, status } = useSession()
+    const { isAdminAuthed } = useAdminAuth()
 
-    console.log('data', data)
+    if (!isAdminAuthed) {
+        return null
+    }
+
     return (
         <main className='page-container max-w-[1200px] mx-auto'>
             <section className='flex justify-between w-full'>
