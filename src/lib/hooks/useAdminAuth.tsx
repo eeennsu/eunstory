@@ -1,12 +1,15 @@
-'use client'
-
 import { useSession, UseSessionOptions } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { routePaths } from '../route'
 import { useToast } from '@/shared/ui/use-toast'
 import { useEffect, useCallback } from 'react'
 
-export const useAdminAuth = (options: UseSessionOptions<boolean> = { required: true }) => {
+type Params = {
+    isProtectedRoute?: boolean
+    options?: UseSessionOptions<boolean>
+}
+
+export const useAdminAuth = ({ isProtectedRoute = false, options = { required: true } }: Params = {}) => {
     const router = useRouter()
     const { toast } = useToast()
     const { data, status } = useSession({
@@ -31,10 +34,10 @@ export const useAdminAuth = (options: UseSessionOptions<boolean> = { required: t
     }, [toast])
 
     useEffect(() => {
-        if (!isAdminAuthed) {
+        if (!isAdminAuthed && isProtectedRoute) {
             showToast()
         }
-    }, [isAdminAuthed, showToast])
+    }, [isAdminAuthed, isProtectedRoute, showToast])
 
     return { isAdminAuthed }
 }
