@@ -1,6 +1,6 @@
 'use client'
 
-import { useAdminAuth } from '@/lib/hooks/useAdminAuth'
+import { useAdminAuth } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/shared/ui/button'
 import Link from 'next/link'

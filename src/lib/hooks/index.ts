@@ -1,1 +1,1 @@
-export * from './useAdminAuth'
+export * from './use-admin-auth'

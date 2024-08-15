@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import '@/lib/css/globals.css'
 import { RootProvider } from '@/lib/providers'
 import { TopLoadingBar } from '@/features/top-loading-bar'
 import { Suspense } from 'react'
 import { Footer, Header } from '@/features/layout'
 import { Toaster } from '@/shared/ui/toaster'
+import '@/lib/css/globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,7 +31,7 @@ export default function RootLayout({
                         <div className='flex flex-col w-full flex-1 bg-orange-100'>{children}</div>
                         <Footer />
                     </div>
-                    <Toaster  />
+                    <Toaster />
                 </RootProvider>
             </body>
         </html>
