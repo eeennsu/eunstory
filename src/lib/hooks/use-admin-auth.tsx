@@ -15,17 +15,17 @@ type Params = {
 export const useAdminAuth = ({ isProtectedRoute = false, options = { required: true } }: Params = {}) => {
     const router = useRouter()
     const { toast } = useToast()
-    const { data, status } = useSession({
+    const { data: session, status } = useSession({
         ...options,
         onUnauthenticated: () => {
             isProtectedRoute && router.replace(routePaths.home())
         },
     })
 
-    const isAdminAuthed = status === 'authenticated' && data?.user?.isAdmin === true && data.expires
+    const isAdminAuthed = status === 'authenticated' && session?.user?.isAdmin === true && session.expires
 
     useEffect(() => {
-        if (!isAdminAuthed && isProtectedRoute) {
+        if (isAdminAuthed === false && isProtectedRoute) {
             toast({
                 title: '접근 권한이 없습니다.',
                 description: '관리자 권한이 필요합니다.',
