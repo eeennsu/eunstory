@@ -6,7 +6,7 @@ import { PostForm, PostPreview } from '@/widgets/home'
 import type { FC } from 'react'
 
 const CreatePostPage: FC = () => {
-    const { isAdminAuthed } = useAdminAuth()
+    const { isAdminAuthed } = useAdminAuth({ isProtectedRoute: true })
 
     if (!isAdminAuthed) {
         return null
