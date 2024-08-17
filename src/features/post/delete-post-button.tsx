@@ -1,9 +1,9 @@
 'use client'
 
 import { requestDeletePost } from '@/entities/post'
+import { useProgressBar } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/shared/ui/button'
-import { useRouter } from 'next/navigation'
 import type { FC } from 'react'
 
 interface Props {
@@ -11,12 +11,14 @@ interface Props {
 }
 
 export const DeletePostButton: FC<Props> = ({ id }) => {
-    const router = useRouter()
+    const { startBar, stopBar, router } = useProgressBar()
 
     const onDelete = async () => {
         if (!confirm('정말 삭제하시겠습니까?')) {
             return
         }
+
+        startBar()
 
         try {
             await requestDeletePost({ id })
@@ -25,6 +27,7 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
             alert('게시물 삭제에 실패했습니다')
         } finally {
             router.replace(routePaths.post.list())
+            stopBar()
         }
     }
 

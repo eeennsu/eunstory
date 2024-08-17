@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { RootProvider } from '@/lib/providers'
 import { TopLoadingBar } from '@/features/top-loading-bar'
-import { Suspense } from 'react'
 import { Footer, Header } from '@/features/layout'
 import '@/lib/css/globals.css'
 
@@ -22,9 +21,7 @@ export default function RootLayout({
         <html lang='en'>
             <body className={inter.className}>
                 <RootProvider>
-                    <Suspense fallback={null}>
-                        <TopLoadingBar />
-                    </Suspense>
+                    <TopLoadingBar />
                     <div className='flex w-full min-h-dvh flex-col items-center justify-center'>
                         <Header />
                         <div className='flex flex-col w-full flex-1 bg-orange-100'>{children}</div>
