@@ -61,7 +61,7 @@
 
 @layer base {
     * {
-        @apply border-border flex-wrap;
+        @apply border-border flex-wrap transition-all duration-300;
     }
     body {
         @apply bg-background text-foreground;

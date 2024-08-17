@@ -37,11 +37,20 @@ export const requestCreatePost = async ({ ...post }: Partial<Post>) => {
     }
 }
 
-export const requestGetPostList = async ({ perPage = 5, curPage = 1 }: { perPage?: number; curPage?: number }) => {
+export const requestGetPostList = async ({
+    perPage = 5,
+    curPage = 1,
+    tag,
+}: {
+    perPage?: number
+    curPage?: number
+    tag?: string
+}) => {
     try {
         const posts = (await prisma.post.findMany({
             where: {
                 published: true,
+                ...(tag && { tags: { has: tag } }),
             },
             skip: perPage * (curPage - 1),
             take: perPage,

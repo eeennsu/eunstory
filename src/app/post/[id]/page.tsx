@@ -1,13 +1,23 @@
+import { requestGetDetailPost } from '@/entities/post'
+import { getDateWithTime } from '@/lib/utils'
 import type { FC } from 'react'
 
-type Props = {
+interface Props {
     params: {
         id: string
     }
 }
 
-const DetailPostPage: FC<Props> = ({ params: { id } }) => {
-    return <div>DetailPostPage - {id}</div>
+const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
+    const { post } = await requestGetDetailPost({ id })
+
+    return (
+        <div>
+            <h1>{post.title}</h1>
+            <p>{post.content}</p>
+            {post.createdAt && <div>{getDateWithTime(post.createdAt)}</div>}
+        </div>
+    )
 }
 
 export default DetailPostPage

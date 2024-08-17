@@ -1,4 +1,6 @@
 import { requestGetPostList } from '@/entities/post'
+import { routePaths } from '@/lib/route'
+import Link from 'next/link'
 import { FC } from 'react'
 
 export const PostListBodyWidget: FC = async () => {
@@ -7,11 +9,12 @@ export const PostListBodyWidget: FC = async () => {
     return (
         <section className='flex gap-10'>
             {posts.map((post) => (
-                <div
+                <Link
                     key={post.id}
-                    className='border-2 border-black p-2'>
-                    {post.title}
-                </div>
+                    href={routePaths.post.detail(post.id)}
+                    className='hover:scale-110'>
+                    <div className='border-2 border-black p-2'>{post.title}</div>
+                </Link>
             ))}
         </section>
     )
