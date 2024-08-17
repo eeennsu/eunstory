@@ -49,6 +49,7 @@ export const requestGetPostList = async ({
     try {
         const posts = (await prisma.post.findMany({
             where: {
+                isActive: true,
                 published: true,
                 ...(tag && { tags: { has: tag } }),
             },
@@ -122,17 +123,18 @@ export const requestDeletePost = async ({ id }: { id: string }) => {
             throw new Error(`Post ID is required`)
         }
 
-        const deletedPost = await prisma.post.delete({
+        const deletedPost = await prisma.post.update({
             where: {
                 id,
+            },
+            data: {
+                isActive: false,
             },
         })
 
         if (!deletedPost) {
             throw new Error(`Failed to delete post`)
         }
-
-        return { deletedPost }
     } catch (error) {
         throw error
     }

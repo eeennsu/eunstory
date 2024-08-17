@@ -25,6 +25,7 @@ model Visitor {
 
 model Post {
     id        String    @id @unique @default(cuid())
+    isActive  Boolean   @default(true)
     title     String    @db.VarChar(255)
     content   String    @db.Text
     tags      String[]  @default([])
@@ -40,6 +41,7 @@ model Post {
 
 model Comment {
     id              String   @id @default(cuid())
+    isActive        Boolean  @default(true)
     content         String   @db.Text
     postId          String
     post            Post     @relation(fields: [postId], references: [id])
