@@ -24,7 +24,7 @@ model Visitor {
 }
 
 model Post {
-    id        String    @id @default(cuid())
+    id        String    @id @unique @default(cuid())
     title     String    @db.VarChar(255)
     content   String    @db.Text
     tags      String[]  @default([])

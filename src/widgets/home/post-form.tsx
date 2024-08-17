@@ -1,7 +1,6 @@
 'use client'
 
 import { requestCreatePost } from '@/entities/post'
-import { client } from '@/lib/axios/client-instance'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
@@ -16,9 +15,7 @@ export const PostForm: FC = () => {
     const { data } = useSession()
     const router = useRouter()
 
-    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-
+    const onSubmit = async () => {
         if (!title?.length || !content?.length) {
             alert('제목과 내용은 필수입니다.')
             return
@@ -40,7 +37,7 @@ export const PostForm: FC = () => {
         try {
             const response = await requestCreatePost(body)
 
-            if (response.status === 201 && response.data?.post) {
+            if (response?.createdPost) {
                 alert('게시물이 생성되었습니다.')
                 setTitle('')
                 setContent('')
@@ -57,7 +54,7 @@ export const PostForm: FC = () => {
 
     return (
         <section className='flex w-full flex-1 bg-blue-300'>
-            <form onSubmit={onSubmit}>
+            <form action={onSubmit}>
                 <Input
                     className='w-72'
                     value={title}

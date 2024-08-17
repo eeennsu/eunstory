@@ -1,6 +1,6 @@
 'use client'
 
-import { ERROR_CODES } from '@/lib/api'
+import { ERROR_CODES } from '@/lib/fetch'
 import { Button } from '@/shared/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog'
 import { Input } from '@/shared/ui/input'

@@ -1,13 +1,13 @@
-import { ERROR_CODES } from '@/lib/api'
+import { ERROR_CODES } from '@/lib/fetch'
 import { User } from '@prisma/client'
 import { AuthOptions } from 'next-auth'
 import NextAuth from 'next-auth/next'
 import CredentialsProvider, { CredentialInput } from 'next-auth/providers/credentials'
-import * as bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import prisma from '@/lib/prisma/prisma-client'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 
-const authOptions: AuthOptions = {
+export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
         CredentialsProvider({
