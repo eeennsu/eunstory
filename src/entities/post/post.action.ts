@@ -22,8 +22,8 @@ export const requestCreatePost = async ({ ...post }: Partial<Post>) => {
             data: {
                 title,
                 content,
-                tags,
                 authorId,
+                tags,
             },
         })
 
@@ -53,7 +53,9 @@ export const requestGetPostList = async ({
             where: {
                 isActive: true,
                 published: true,
-                ...(tag && { tags: { has: tag } }),
+                tags: {
+                    contains: tag,
+                },
             },
             skip: perPage * (curPage - 1),
             take: perPage,

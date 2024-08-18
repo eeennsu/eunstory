@@ -3,15 +3,15 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
+    provider = "sqlite"
     url      = env("DATABASE_URL")
 }
 
 model User {
     id       String    @id @default(cuid()) // primary key
     username String    @unique // user id
-    password String    @db.VarChar(255)
-    name     String    @db.VarChar(255)
+    password String
+    name     String
     posts    Post[]
     comments Comment[]
     isAdmin  Boolean   @default(false)
@@ -26,9 +26,9 @@ model Visitor {
 model Post {
     id        String    @id @unique @default(cuid())
     isActive  Boolean   @default(true)
-    title     String    @db.VarChar(255)
-    content   String    @db.Text
-    tags      String[]  @default([])
+    title     String
+    content   String
+    tags      String?
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     published Boolean   @default(false)
@@ -42,7 +42,7 @@ model Post {
 model Comment {
     id              String   @id @default(cuid())
     isActive        Boolean  @default(true)
-    content         String   @db.Text
+    content         String
     postId          String
     post            Post     @relation(fields: [postId], references: [id])
     createdAt       DateTime @default(now())
