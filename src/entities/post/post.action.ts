@@ -47,6 +47,8 @@ export const requestGetPostList = async ({
     tag?: string
 }) => {
     try {
+        const totalCount = await prisma.post.count()
+
         const posts = (await prisma.post.findMany({
             where: {
                 isActive: true,
@@ -64,7 +66,7 @@ export const requestGetPostList = async ({
             throw new Error(`Posts not found`)
         }
 
-        return { posts }
+        return { totalCount, posts }
     } catch (error) {
         throw error
     }
