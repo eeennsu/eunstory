@@ -60,13 +60,13 @@ export const authOptions: AuthOptions = {
                 token['@id'] = user['@id']
             }
 
-            return token
+            return Promise.resolve(token)
         },
         session: async ({ session, token }) => {
             session.user.isAdmin = token.isAdmin as boolean | undefined
             session.user['@id'] = token['@id'] as string | undefined
 
-            return session
+            return Promise.resolve(session)
         },
     },
 }

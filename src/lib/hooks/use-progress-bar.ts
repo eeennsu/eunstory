@@ -6,7 +6,7 @@ export const useProgressBar = () => {
     const startBar = () => startProgress()
     const stopBar = () => stopProgress()
     const router = useRouter()
-    
+
     return {
         router,
         startBar,

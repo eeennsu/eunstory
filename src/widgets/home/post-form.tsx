@@ -1,19 +1,18 @@
 'use client'
 
 import { requestCreatePost } from '@/entities/post'
+import { useAdminAuth, useProgressBar } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Post } from '@prisma/client'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { FormEvent, useState, type FC } from 'react'
+import { useState, type FC } from 'react'
 
 export const PostForm: FC = () => {
     const [title, setTitle] = useState<string>('')
     const [content, setContent] = useState<string>('')
-    const { data } = useSession()
-    const router = useRouter()
+    const { adminId: authorId } = useAdminAuth()
+    const { startBar, stopBar, router } = useProgressBar()
 
     const onSubmit = async () => {
         if (!title?.length || !content?.length) {
@@ -21,12 +20,12 @@ export const PostForm: FC = () => {
             return
         }
 
-        const authorId = data?.user['@id']
-
         if (!authorId) {
             alert('로그인이 필요합니다.')
             return
         }
+
+        startBar()
 
         const body: Partial<Post> = {
             title,
@@ -38,7 +37,6 @@ export const PostForm: FC = () => {
             const response = await requestCreatePost(body)
 
             if (response?.createdPost) {
-                alert('게시물이 생성되었습니다.')
                 setTitle('')
                 setContent('')
             } else {
@@ -48,7 +46,8 @@ export const PostForm: FC = () => {
             console.error(error)
             alert('게시물 생성에 실패했습니다')
         } finally {
-            router.push(routePaths.post.list())
+            router.replace(routePaths.post.list())
+            stopBar()
         }
     }
 

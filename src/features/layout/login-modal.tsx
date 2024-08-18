@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { Fragment, PropsWithChildren, useState, type FC, type ReactNode } from 'react'
+import { Fragment, PropsWithChildren, useState, type FC } from 'react'
 
 interface Props {
     isTriggered: boolean

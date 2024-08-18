@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useSession, UseSessionOptions } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { routePaths } from '@/lib/route'
@@ -32,15 +31,14 @@ export const useAdminAuth = ({ isProtectedRoute = false, options = { required: t
                             ),
                             duration: 3000,
                         }),
-                    100
+                    500
                 )
             }
         },
     })
 
     const isAdminAuthed = status === 'authenticated' && session?.user?.isAdmin === true && session.expires
+    const adminId = session?.user['@id'] || undefined
 
-    return { isAdminAuthed }
+    return { isAdminAuthed, adminId }
 }
-
-

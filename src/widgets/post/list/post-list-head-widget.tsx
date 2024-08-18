@@ -7,7 +7,7 @@ import Link from 'next/link'
 import type { FC } from 'react'
 
 export const PostListHeadWidget: FC = () => {
-    const { isAdminAuthed } = useAdminAuth({ isProtectedRoute: false })
+    const { isAdminAuthed } = useAdminAuth()
 
     return (
         <section className='flex justify-between w-full'>
