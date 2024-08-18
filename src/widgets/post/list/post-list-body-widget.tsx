@@ -34,9 +34,6 @@ export const PostListBodyWidget: FC = () => {
         fetch()
     }, [curPage])
 
-    console.log('postList.length', postList.length)
-    console.log('curPage', curPage)
-
     return (
         <section className='flex gap-10 flex-col'>
             {postList.map((post) => (

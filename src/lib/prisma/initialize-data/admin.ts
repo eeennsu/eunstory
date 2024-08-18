@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 export const createDefaultAdmin = async (prisma: PrismaClient) => {
-    const adminId = process.env.NEXT_PUBLIC_ADMIN_ID
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
+    const adminId = process.env.ADMIN_ID
+    const adminPassword = process.env.ADMIN_PASSWORD
 
     if (!adminId || !adminPassword) {
         throw new Error('ADMIN_ID and ADMIN_PASSWORD must be set in .env')
