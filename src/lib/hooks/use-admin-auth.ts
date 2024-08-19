@@ -3,8 +3,8 @@
 import { useSession, UseSessionOptions } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { routePaths } from '@/lib/route'
-import { cn } from '@/lib/shadcn'
-import { useToast } from '@/shared/ui/use-toast'
+import { useToast } from '@/lib/ui/use-toast'
+import {} from '@/lib/'
 
 type Params = {
     isProtectedRoute?: boolean

@@ -1,10 +1,10 @@
 'use client'
 
 import { ERROR_CODES } from '@/lib/fetch'
-import { Button } from '@/shared/ui/button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog'
-import { Input } from '@/shared/ui/input'
-import { Label } from '@/shared/ui/label'
+import { Button } from '@/lib/ui/button'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/lib/ui/dialog'
+import { Input } from '@/lib/ui/input'
+import { Label } from '@/lib/ui/label'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { Fragment, PropsWithChildren, useState, type FC } from 'react'
 

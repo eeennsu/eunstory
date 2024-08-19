@@ -3,7 +3,7 @@
 import { requestDeletePost } from '@/entities/post'
 import { useProgressBar } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
-import { Button } from '@/shared/ui/button'
+import { Button } from '@/lib/ui/button'
 import type { FC } from 'react'
 
 interface Props {
