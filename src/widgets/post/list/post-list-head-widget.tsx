@@ -2,7 +2,7 @@
 
 import { useAdminAuth } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
-import { Button } from '@/shared/ui/button'
+import { Button } from '@/lib/ui/button'
 import Link from 'next/link'
 import type { FC } from 'react'
 

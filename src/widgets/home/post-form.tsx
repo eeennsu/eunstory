@@ -3,8 +3,8 @@
 import { requestCreatePost } from '@/entities/post'
 import { useAdminAuth, useProgressBar } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
-import { Button } from '@/shared/ui/button'
-import { Input } from '@/shared/ui/input'
+import { Button } from '@/lib/ui/button'
+import { Input } from '@/lib/ui/input'
 import { Post } from '@prisma/client'
 import { useState, type FC } from 'react'
 
