@@ -1,8 +1,9 @@
 'use server'
 
-import prisma from '@/lib/prisma/prisma-client'
+
 import { getServerAuth } from '@/lib/utils'
 import { Post } from '@prisma/client'
+import prisma from '../../../prisma/prisma-client';
 
 export const requestCreatePost = async ({ ...post }: Partial<Post>) => {
     try {
@@ -139,6 +140,23 @@ export const requestDeletePost = async ({ id }: { id: string }) => {
         if (!deletedPost) {
             throw new Error(`Failed to delete post`)
         }
+    } catch (error) {
+        throw error
+    }
+}
+
+// create comment
+export const requestCreateComment = async ({}: {
+    postId: string
+    content: string
+    authorId: string
+    authorType: 'admin' | 'visitor'
+}) => {
+    try {
+        const { isAdminAuthed } = await getServerAuth()
+        
+        const createdComment = await prisma.comment
+
     } catch (error) {
         throw error
     }
