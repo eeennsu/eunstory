@@ -1,7 +1,7 @@
 import type { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerAuth } from '@/lib/utils'
-import prisma from '../../../../prisma/prisma-client'
+import prisma from '@/lib/prisma/prisma-client'
 
 // get post list
 export const GET = async (request: Request) => {
