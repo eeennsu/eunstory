@@ -34,9 +34,9 @@ export const PostForm: FC = () => {
         }
 
         try {
-            const response = await requestCreatePost(body)
+            const response = await requestCreatePost({ post: body })
 
-            if (response?.createdPost) {
+            if (response?.post) {
                 setTitle('')
                 setContent('')
             } else {

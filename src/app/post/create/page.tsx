@@ -1,7 +1,7 @@
 'use client'
 
 import { useAdminAuth } from '@/lib/hooks'
-import { cn } from '@/lib/shadcn'
+import { cn } from '@/lib/shadcn/shadcn-utils'
 import { PostForm, PostPreview } from '@/widgets/home'
 import type { FC } from 'react'
 

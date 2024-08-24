@@ -46,10 +46,7 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
             open={isTriggered}
             modal>
             <DialogTrigger className='cursor-default'>{children}</DialogTrigger>
-            <DialogContent
-                className='sm:max-w-[425px]'
-                outsideClick={close}
-                isCloseHidden>
+            <DialogContent className='sm:max-w-[425px]'>
                 <DialogHeader>
                     <div className='flex justify-between items-center'>
                         <DialogTitle>Hello Eunsu!</DialogTitle>

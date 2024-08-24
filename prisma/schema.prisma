@@ -1,3 +1,28 @@
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+    id       String    @id @default(cuid()) // primary key
+    username String    @unique // user id
+    password String
+    name     String
+    posts    Post[]
+    comments Comment[]
+    isAdmin  Boolean   @default(false)
+}
+
+model Visitor {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    comments  Comment[]
+}
+
 model Post {
     id        String    @id @unique @default(cuid())
     isActive  Boolean   @default(true)

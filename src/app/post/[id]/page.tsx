@@ -12,6 +12,10 @@ interface Props {
 const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
     const { post } = await requestGetDetailPost({ id })
 
+    if (!post) {
+        throw new Error('Post not found')
+    }
+
     return (
         <div>
             <h1>{post.title}</h1>
