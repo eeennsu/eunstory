@@ -1,4 +1,3 @@
-import { requestGetDefaultPostList } from '@/entities/post'
 import { PostListBodyWidget, PostListHeadWidget } from '@/widgets/post/list'
 import type { FC } from 'react'
 

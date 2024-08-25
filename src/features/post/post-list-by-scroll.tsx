@@ -4,14 +4,16 @@ import { requestGetPostList } from '@/entities/post'
 import { useInfiniteScroll } from '@/lib/hooks/use-infinite-scroll'
 import { routePaths } from '@/lib/route'
 import { Post } from '@prisma/client'
+import { Ellipsis } from 'lucide-react'
 import Link from 'next/link'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState, useTransition } from 'react'
 
 interface Props {
     initialPosts: Post[]
 }
 
 export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
+    const [isPending, startTransition] = useTransition()
     const [curPage, setCurPage] = useState<number>(1)
     const [postList, setPostList] = useState<Post[]>([...initialPosts])
     const [hasMore, setHasMore] = useState<boolean>(true)
@@ -27,7 +29,7 @@ export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
     useEffect(() => {
         if (curPage === 1) return
 
-        const fetch = async () => {
+        startTransition(async () => {
             const { totalCount, posts } = await requestGetPostList({
                 curPage,
                 perPage,
@@ -35,9 +37,7 @@ export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
 
             setHasMore(totalCount > perPage * curPage)
             setPostList((prev) => [...prev, ...posts])
-        }
-
-        fetch()
+        })
     }, [curPage])
 
     return (
@@ -50,6 +50,11 @@ export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
                     <div className='border-2 border-black p-2 h-80 text-5xl'>{post.title}</div>
                 </Link>
             ))}
+            {isPending && (
+                <div className='w-full flex justify-center'>
+                    <Ellipsis className='size-8 animate-ping' />
+                </div>
+            )}
             {hasMore && (
                 <div
                     className='h-4'

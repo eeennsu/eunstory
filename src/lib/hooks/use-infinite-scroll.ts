@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface InfiniteScrollProps {
     onIntersect: () => void
@@ -8,7 +8,7 @@ interface InfiniteScrollProps {
 
 export const useInfiniteScroll = ({
     onIntersect,
-    options = { threshold: 0.1, rootMargin: '0px' },
+    options = { threshold: 0.1, rootMargin: '10px' },
     hasMore,
 }: InfiniteScrollProps) => {
     const targetRef = useRef<HTMLDivElement>(null)
@@ -19,7 +19,6 @@ export const useInfiniteScroll = ({
 
         observerRef.current = new IntersectionObserver(([entry]) => {
             if (entry.isIntersecting) {
-                console.log('intersect')
                 onIntersect()
             }
         }, options)
