@@ -18,4 +18,3 @@ export const generateRequest = async <T>({ method = 'GET', url, body, config }: 
 
     return response.json()
 }
-
