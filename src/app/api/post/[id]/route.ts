@@ -1,10 +1,11 @@
+import { NextResponseData } from '@/lib/fetch/return-type'
 import prisma from '@/lib/prisma/prisma-client'
 import { Post } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
 type Params = {
     params: {
-        id: string
+        id?: string
     }
 }
 
@@ -32,6 +33,8 @@ export const GET = async (_: Request, { params }: Params) => {
         return NextResponse.json({ error }, { status: 500 })
     }
 }
+
+export type ResponseGetDetailPostType = NextResponseData<typeof GET>
 
 // edit post
 export const PATCH = async (request: Request, { params }: Params) => {
@@ -67,6 +70,8 @@ export const PATCH = async (request: Request, { params }: Params) => {
     }
 }
 
+export type ResponsePatchDetailPostType = NextResponseData<typeof PATCH>
+
 // delete post
 export const DELETE = async (_: Request, { params }: Params) => {
     try {
@@ -94,3 +99,5 @@ export const DELETE = async (_: Request, { params }: Params) => {
         return NextResponse.json({ error }, { status: 500 })
     }
 }
+
+export type ResponseDeleteDetailPostType = NextResponseData<typeof DELETE>

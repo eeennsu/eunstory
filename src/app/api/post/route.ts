@@ -2,20 +2,14 @@ import type { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerAuth } from '@/lib/utils'
 import prisma from '@/lib/prisma/prisma-client'
+import { NextResponseData } from '@/lib/fetch/return-type'
 
 // get post list
 export const GET = async (request: Request) => {
-    const { isAdminAuthed } = await getServerAuth()
-
-    if (!isAdminAuthed) {
-        throw new Error(`Unauthorized`)
-    }
-
     const searchParams = new URL(request.url).searchParams
-    const perPage = Number(searchParams.get('perPage'))
     const curPage = Number(searchParams.get('curPage'))
-    const body = await request.json()
-    const tag = body?.tag || ''
+    const perPage = Number(searchParams.get('perPage'))
+    const tag = searchParams.get('tag') || ''
 
     try {
         const totalCount = await prisma.post.count()
@@ -43,6 +37,8 @@ export const GET = async (request: Request) => {
         return NextResponse.json({ error }, { status: 500 })
     }
 }
+
+export type ResponseGetPostListType = NextResponseData<typeof GET>
 
 // create post
 export const POST = async (request: NextRequest) => {
@@ -78,3 +74,5 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ error }, { status: 500 })
     }
 }
+
+export type ResponseCreatePostType = NextResponseData<typeof POST>

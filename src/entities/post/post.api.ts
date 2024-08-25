@@ -1,8 +1,10 @@
+import { ResponseGetPostListType } from '@/app/api/post/route'
 import { Post } from '@prisma/client'
 
 // server
-export const requestGetDefaultPost = async () => {
-    const res = await fetch('http://localhost:3000/api/post')
+export const requestGetDefaultPostList = async () => {
+    const res = await fetch('http://localhost:3000/api/post?curPage=1&perPage=5', { cache: 'no-store' })
+
     return res.json()
 }
 
@@ -21,7 +23,7 @@ export const requestGetPostList = async ({
     params.append('curPage', curPage.toString())
     params.append('perPage', perPage.toString())
 
-    const res = await fetch(`/api/post?${params.toString()}`)
+    const res = await fetch(`/api/post?${params.toString()}`, { cache: 'no-store' })
     return res.json()
 }
 
