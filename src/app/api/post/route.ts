@@ -2,10 +2,16 @@ import type { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerAuth } from '@/lib/utils'
 import prisma from '@/lib/prisma/prisma-client'
-import { NextResponseData } from '@/lib/fetch/return-type'
+import { NextResponseData } from '@/lib/fetch'
 
 // get post list
 export const GET = async (request: Request) => {
+    const { isAdminAuthed } = await getServerAuth()
+
+    if (!isAdminAuthed) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const searchParams = new URL(request.url).searchParams
     const curPage = Number(searchParams.get('curPage'))
     const perPage = Number(searchParams.get('perPage'))
@@ -43,12 +49,6 @@ export type ResponseGetPostListType = NextResponseData<typeof GET>
 // create post
 export const POST = async (request: NextRequest) => {
     try {
-        const { isAdminAuthed } = await getServerAuth()
-
-        if (!isAdminAuthed) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-        }
-
         const body = await request.json()
         const { title, content, tags = '', authorId } = body
 

@@ -1,1 +1,2 @@
-export * from './post.api'
+export * from './post.api.client'
+export * from './post.api.server'

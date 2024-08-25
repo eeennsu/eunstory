@@ -1,4 +1,4 @@
-import { NextResponseData } from '@/lib/fetch/return-type'
+import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
 import { Post } from '@prisma/client'
 import { NextResponse } from 'next/server'
