@@ -1,3 +1,4 @@
+import { ResponseCreatePostType } from '@/app/api/post/route'
 import { generateRequest } from '@/lib/fetch'
 import { Post } from '@prisma/client'
 
@@ -27,7 +28,19 @@ export const requestGetDetailPost = async ({ id }: { id: string }) => {
 }
 
 export const requestCreatePost = async ({ post }: { post: Partial<Post> }) => {
-    return generateRequest({ url: `/api/post`, method: 'POST', body: post })
+    return generateRequest<Partial<Post>, ResponseCreatePostType>({
+        url: `/api/post`,
+        method: 'POST',
+        body: post,
+    })
+}
+
+export const requestEditPost = async ({ id, post }: { id: string; post: Partial<Post> }) => {
+    return generateRequest<Partial<Post>, ResponseCreatePostType>({
+        url: `/api/post/${id}`,
+        method: 'PATCH',
+        body: post,
+    })
 }
 
 export const requestDeletePost = async ({ id }: { id: string }) => {

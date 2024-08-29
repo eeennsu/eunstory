@@ -6,5 +6,7 @@ type Params = {
     }
 }
 
-export type NextResponseData<T extends (req: NextRequest, params: Params) => Promise<NextResponse>> =
+type NextApiFunction = (req: NextRequest, params: Params) => Promise<NextResponse>
+
+export type NextResponseData<T extends NextApiFunction> =
     Awaited<ReturnType<T>> extends NextResponse<infer K> ? K : never

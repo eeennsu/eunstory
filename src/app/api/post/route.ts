@@ -22,7 +22,7 @@ export const GET = async (request: Request) => {
         const posts = (await prisma.post.findMany({
             where: {
                 isActive: true,
-                published: true,
+                isPublished: true,
                 tags: {
                     contains: tag,
                 },
@@ -50,7 +50,7 @@ export type ResponseGetPostListType = NextResponseData<typeof GET>
 export const POST = async (request: NextRequest) => {
     try {
         const body = await request.json()
-        const { title, content, tags = '', authorId } = body
+        const { title, content, tags = '', authorId, isPublished } = body
 
         if (!title || !content || !authorId) {
             return NextResponse.json({ error: 'Title, content, and authorId are required' }, { status: 400 })
@@ -58,10 +58,12 @@ export const POST = async (request: NextRequest) => {
 
         const createdPost = await prisma.post.create({
             data: {
+                isActive: true,
                 title,
                 authorId,
                 content,
                 tags,
+                isPublished
             },
         })
 
