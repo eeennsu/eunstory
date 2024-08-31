@@ -1,7 +1,8 @@
 'use client'
 
 import { requestCreatePost, requestEditPost } from '@/entities/post'
-import { useAdminAuth, useAsync, useProgressBar } from '@/lib/hooks'
+import { TiptapEditor, TiptapRefType } from '@/features/commons/tiptap-editor'
+import { useAdminAuth, useProgressBar } from '@/lib/hooks'
 import { useDebouncedValue } from '@/lib/hooks/use-debounced-value'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
@@ -10,25 +11,28 @@ import { Label } from '@/lib/ui/label'
 import { useToast } from '@/lib/ui/use-toast'
 import { Post } from '@prisma/client'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { useCallback, useEffect, useState, type FC } from 'react'
+import { useCallback, useEffect, useRef, useState, type FC } from 'react'
 
 export const PostForm: FC = () => {
     const route = useRouter()
     const params = useSearchParams()
     const pathname = usePathname()
     const temporarySavedPostId = params.get('id')
+
+    const editorRef = useRef<TiptapRefType>(null)
+
     const [title, setTitle] = useState<string>('')
-    const [content, setContent] = useState<string>('')
+
     const [tags, setTags] = useState<string>('')
 
     const { adminId: authorId } = useAdminAuth()
     const { executeWithProgress, router } = useProgressBar()
     const { toast } = useToast()
 
-    const debouncedPost = useDebouncedValue({ title, content, tags }, 3000)
+    const debouncedPost = useDebouncedValue({ title, content: editorRef.current?.getHtml(), tags }, 3000)
 
     const onSubmit = async () => {
-        if (!title.length && !content.length) {
+        if (!title.length && editorRef.current?.isEmpty()) {
             toast({
                 title: '제목과 내용을 입력해주세요.',
             })
@@ -42,7 +46,7 @@ export const PostForm: FC = () => {
             return
         }
 
-        if (!content.length) {
+        if (editorRef.current?.isEmpty()) {
             toast({
                 title: '내용을 입력해주세요.',
             })
@@ -59,7 +63,7 @@ export const PostForm: FC = () => {
         executeWithProgress(async () => {
             const body: Partial<Post> = {
                 title,
-                content,
+                content: editorRef.current?.getHtml(),
                 authorId,
                 isPublished: true,
             }
@@ -82,9 +86,11 @@ export const PostForm: FC = () => {
     }
 
     const savePost = useCallback(async () => {
-        if (!title.length || !content.length) return
+        if (!title.length || editorRef.current?.isEmpty()) return
 
         let isSaved
+
+        const content = editorRef.current?.getHtml()
 
         // 임시 저장된 포스트가 있으면? 임시저장된 포스트 내용 변경하며 임시저장
         if (!!temporarySavedPostId) {
@@ -140,37 +146,31 @@ export const PostForm: FC = () => {
     }, [debouncedPost])
 
     return (
-        <section className='flex w-full flex-1 bg-blue-200 items-center justify-center'>
+        <section className='flex w-full flex-1 flex-col bg-blue-200 items-center justify-center'>
             <form
-                action={onSubmit}
-                className='flex flex-col gap-4'>
-                <Label>
-                    <span>제목</span>
-                    <Input
-                        className='w-72'
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                </Label>
-                <Label>
-                    <span>내용</span>
-                    <Input
-                        className='w-72'
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                    />
-                </Label>
+                onSubmit={onSubmit}
+                className='flex flex-col gap-4 flex-1 py-10'>
+                <Input
+                    className='w-full focus:ring-0'
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder='제목을 입력해주세요'
+                />
 
-                <Label>
-                    <span>태그</span>
-                    <Input
-                        className='w-72'
-                        value={tags}
-                        onChange={(e) => setTags(e.target.value)}
-                    />
-                </Label>
+                <Input
+                    className='w-full focus:ring-0'
+                    value={tags}
+                    onChange={(e) => setTags(e.target.value)}
+                    placeholder='태그를 엔터로 할것입니다!!'
+                />
 
-                <Button>생성</Button>
+                <TiptapEditor
+                    ref={editorRef}
+                    isAllToolbar
+                    placeholder='내용을 입력해주세요'
+                />
+
+                <Button type='submit'>생성</Button>
             </form>
         </section>
     )

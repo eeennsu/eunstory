@@ -61,7 +61,7 @@
 
 @layer base {
     * {
-        @apply border-border flex-wrap transition-all duration-300;
+        @apply border-border flex-wrap;
     }
     body {
         @apply bg-background text-foreground;
@@ -72,4 +72,8 @@
     .page-container {
         @apply flex flex-col w-full flex-1;
     }
+}
+
+input[type='file']::-webkit-file-upload-button {
+    cursor: pointer;
 }

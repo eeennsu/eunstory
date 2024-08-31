@@ -1,0 +1,62 @@
+/* tiptap */
+.ProseMirror p.is-editor-empty:first-child::before {
+    @apply text-gray-400 float-left h-0 pointer-events-none;
+    content: attr(data-placeholder);
+}
+
+.ProseMirror p[data-placeholder].is-editor-empty {
+    @apply text-gray-500 text-sm !text-left;
+}
+
+.ProseMirror div[contenteditable='false'][draggable='true'],
+.tiptap-editor-content img {
+    @apply my-2.5;
+}
+
+.ProseMirror img {
+    @apply m-0;
+}
+
+.ProseMirror ul ul {
+    @apply list-outside list-disc pl-5;
+}
+
+.ProseMirror ol ol {
+    @apply list-outside list-decimal pl-5;
+}
+
+.ProseMirror ul p,
+.ProseMirror ol p {
+    @apply inline;
+}
+
+.tiptap-editor-content {
+    @apply prose max-w-full;
+}
+
+.ProseMirror a,
+.tiptap-editor-content a {
+    @apply text-blue-500 underline cursor-pointer;
+}
+
+.ProseMirror pre,
+.tiptap-editor-content pre {
+    @apply m-2 whitespace-pre-wrap rounded-lg bg-gray-50 p-5 !font-mono text-sm font-medium text-gray-800;
+}
+
+.tiptap-editor-content img {
+    @apply cursor-default !important;
+}
+
+.tiptap-editor-content {
+    @apply whitespace-pre-wrap;
+}
+
+.tiptap-editor-content p {
+    @apply h-7;
+}
+
+.tiptap-editor-content ul p,
+.tiptap-editor-content ol p {
+    @apply inline;
+}

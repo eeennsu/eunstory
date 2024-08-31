@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { RootProvider } from '@/lib/providers'
-import { TopLoadingBar } from '@/features/top-loading-bar'
+import { TopLoadingBar } from '@/features/commons/top-loading-bar'
 import { Footer, Header } from '@/features/layout'
 import '@/lib/css/globals.css'
+import '@/lib/css/tiptap.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
