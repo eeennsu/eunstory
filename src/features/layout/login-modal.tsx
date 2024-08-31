@@ -5,6 +5,7 @@ import { Button } from '@/lib/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/lib/ui/dialog'
 import { Input } from '@/lib/ui/input'
 import { Label } from '@/lib/ui/label'
+import { X } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { Fragment, PropsWithChildren, useState, type FC } from 'react'
 
@@ -46,15 +47,17 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
             open={isTriggered}
             modal>
             <DialogTrigger className='cursor-default'>{children}</DialogTrigger>
-            <DialogContent className='sm:max-w-[425px]'>
+            <DialogContent
+                className='sm:max-w-[425px]'
+                isCloseHidden>
                 <DialogHeader>
                     <div className='flex justify-between items-center'>
                         <DialogTitle>Hello Eunsu!</DialogTitle>
                         <Button
-                            className='px-3 h-8'
                             variant='ghost'
+                            className='p-3'
                             onClick={close}>
-                            X
+                            <X className='size-4' />
                         </Button>
                     </div>
                 </DialogHeader>

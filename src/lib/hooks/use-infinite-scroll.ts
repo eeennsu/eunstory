@@ -17,21 +17,24 @@ export const useInfiniteScroll = ({
     useEffect(() => {
         if (!hasMore) return
 
+        const currentTarget = targetRef.current
         observerRef.current = new IntersectionObserver(([entry]) => {
             if (entry.isIntersecting) {
                 onIntersect()
             }
         }, options)
 
-        if (targetRef.current) {
-            observerRef.current.observe(targetRef.current)
+        if (currentTarget) {
+            observerRef.current.observe(currentTarget)
         }
 
         return () => {
-            if (targetRef.current && observerRef.current) {
-                observerRef.current.unobserve(targetRef.current)
+            if (currentTarget && observerRef.current) {
+                observerRef.current.unobserve(currentTarget)
             }
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hasMore])
 
     return { targetRef }

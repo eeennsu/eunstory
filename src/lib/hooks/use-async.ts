@@ -11,5 +11,7 @@ export const useAsync = (asyncFn: () => Promise<any>, dependencyArray: any[]) =>
         }
 
         asyncFunction()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [...dependencyArray])
 }

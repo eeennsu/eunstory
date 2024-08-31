@@ -1,4 +1,5 @@
-import { ResponseCreatePostType } from '@/app/api/post/route'
+import { ResponseGetDetailPostType } from '@/app/api/post/[id]/route'
+import { ResponseCreatePostType, ResponseGetPostListType } from '@/app/api/post/route'
 import { generateRequest } from '@/lib/fetch'
 import { Post } from '@prisma/client'
 
@@ -16,15 +17,7 @@ export const requestGetPostList = async ({
     params.append('curPage', curPage.toString())
     params.append('perPage', perPage.toString())
 
-    return generateRequest({ url: `/api/post?${params.toString()}` })
-}
-
-export const requestGetDetailPost = async ({ id }: { id: string }) => {
-    if (!id) {
-        throw new Error(`Post ID is required`)
-    }
-
-    return generateRequest({ url: `/api/post/${id}` })
+    return generateRequest<undefined, ResponseGetPostListType>({ url: `/api/post?${params.toString()}` })
 }
 
 export const requestCreatePost = async ({ post }: { post: Partial<Post> }) => {

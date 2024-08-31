@@ -1,7 +1,7 @@
 'use client'
 
 import { requestGetPostList } from '@/entities/post'
-import { useInfiniteScroll } from '@/lib/hooks'
+import { useInfiniteScroll, useLoading } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Post } from '@prisma/client'
 import { Ellipsis } from 'lucide-react'
@@ -13,10 +13,10 @@ interface Props {
 }
 
 export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
-    const [isPending, startTransition] = useTransition()
     const [curPage, setCurPage] = useState<number>(1)
     const [postList, setPostList] = useState<Post[]>([...initialPosts])
     const [hasMore, setHasMore] = useState<boolean>(true)
+    const { isLoading, execute } = useLoading()
     const perPage = 5
 
     const { targetRef } = useInfiniteScroll({
@@ -29,15 +29,21 @@ export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
     useEffect(() => {
         if (curPage === 1) return
 
-        startTransition(async () => {
-            const { totalCount, posts } = await requestGetPostList({
+        execute(async () => {
+            const response = await requestGetPostList({
                 curPage,
                 perPage,
             })
 
-            setHasMore(totalCount > perPage * curPage)
-            setPostList((prev) => [...prev, ...posts])
+            if ('totalCount' in response && 'posts' in response) {
+                const { totalCount, posts } = response
+
+                setHasMore(totalCount > perPage * curPage)
+                setPostList((prev) => [...prev, ...posts])
+            }
         })
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [curPage])
 
     return (
@@ -50,7 +56,7 @@ export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
                     <div className='border-2 border-black p-2 h-80 text-5xl'>{post.title}</div>
                 </Link>
             ))}
-            {isPending && (
+            {isLoading && (
                 <div className='w-full flex justify-center'>
                     <Ellipsis className='size-8 animate-ping' />
                 </div>

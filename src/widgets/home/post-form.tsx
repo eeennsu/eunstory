@@ -10,7 +10,7 @@ import { Label } from '@/lib/ui/label'
 import { useToast } from '@/lib/ui/use-toast'
 import { Post } from '@prisma/client'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { useEffect, useState, type FC } from 'react'
+import { useCallback, useEffect, useState, type FC } from 'react'
 
 export const PostForm: FC = () => {
     const route = useRouter()
@@ -19,13 +19,13 @@ export const PostForm: FC = () => {
     const temporarySavedPostId = params.get('id')
     const [title, setTitle] = useState<string>('')
     const [content, setContent] = useState<string>('')
-    const [tags, setTags] = useState<string[]>([])
+    const [tags, setTags] = useState<string>('')
 
     const { adminId: authorId } = useAdminAuth()
     const { executeWithProgress, router } = useProgressBar()
     const { toast } = useToast()
 
-    const debouncedPost = useDebouncedValue<{ title: string; content: string }>({ title, content }, 2500)
+    const debouncedPost = useDebouncedValue({ title, content, tags }, 3000)
 
     const onSubmit = async () => {
         if (!title.length && !content.length) {
@@ -81,10 +81,8 @@ export const PostForm: FC = () => {
         })
     }
 
-    // TODO: 임시저장 기능 구현하긴 했는데, 왜 이게 자꾸 연속으로 호출되지.... 객체로 해서 문제인가.. ㅠㅠ 일단 자자
-    useAsync(async () => {
-        const { title: debouncedTitle, content: debouncedContent } = debouncedPost
-        if (!debouncedTitle.length || !debouncedContent.length) return
+    const savePost = useCallback(async () => {
+        if (!title.length || !content.length) return
 
         let isSaved
 
@@ -93,9 +91,9 @@ export const PostForm: FC = () => {
             const updatedTemporarySavedPost = await requestEditPost({
                 id: temporarySavedPostId,
                 post: {
-                    title: debouncedTitle,
-                    content: debouncedContent,
-                    ...(tags.length > 0 && { tags: tags.join(';') }),
+                    title,
+                    content,
+                    ...(tags.length > 0 && { tags }),
                 },
             })
 
@@ -108,11 +106,11 @@ export const PostForm: FC = () => {
         else {
             const temporarySavedPost = await requestCreatePost({
                 post: {
-                    title: debouncedTitle,
-                    content: debouncedContent,
+                    title,
+                    content,
                     authorId,
                     isPublished: false,
-                    ...(tags.length > 0 && { tags: tags.join(';') }),
+                    ...(tags.length > 0 && { tags }),
                 },
             })
 
@@ -131,6 +129,14 @@ export const PostForm: FC = () => {
                 title: '포스트가 임시 저장되었습니다.',
             })
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedPost, temporarySavedPostId, tags, temporarySavedPostId, authorId])
+
+    useEffect(() => {
+        savePost()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedPost])
 
     return (
@@ -152,6 +158,15 @@ export const PostForm: FC = () => {
                         className='w-72'
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
+                    />
+                </Label>
+
+                <Label>
+                    <span>태그</span>
+                    <Input
+                        className='w-72'
+                        value={tags}
+                        onChange={(e) => setTags(e.target.value)}
                     />
                 </Label>
 

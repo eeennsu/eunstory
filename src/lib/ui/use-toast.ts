@@ -4,11 +4,12 @@
 import * as React from 'react'
 
 import type { ToastActionElement, ToastProps } from '@/lib/ui/toast'
+import { cn } from '../shadcn/shadcn-utils'
 
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
 
-type ToasterToast = ToastProps & {
+export type ToasterToast = ToastProps & {
     id: string
     title?: React.ReactNode
     description?: React.ReactNode
@@ -137,7 +138,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, 'id'>
 
-function toast({ ...props }: Toast) {
+function toast({ className, ...props }: Toast) {
     const id = genId()
 
     const update = (props: ToasterToast) =>
@@ -151,6 +152,10 @@ function toast({ ...props }: Toast) {
         type: 'ADD_TOAST',
         toast: {
             ...props,
+            className: cn(
+                'fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:right-8 sm:top-8 sm:flex-col md:max-w-[220px]',
+                className
+            ),
             id,
             open: true,
             onOpenChange: (open) => {

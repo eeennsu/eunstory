@@ -8,7 +8,13 @@ interface Props {
 }
 
 const EditPostPage: FC<Props> = async ({ params: { id } }) => {
-    const { post } = await requestGetDetailPost({ id })
+    const response = await requestGetDetailPost({ id })
+
+    if (!('post' in response)) {
+        throw response.error
+    }
+
+    const { post } = response
 
     return (
         <div>

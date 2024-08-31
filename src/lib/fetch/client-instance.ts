@@ -1,29 +1,36 @@
-interface RequestProps {
+export type RequestProps = {
     [key: string]: any
 }
 
-export interface Parameters<T> {
+export type Parameters<T> = {
     url: string
     method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
     body?: T
     config?: RequestInit
 }
 
-export const generateRequest = async <TRequest extends RequestProps, TResponse>({
+export const generateRequest = async <TRequest extends RequestProps | undefined, TResponse>({
     method = 'GET',
     url,
     body,
     config,
 }: Parameters<TRequest>) => {
-    const response = await fetch(url, {
+    const requestOptions: RequestInit = {
         method,
         headers: {
             'Content-Type': 'application/json',
         },
-        ...(body && { body: JSON.stringify(body as TRequest) }),
-        cache: 'no-store',
+        next: {
+            revalidate: 3600,
+        },
         ...config,
-    })
+    }
+
+    if (body && typeof body !== 'undefined') {
+        requestOptions.body = JSON.stringify(body)
+    }
+
+    const response = await fetch(url, requestOptions)
 
     return response.json() as TResponse
 }
