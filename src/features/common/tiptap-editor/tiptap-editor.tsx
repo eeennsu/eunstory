@@ -15,7 +15,7 @@ import {
     ListItem,
     Indent,
     Markdown,
-} from '@/features/commons/tiptap-editor'
+} from '@/features/common/tiptap-editor'
 
 import { cn } from '@/lib/shadcn/shadcn-utils'
 

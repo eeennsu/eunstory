@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import type { Editor } from '@tiptap/react'
 import { TiptapCommonButton } from './tiptap-common-button'
-import { ACCEPTED_MEME_TYPE } from '@/features/commons/tiptap-editor'
+import { ACCEPTED_MEME_TYPE } from '@/features/common/tiptap-editor'
 import { ImageIcon } from 'lucide-react'
 
 interface Props {

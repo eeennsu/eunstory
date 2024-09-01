@@ -5,7 +5,7 @@ import { startProgress, stopProgress, useRouter } from 'next-nprogress-bar'
 export const useProgressBar = () => {
     const startBar = () => startProgress()
     const stopBar = () => stopProgress()
-    const router = useRouter()
+    const barRouter = useRouter()
 
     const executeWithProgress = (callback: () => Promise<void>) => {
         startBar()
@@ -13,7 +13,7 @@ export const useProgressBar = () => {
     }
 
     return {
-        router,
+        barRouter,
         startBar,
         stopBar,
         executeWithProgress,

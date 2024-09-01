@@ -11,7 +11,7 @@ import {
     Heading3Button,
     ItalicButton,
     StrikeButton,
-} from '@/features/commons/tiptap-editor/tiptap-toolbar-buttons'
+} from '@/features/common/tiptap-editor/tiptap-toolbar-buttons'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 
 export type ToolbarButtonType =

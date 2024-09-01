@@ -1,75 +1,91 @@
 'use client'
 
 import { requestCreatePost, requestEditPost } from '@/entities/post'
-import { TiptapEditor, TiptapRefType } from '@/features/commons/tiptap-editor'
+import { TagInput, TagInputRef } from '@/features/common/tag-input'
+import { TiptapEditor, TiptapRefType } from '@/features/common/tiptap-editor'
 import { useAdminAuth, useProgressBar } from '@/lib/hooks'
 import { useDebouncedValue } from '@/lib/hooks/use-debounced-value'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
-import { Input } from '@/lib/ui/input'
-import { Label } from '@/lib/ui/label'
+import { Input } from '@/shared/common'
 import { useToast } from '@/lib/ui/use-toast'
 import { Post } from '@prisma/client'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { useCallback, useEffect, useRef, useState, type FC } from 'react'
+import { FormEvent, KeyboardEvent, useCallback, useEffect, useRef, useState, type FC } from 'react'
 
 export const PostForm: FC = () => {
-    const route = useRouter()
+    const router = useRouter()
     const params = useSearchParams()
     const pathname = usePathname()
     const temporarySavedPostId = params.get('id')
 
-    const editorRef = useRef<TiptapRefType>(null)
-
-    const [title, setTitle] = useState<string>('')
-
-    const [tags, setTags] = useState<string>('')
-
     const { adminId: authorId } = useAdminAuth()
-    const { executeWithProgress, router } = useProgressBar()
+    const { executeWithProgress, barRouter } = useProgressBar()
     const { toast } = useToast()
 
-    const debouncedPost = useDebouncedValue({ title, content: editorRef.current?.getHtml(), tags }, 3000)
+    const editorRef = useRef<TiptapRefType>(null)
+    const tagInputRef = useRef<TagInputRef>(null)
 
-    const onSubmit = async () => {
+    const [title, setTitle] = useState<string>('')
+    const debouncedPost = useDebouncedValue(
+        { title, content: editorRef.current?.getHtml(), tags: tagInputRef.current?.getTags() },
+        5000
+    )
+
+    const isValidateForm = () => {
+        if (!authorId) {
+            toast({
+                title: '인증이 필요합니다.',
+            })
+
+            return false
+        }
+
         if (!title.length && editorRef.current?.isEmpty()) {
             toast({
                 title: '제목과 내용을 입력해주세요.',
             })
-            return
+
+            return false
         }
 
         if (!title.length) {
             toast({
                 title: '제목을 입력해주세요.',
             })
-            return
+
+            return false
         }
 
         if (editorRef.current?.isEmpty()) {
             toast({
                 title: '내용을 입력해주세요.',
             })
-            return
+
+            return false
         }
 
-        if (!authorId) {
-            toast({
-                title: '인증이 필요합니다.',
-            })
-            return
-        }
+        return true
+    }
+
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        if (!isValidateForm()) return
+
+        const tags = tagInputRef.current?.getTags().join(';') || ''
 
         executeWithProgress(async () => {
-            const body: Partial<Post> = {
+            const post: Partial<Post> = {
                 title,
-                content: editorRef.current?.getHtml(),
+                content: editorRef.current?.getHtml() as string,
+                ...(tags.length > 0 && { tags }),
                 authorId,
                 isPublished: true,
             }
 
             try {
-                const response = await requestCreatePost({ post: body })
+                const response = await requestCreatePost({ post })
 
                 if ('post' in response) {
                     alert('게시물이 생성되었습니다')
@@ -80,27 +96,29 @@ export const PostForm: FC = () => {
                 console.error(error)
                 alert('게시물 생성에 실패했습니다')
             } finally {
-                router.replace(routePaths.post.list())
+                barRouter.replace(routePaths.post.list())
             }
         })
     }
 
-    const savePost = useCallback(async () => {
+    const temporarySavePost = useCallback(async () => {
         if (!title.length || editorRef.current?.isEmpty()) return
 
         let isSaved
 
-        const content = editorRef.current?.getHtml()
+        const tags = tagInputRef.current?.getTags().join(';') || ''
+
+        const post: Partial<Post> = {
+            title,
+            content: editorRef.current?.getHtml() as string,
+            tags: tags.length > 0 ? tags : undefined,
+        }
 
         // 임시 저장된 포스트가 있으면? 임시저장된 포스트 내용 변경하며 임시저장
         if (!!temporarySavedPostId) {
             const updatedTemporarySavedPost = await requestEditPost({
                 id: temporarySavedPostId,
-                post: {
-                    title,
-                    content,
-                    ...(tags.length > 0 && { tags }),
-                },
+                post,
             })
 
             if ('post' in updatedTemporarySavedPost) {
@@ -112,11 +130,9 @@ export const PostForm: FC = () => {
         else {
             const temporarySavedPost = await requestCreatePost({
                 post: {
-                    title,
-                    content,
+                    ...post,
                     authorId,
                     isPublished: false,
-                    ...(tags.length > 0 && { tags }),
                 },
             })
 
@@ -124,7 +140,7 @@ export const PostForm: FC = () => {
                 const url = new URL(pathname, window.location.origin)
                 url.searchParams.set('id', temporarySavedPost.post.id)
 
-                route.replace(url.toString())
+                router.replace(url.toString())
 
                 isSaved = true
             }
@@ -137,10 +153,16 @@ export const PostForm: FC = () => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedPost, temporarySavedPostId, tags, temporarySavedPostId, authorId])
+    }, [debouncedPost, temporarySavedPostId, temporarySavedPostId, authorId])
+
+    const preventEnterInInput = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+        }
+    }
 
     useEffect(() => {
-        savePost()
+        temporarySavePost()
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedPost])
@@ -151,17 +173,18 @@ export const PostForm: FC = () => {
                 onSubmit={onSubmit}
                 className='flex flex-col gap-4 flex-1 py-10'>
                 <Input
-                    className='w-full focus:ring-0'
+                    className='w-full text-2xl h-16 font-semibold'
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder='제목을 입력해주세요'
+                    onKeyDown={preventEnterInInput}
                 />
 
-                <Input
-                    className='w-full focus:ring-0'
-                    value={tags}
-                    onChange={(e) => setTags(e.target.value)}
+                <TagInput
+                    ref={tagInputRef}
+                    className='w-full h-12'
                     placeholder='태그를 엔터로 할것입니다!!'
+                    onKeyDown={preventEnterInInput}
                 />
 
                 <TiptapEditor
