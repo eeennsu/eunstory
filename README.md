@@ -6,7 +6,7 @@
   - tailwindcss
   - shadcn
   - prisma
-  - postgresql
+  - sqlite
 
 * 기획
   - 메인 페이지 : 동적인 소개글 (3D or 게임처럼 이동 가능한 케릭터 등으로 구현 예정)
