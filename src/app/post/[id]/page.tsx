@@ -1,6 +1,6 @@
-import { requestGetDetailPost } from '@/entities/post'
+import { serverRequestGetDetailPost } from '@/entities/post'
 import { DeletePostButton } from '@/features/post'
-import { getDateWithTime } from '@/lib/utils'
+import { getDateWithTime, textSanitizing } from '@/lib/utils'
 import type { FC } from 'react'
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
-    const response = await requestGetDetailPost({ id })
+    const response = await serverRequestGetDetailPost({ id })
 
     if (!('post' in response)) {
         throw new Error('Post not found')
@@ -19,12 +19,17 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
     const { post } = response
 
     return (
-        <div>
-            <h1>{post.title}</h1>
-            <p>{post.content}</p>
-            {post.createdAt && <div>{getDateWithTime(post.createdAt)}</div>}
-            <DeletePostButton id={id} />
-        </div>
+        <main className='page-container'>
+            <article className='flex flex-col items-center'>
+                <h1 className='text-5xl font-bold'>{post.title}</h1>
+                <section
+                    className='tiptap-editor-content'
+                    dangerouslySetInnerHTML={{ __html: textSanitizing(post.content) }}
+                />
+                {post.createdAt && <div>{getDateWithTime(post.createdAt)}</div>}
+                <DeletePostButton id={id} />
+            </article>
+        </main>
     )
 }
 

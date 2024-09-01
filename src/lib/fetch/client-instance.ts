@@ -32,5 +32,9 @@ export const generateRequest = async <TRequest extends RequestProps | undefined,
 
     const response = await fetch(url, requestOptions)
 
+    if (response.status === 204) {
+        return null as TResponse
+    }
+
     return response.json() as TResponse
 }

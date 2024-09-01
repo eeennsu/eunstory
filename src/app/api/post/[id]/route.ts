@@ -1,6 +1,8 @@
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
+import { routePaths } from '@/lib/route'
 import { Post } from '@prisma/client'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 
 type Params = {
@@ -41,7 +43,7 @@ export const GET = async (request: NextRequest, { params }: Params) => {
 export type ResponseGetDetailPostType = NextResponseData<typeof GET>
 
 // edit post
-export const PATCH = async (request: Request, { params }: Params) => {
+export const PATCH = async (request: NextRequest, { params }: Params) => {
     try {
         const id = params?.id
 
@@ -77,7 +79,7 @@ export const PATCH = async (request: Request, { params }: Params) => {
 export type ResponsePatchDetailPostType = NextResponseData<typeof PATCH>
 
 // delete post
-export const DELETE = async (_: Request, { params }: Params) => {
+export const DELETE = async (_: NextRequest, { params }: Params) => {
     try {
         const id = params?.id
 
@@ -98,8 +100,9 @@ export const DELETE = async (_: Request, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 })
         }
 
-        return NextResponse.next({ status: 204 })
+        return new NextResponse(null, { status: 204 })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }

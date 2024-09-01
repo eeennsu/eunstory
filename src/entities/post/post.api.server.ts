@@ -7,6 +7,11 @@ import { getUrlFromServer, serverRequest } from '@/lib/fetch'
 export const serverRequestGetDefaultPostList = async () => {
     return serverRequest<undefined, ResponseGetPostListType>({
         url: getUrlFromServer('/api/post/?curPage=1&perPage=5'),
+        config: {
+            next: {
+                tags: ['post-list'],
+            },
+        },
     })
 }
 

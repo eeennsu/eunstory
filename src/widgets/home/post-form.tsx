@@ -30,7 +30,7 @@ export const PostForm: FC = () => {
     const [content, setContent] = useState<string>('')
     const [isSelfTemporarySaved, setIsSelfTemporarySaved] = useState<boolean>(false)
 
-    const debouncedPost = useDebouncedValue({ title, content }, 2000)
+    const debouncedPost = useDebouncedValue({ title, content }, 5000)
 
     const isValidateForm = () => {
         if (!authorId) {
@@ -89,13 +89,14 @@ export const PostForm: FC = () => {
                 const response = await requestCreatePost({ post })
 
                 if ('post' in response) {
-                    alert('게시물이 생성되었습니다')
+                    const { dismiss } = toast({ title: '게시물이 생성되었습니다.' })
+                    
                 } else {
-                    alert('게시물 생성에 실패했습니다')
+                    toast({ title: '게시물 생성에 실패하였습니다.', description: '다시 시도해주세요.' })
                 }
             } catch (error) {
                 console.error(error)
-                alert('게시물 생성에 실패했습니다')
+                toast({ title: '게시물 생성에 실패하였습니다.', description: '다시 시도해주세요.' })
             } finally {
                 barRouter.replace(routePaths.post.list())
             }

@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma/prisma-client'
 import { NextResponseData } from '@/lib/fetch'
 
 // get post list
-export const GET = async (request: Request) => {
+export const GET = async (request: NextRequest) => {
     const searchParams = new URL(request.url).searchParams
     const curPage = Number(searchParams.get('curPage'))
     const perPage = Number(searchParams.get('perPage'))

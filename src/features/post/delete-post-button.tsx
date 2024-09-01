@@ -4,6 +4,7 @@ import { requestDeletePost } from '@/entities/post'
 import { useProgressBar } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
+import { useToast } from '@/lib/ui/use-toast'
 import type { FC } from 'react'
 
 interface Props {
@@ -11,25 +12,31 @@ interface Props {
 }
 
 export const DeletePostButton: FC<Props> = ({ id }) => {
-    const { startBar, stopBar, barRouter } = useProgressBar()
+    const { executeWithProgress, barRouter } = useProgressBar()
+    const { toast } = useToast()
 
     const onDelete = async () => {
         if (!confirm('정말 삭제하시겠습니까?')) {
             return
         }
 
-        startBar()
-
-        try {
-            await requestDeletePost({ id })
-        } catch (error) {
-            console.error(error)
-            alert('게시물 삭제에 실패했습니다')
-        } finally {
-            barRouter.replace(routePaths.post.list())
-            stopBar()
-        }
+        executeWithProgress(async () => {
+            try {
+                await requestDeletePost({ id })
+            } catch (error) {
+                console.error(error)
+                toast({ title: '게시물 삭제에 실패했습니다', description: '다시 시도해주세요.' })
+            } finally {
+                barRouter.replace(routePaths.post.list())
+            }
+        })
     }
 
-    return <Button onClick={onDelete}>DeletePostButton</Button>
+    return (
+        <Button
+            type='button'
+            onClick={onDelete}>
+            DeletePostButton
+        </Button>
+    )
 }

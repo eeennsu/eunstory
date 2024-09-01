@@ -14,7 +14,7 @@ export const base64UrlDecode = (str: string): string => {
     }
 }
 
-export const parseJWT = (token: string) => {
+export const parseJWT = (token: string): any => {
     const base64Url = token.split('.')[1]
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
     const jsonPayload = base64UrlDecode(base64)
