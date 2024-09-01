@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const DeletePostButton: FC<Props> = ({ id }) => {
-    const { startBar, stopBar, router } = useProgressBar()
+    const { startBar, stopBar, barRouter } = useProgressBar()
 
     const onDelete = async () => {
         if (!confirm('정말 삭제하시겠습니까?')) {
@@ -26,7 +26,7 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
             console.error(error)
             alert('게시물 삭제에 실패했습니다')
         } finally {
-            router.replace(routePaths.post.list())
+            barRouter.replace(routePaths.post.list())
             stopBar()
         }
     }

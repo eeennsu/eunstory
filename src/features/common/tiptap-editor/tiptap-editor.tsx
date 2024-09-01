@@ -32,6 +32,7 @@ interface TiptapEditorProps {
 
 export interface TiptapRefType {
     getHtml: () => string
+    setContent: (content: string) => void
     extractImgId: () => string[]
     isEmpty: () => boolean
 }
@@ -59,6 +60,7 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
                     ),
                 },
             },
+            onUpdate: onUpdate || (() => {}),
             extensions: [
                 StarterKit.configure({
                     bulletList: {
@@ -112,7 +114,7 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
                     transformCopiedText: false, // Copied text is transformed to markdown
                 }),
             ],
-            onUpdate: onUpdate ? onUpdate : () => {},
+
             content: previousContent,
         })
 
@@ -132,6 +134,9 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
                 },
                 isEmpty: () => {
                     return editor?.isEmpty || false
+                },
+                setContent: (content: string) => {
+                    editor?.commands.setContent(content)
                 },
             }),
             [editor]

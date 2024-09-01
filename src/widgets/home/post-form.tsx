@@ -1,9 +1,9 @@
 'use client'
 
-import { requestCreatePost, requestEditPost } from '@/entities/post'
+import { requestCreatePost, requestEditPost, requestGetDetailPost } from '@/entities/post'
 import { TagInput, TagInputRef } from '@/features/common/tag-input'
 import { TiptapEditor, TiptapRefType } from '@/features/common/tiptap-editor'
-import { useAdminAuth, useProgressBar } from '@/lib/hooks'
+import { useAdminAuth, useAsync, useProgressBar } from '@/lib/hooks'
 import { useDebouncedValue } from '@/lib/hooks/use-debounced-value'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
@@ -27,10 +27,10 @@ export const PostForm: FC = () => {
     const tagInputRef = useRef<TagInputRef>(null)
 
     const [title, setTitle] = useState<string>('')
-    const debouncedPost = useDebouncedValue(
-        { title, content: editorRef.current?.getHtml(), tags: tagInputRef.current?.getTags() },
-        5000
-    )
+    const [content, setContent] = useState<string>('')
+    const [isSelfTemporarySaved, setIsSelfTemporarySaved] = useState<boolean>(false)
+
+    const debouncedPost = useDebouncedValue({ title, content }, 2000)
 
     const isValidateForm = () => {
         if (!authorId) {
@@ -68,6 +68,7 @@ export const PostForm: FC = () => {
         return true
     }
 
+    // 제출 함수
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
@@ -78,7 +79,7 @@ export const PostForm: FC = () => {
         executeWithProgress(async () => {
             const post: Partial<Post> = {
                 title,
-                content: editorRef.current?.getHtml() as string,
+                content,
                 ...(tags.length > 0 && { tags }),
                 authorId,
                 isPublished: true,
@@ -101,17 +102,16 @@ export const PostForm: FC = () => {
         })
     }
 
+    // 임시저장 함수
     const temporarySavePost = useCallback(async () => {
-        if (!title.length || editorRef.current?.isEmpty()) return
-
         let isSaved
 
         const tags = tagInputRef.current?.getTags().join(';') || ''
 
         const post: Partial<Post> = {
             title,
-            content: editorRef.current?.getHtml() as string,
-            tags: tags.length > 0 ? tags : undefined,
+            content: editorRef.current?.getHtml() || '',
+            ...(tags.length > 0 && { tags }),
         }
 
         // 임시 저장된 포스트가 있으면? 임시저장된 포스트 내용 변경하며 임시저장
@@ -155,17 +155,39 @@ export const PostForm: FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedPost, temporarySavedPostId, temporarySavedPostId, authorId])
 
+    // 엔터 입력시 submit 이벤트 방지
     const preventEnterInInput = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault()
         }
     }
 
+    // 제목 또는 내용이 변경되면 임시저장
     useEffect(() => {
-        temporarySavePost()
+        if (!title.length || !content.length) return
+
+        if (!isSelfTemporarySaved) {
+            temporarySavePost()
+        } else {
+            setIsSelfTemporarySaved(false)
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedPost])
+
+    useAsync(async () => {
+        if (temporarySavedPostId) {
+            const fetchTemporarySavedPost = await requestGetDetailPost({ id: temporarySavedPostId, isPublished: false })
+
+            if ('post' in fetchTemporarySavedPost) {
+                const { post } = fetchTemporarySavedPost
+
+                setTitle(post.title)
+                editorRef.current?.setContent(post.content)
+                post.tags && tagInputRef.current?.setTagValues(post.tags.split(';'))
+            }
+        }
+    }, [temporarySavedPostId])
 
     return (
         <section className='flex w-full flex-1 flex-col bg-blue-200 items-center justify-center'>
@@ -176,24 +198,34 @@ export const PostForm: FC = () => {
                     className='w-full text-2xl h-16 font-semibold'
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder='제목을 입력해주세요'
+                    placeholder='제목을 입력해주세요.'
                     onKeyDown={preventEnterInInput}
                 />
-
                 <TagInput
                     ref={tagInputRef}
                     className='w-full h-12'
-                    placeholder='태그를 엔터로 할것입니다!!'
+                    placeholder='태그를 입력해주세요.'
                     onKeyDown={preventEnterInInput}
                 />
-
                 <TiptapEditor
                     ref={editorRef}
                     isAllToolbar
-                    placeholder='내용을 입력해주세요'
+                    placeholder='내용을 입력해주세요.'
+                    onUpdate={({ editor }) => setContent(editor.getHTML())}
                 />
 
-                <Button type='submit'>생성</Button>
+                <div className='flex gap-4 justify-end'>
+                    <Button
+                        type='button'
+                        variant='secondary'
+                        onClick={() => {
+                            temporarySavePost()
+                            setIsSelfTemporarySaved(true)
+                        }}>
+                        임시 저장
+                    </Button>
+                    <Button type='submit'>작성하기</Button>
+                </div>
             </form>
         </section>
     )

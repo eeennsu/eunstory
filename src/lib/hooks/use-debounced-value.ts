@@ -4,14 +4,11 @@ import deepEqual from 'deep-equal'
 export const useDebouncedValue = <T>(value: T, delay: number = 1000): T => {
     const [debouncedValue, setDebouncedValue] = useState<T>(value)
     const previousValueRef = useRef<T>(value)
-    const isObject = typeof value === 'object' && value !== null
 
     useEffect(() => {
-        if (isObject) {
-            if (deepEqual(value, previousValueRef.current)) {
-                return
-            }
-        }
+        const isObject = typeof value === 'object' && value !== null
+
+        if (isObject && deepEqual(value, previousValueRef.current)) return
 
         const handler = setTimeout(() => {
             setDebouncedValue(value)

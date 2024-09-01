@@ -1,7 +1,7 @@
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
 import { Post } from '@prisma/client'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 type Params = {
     params: {
@@ -10,8 +10,11 @@ type Params = {
 }
 
 // get detail post
-export const GET = async (_: Request, { params }: Params) => {
+export const GET = async (request: NextRequest, { params }: Params) => {
     const id = params?.id
+    const searchParams = request.nextUrl.searchParams
+
+    const isPublished = searchParams.get('isPublished') || '1'
 
     if (!id) {
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
@@ -21,6 +24,7 @@ export const GET = async (_: Request, { params }: Params) => {
         const post = (await prisma.post.findFirst({
             where: {
                 id,
+                ...(isPublished && { isPublished: isPublished === '1' }),
             },
         })) as Post
 

@@ -153,7 +153,7 @@ function toast({ className, ...props }: Toast) {
         toast: {
             ...props,
             className: cn(
-                'fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:right-8 sm:top-8 sm:flex-col md:max-w-[220px]',
+                'fixed top-0 z-[100] flex max-h-screen flex-col-reverse p-4 sm:right-8 sm:top-8 sm:flex-col w-fit max-md:w-full max-sm:max-w-[400px]',
                 className
             ),
             id,

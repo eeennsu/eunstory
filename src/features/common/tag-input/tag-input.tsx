@@ -11,6 +11,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {}
 
 export interface TagInputRef {
     getTags: () => string[]
+    setTagValues: (tags: string[]) => void
     isEmpty: () => boolean
 }
 
@@ -18,54 +19,69 @@ export const TagInput = forwardRef<TagInputRef, Props>(({ className, placeholder
     const inputRef = useRef<HTMLInputElement>(null)
     const [tags, setTags] = useState<string[]>([])
 
-    useImperativeHandle(ref, () => ({
-        getTags: () => tags,
-        isEmpty: () => tags.length === 0,
-    }))
-
     const handleRegisterTag = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key !== 'Enter') return
-        const value = inputRef.current?.value
+        switch (e.key) {
+            case 'Enter':
+                const value = inputRef.current?.value
 
-        if (value?.includes(';')) {
-            toast({
-                title: '태그에는 세미콜론을 사용할 수 없습니다.',
-            })
-            return
-        }
+                if (tags.length === 5) {
+                    toast({
+                        title: '태그는 최대 5개까지 등록할 수 있습니다.',
+                    })
 
-        if (tags.find((tag) => tag === value) && inputRef.current) {
-            inputRef.current.value = ''
+                    if (inputRef.current) {
+                        inputRef.current.value = ''
+                    }
+                    return
+                }
 
-            toast({
-                title: '같은 태그는 등록할 수 없습니다.',
-            })
-            return
-        }
+                if (value?.includes(';')) {
+                    toast({
+                        title: '태그에는 세미콜론을 사용할 수 없습니다.',
+                    })
+                    return
+                }
 
-        if (tags.length >= 5) {
-            toast({
-                title: '태그는 최대 5개까지 등록할 수 있습니다.',
-            })
+                if (tags.find((tag) => tag === value) && inputRef.current) {
+                    inputRef.current.value = ''
 
-            if (inputRef.current) {
-                inputRef.current.value = ''
-            }
-            return
-        }
+                    toast({
+                        title: '같은 태그는 등록할 수 없습니다.',
+                    })
+                    return
+                }
 
-        if (typeof value === 'string' && value.trim() !== '') {
-            setTags((prev) => [...prev, value])
+                if (typeof value === 'string' && value.trim() !== '') {
+                    setTags((prev) => [...prev, value.trim()])
 
-            if (inputRef.current) {
-                inputRef.current.value = ''
-            }
+                    if (inputRef.current) {
+                        inputRef.current.value = ''
+                    }
+                }
+
+                break
+            case 'Backspace':
+                if (tags.length === 0) return
+
+                setTags((prev) => prev.slice(0, -1))
+
+                break
         }
     }
 
     const handleRemoveTag = (tag: string) => {
         setTags((prev) => prev.filter((prevTag) => prevTag !== tag))
+
+        if (inputRef.current) {
+            inputRef.current.focus()
+        }
     }
+
+    useImperativeHandle(ref, () => ({
+        getTags: () => tags,
+        isEmpty: () => tags.length === 0,
+        setTagValues: (tagValues: string[]) => setTags(tagValues),
+    }))
 
     return (
         <section className='flex bg-white rounded-lg items-center'>
@@ -93,3 +109,5 @@ export const TagInput = forwardRef<TagInputRef, Props>(({ className, placeholder
         </section>
     )
 })
+
+TagInput.displayName = 'TagInput'

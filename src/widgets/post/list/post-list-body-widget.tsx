@@ -1,11 +1,11 @@
-import { requestGetDefaultPostList } from '@/entities/post'
+import { serverRequestGetDefaultPostList } from '@/entities/post'
 import { PostListByScroll } from '@/features/post/post-list-by-scroll'
 import { routePaths } from '@/lib/route'
 import { redirect } from 'next/navigation'
 import type { FC } from 'react'
 
 export const PostListBodyWidget: FC = async () => {
-    const response = await requestGetDefaultPostList()
+    const response = await serverRequestGetDefaultPostList()
 
     if ('error' in response) {
         redirect(routePaths.home())
