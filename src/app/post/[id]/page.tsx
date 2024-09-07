@@ -13,7 +13,6 @@ interface Props {
 
 const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
     const response = await serverRequestGetDetailPost({ id })
-    const { isAdminAuthed } = await getServerAdminAuth()
 
     if (!('post' in response)) {
         throw new Error('Post not found')
@@ -30,7 +29,7 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
                     dangerouslySetInnerHTML={{ __html: textSanitizing(post.content) }}
                 />
                 {post.createdAt && <div>{getDateWithTime(post.createdAt)}</div>}
-                {isAdminAuthed && <DeletePostButton id={id} />}
+                <DeletePostButton id={id} />
             </article>
         </main>
     )

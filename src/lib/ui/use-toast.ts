@@ -138,7 +138,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, 'id'>
 
-function toast({ className, position = 'right', ...props }: Toast & { position?: 'center' | 'right' }) {
+function toast({ className, position = 'bottom', ...props }: Toast & { position?: 'top' | 'bottom' }) {
     const id = genId()
 
     const update = (props: ToasterToast) =>
@@ -153,10 +153,8 @@ function toast({ className, position = 'right', ...props }: Toast & { position?:
         toast: {
             ...props,
             className: cn(
-                'fixed top-0 z-[100] flex max-h-screen flex-col-reverse text-center p-4 sm:top-8 sm:flex-col w-fit max-md:w-full max-sm:max-w-[400px]',
-                position === 'center'
-                    ? 'sm:right-1/2 sm:left-1/2 sm:-translate-x-1/2 max-w-[300px] w-full'
-                    : 'sm:right-8',
+                'fixed z-[100] flex max-h-screen right-12 flex-col-reverse text-center p-4 w-fit max-md:w-full max-sm:max-w-[400px]',
+                position !== 'top' ? 'top-12' : 'bottom-12',
                 className
             ),
             id,

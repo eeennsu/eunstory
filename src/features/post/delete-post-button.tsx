@@ -1,11 +1,10 @@
 'use client'
 
 import { requestDeletePost } from '@/entities/post'
-import { useProgressBar } from '@/lib/hooks'
+import { useAdminAuth, useProgressBar } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import { useToast } from '@/lib/ui/use-toast'
-import { useRouter } from 'next/navigation'
 import type { FC } from 'react'
 
 interface Props {
@@ -13,6 +12,12 @@ interface Props {
 }
 
 export const DeletePostButton: FC<Props> = ({ id }) => {
+    const { isAdminAuthed } = useAdminAuth()
+
+    if (!isAdminAuthed) {
+        return null
+    }
+
     const { executeWithProgress, barRouter } = useProgressBar()
 
     const { toast } = useToast()
@@ -36,10 +41,12 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
     }
 
     return (
-        <Button
-            type='button'
-            onClick={onDelete}>
-            DeletePostButton
-        </Button>
+        isAdminAuthed && (
+            <Button
+                type='button'
+                onClick={onDelete}>
+                DeletePostButton
+            </Button>
+        )
     )
 }

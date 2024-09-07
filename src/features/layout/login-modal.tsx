@@ -25,7 +25,7 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
         if (!id.length || !password.length) {
             return toast({
                 title: '아이디 또는 비밀번호를 입력해주세요',
-                position: 'center',
+                position: 'top',
                 variant: 'warning',
             })
         }
@@ -43,7 +43,7 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
                 case ERROR_CODES.MISSING_ID_OR_PASSWORD:
                     return toast({
                         title: '아이디 또는 비밀번호를 입력해주세요',
-                        position: 'center',
+                        position: 'top',
                         variant: 'warning',
                     })
 
@@ -51,7 +51,7 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
                     return toast({
                         title: '유저를 찾을 수 없습니다.',
                         description: '다시 입력해주세요.',
-                        position: 'center',
+                        position: 'top',
                         variant: 'warning',
                     })
 
@@ -59,7 +59,7 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
                     return toast({
                         title: '아이디 또는 비밀번호가 일치하지 않습니다.',
                         description: '다시 입력해주세요.',
-                        position: 'center',
+                        position: 'top',
                         variant: 'warning',
                     })
             }

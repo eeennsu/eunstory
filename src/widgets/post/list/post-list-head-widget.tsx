@@ -1,11 +1,13 @@
-import { getServerAdminAuth } from '@/lib/auth'
+'use client'
+
+import { useAdminAuth } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import Link from 'next/link'
 import type { FC } from 'react'
 
-export const PostListHeadWidget: FC = async () => {
-    const { isAdminAuthed } = await getServerAdminAuth()
+export const PostListHeadWidget: FC = () => {
+    const { isAdminAuthed } = useAdminAuth()
 
     return (
         <section className='flex justify-between w-full'>
