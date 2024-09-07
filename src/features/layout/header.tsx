@@ -3,16 +3,15 @@
 import { routePaths } from '@/lib/route'
 import { NAV_LINKS } from '@/shared/constants'
 import { Button } from '@/lib/ui/button'
-import { signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState, type FC } from 'react'
 import { LoginModal } from '@/features/layout'
+import { useAdminAuth } from '@/lib/hooks'
 
 export const Header: FC = () => {
-    const { data, status } = useSession()
-    const isAdminLoggedIn = status === 'authenticated' && data?.user?.isAdmin
-
+    const { isAdminAuthed } = useAdminAuth()
     const [count, setCount] = useState<number>(0)
 
     useEffect(() => {
@@ -28,7 +27,7 @@ export const Header: FC = () => {
     return (
         <header className='bg-sky-200 w-full flex items-center justify-center'>
             <section className='relative flex w-full max-w-[900px] justify-between items-center'>
-                <Link href={routePaths.home()}>
+                <Link href={isAdminAuthed ? routePaths.admin() : routePaths.home()}>
                     <Image
                         src={'/images/eunstory-logo.png'}
                         width={200}
@@ -53,7 +52,7 @@ export const Header: FC = () => {
                             <Link href={link.url}>{link.title}</Link>
                         </Button>
                     ))}
-                    {isAdminLoggedIn && (
+                    {isAdminAuthed && (
                         <>
                             <Button
                                 asChild

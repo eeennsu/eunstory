@@ -11,7 +11,7 @@ import { Input } from '@/shared/common'
 import { useToast } from '@/lib/ui/use-toast'
 import { Post } from '@prisma/client'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { FormEvent, KeyboardEvent, useCallback, useEffect, useRef, useState, type FC } from 'react'
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState, type FC } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider } from '@/lib/ui/tooltip'
 import { TooltipTrigger } from '@radix-ui/react-tooltip'
 
@@ -34,7 +34,7 @@ export const PostForm: FC = () => {
 
     const debouncedPost = useDebouncedValue({ title, content }, 5000)
 
-    const isValidateForm = () => {
+    const isValidatedForm = () => {
         if (!authorId) {
             toast({
                 title: '인증이 필요합니다.',
@@ -71,12 +71,12 @@ export const PostForm: FC = () => {
     }
 
     // 제출 함수
-    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if (!isValidateForm()) return
+        if (!isValidatedForm()) return
 
-        const tags = tagInputRef.current?.getTags().join(';') || ''
+        const tags = tagInputRef.current?.getTags().join(',') || ''
 
         executeWithProgress(async () => {
             const post: Partial<Post> = {
@@ -90,7 +90,7 @@ export const PostForm: FC = () => {
             try {
                 const response = await requestCreatePost({ post })
 
-                if ('post' in response) {
+                if (response) {
                     toast({ title: '게시물이 생성되었습니다.' })
                 } else {
                     toast({ title: '게시물 생성에 실패하였습니다.', description: '다시 시도해주세요.' })
@@ -105,10 +105,10 @@ export const PostForm: FC = () => {
     }
 
     // 임시저장 함수
-    const temporarySavePost = useCallback(async () => {
+    const temporarySavePost = async () => {
         let isSaved
 
-        const tags = tagInputRef.current?.getTags().join(';') || ''
+        const tags = tagInputRef.current?.getTags().join(',') || ''
 
         const post: Partial<Post> = {
             title,
@@ -130,7 +130,7 @@ export const PostForm: FC = () => {
 
         // 임시 저장된 포스트가 없으면? 새로운 포스트 생성하며 임시저장
         else {
-            const temporarySavedPost = await requestCreatePost({
+            const temporarySavedResponse = await requestCreatePost({
                 post: {
                     ...post,
                     authorId,
@@ -138,9 +138,9 @@ export const PostForm: FC = () => {
                 },
             })
 
-            if ('post' in temporarySavedPost) {
+            if ('postId' in temporarySavedResponse) {
                 const url = new URL(pathname, window.location.origin)
-                url.searchParams.set('id', temporarySavedPost.post.id)
+                url.searchParams.set('id', temporarySavedResponse.postId)
 
                 router.replace(url.toString())
 
@@ -153,9 +153,7 @@ export const PostForm: FC = () => {
                 title: '포스트가 임시 저장되었습니다.',
             })
         }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedPost, temporarySavedPostId, temporarySavedPostId, authorId])
+    }
 
     // 엔터 입력시 submit 이벤트 방지
     const preventEnterInInput = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -189,50 +187,54 @@ export const PostForm: FC = () => {
 
                 setTitle(post.title)
                 editorRef.current?.setContent(post.content)
-                post.tags && tagInputRef.current?.setTagValues(post.tags.split(';'))
+                post.tags && tagInputRef.current?.setTagValues(post.tags.split(','))
             }
         }
     }, [temporarySavedPostId])
 
     return (
-        !isLoading && (
-            <section className='flex w-full flex-1 flex-col bg-blue-200 items-center justify-center'>
-                <form
-                    onSubmit={onSubmit}
-                    className='flex flex-col gap-4 flex-1 py-10'>
-                    <Input
-                        className='w-full text-2xl h-16 font-semibold'
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder='제목을 입력해주세요.'
-                        onKeyDown={preventEnterInInput}
-                    />
+        <section className='flex w-full flex-1 flex-col bg-blue-200 items-center justify-center'>
+            <form
+                onSubmit={handleSubmit}
+                className='flex flex-col gap-4 flex-1 py-10'>
+                {!isLoading && (
+                    <>
+                        <Input
+                            className='w-full text-2xl h-16 font-semibold'
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder='제목을 입력해주세요.'
+                            onKeyDown={preventEnterInInput}
+                        />
 
-                    <TooltipProvider delayDuration={300}>
-                        <Tooltip defaultOpen>
-                            <TooltipTrigger
-                                type='button'
-                                className='relative'>
-                                <TagInput
-                                    ref={tagInputRef}
-                                    className='w-full h-12'
-                                    placeholder='태그를 입력해주세요.'
-                                    onKeyDown={preventEnterInInput}
-                                />
-                            </TooltipTrigger>
-                            <TooltipContent className='absolute left-[84px] top-6 w-[320px]'>
-                                쉼표 혹은 엔터를 입력하면 태그가 등록됩니다. <br /> 클릭하면 삭제됩니다.
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                        <TooltipProvider delayDuration={300}>
+                            <Tooltip defaultOpen>
+                                <TooltipTrigger
+                                    type='button'
+                                    className='relative'>
+                                    <TagInput
+                                        ref={tagInputRef}
+                                        className='w-full h-12'
+                                        placeholder='태그를 입력해주세요.'
+                                        onKeyDown={preventEnterInInput}
+                                    />
+                                </TooltipTrigger>
+                                <TooltipContent className='absolute left-[84px] top-6 w-[320px]'>
+                                    쉼표 혹은 엔터를 입력하면 태그가 등록됩니다. <br /> 클릭하면 삭제됩니다.
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </>
+                )}
 
-                    <TiptapEditor
-                        ref={editorRef}
-                        isAllToolbar
-                        placeholder='내용을 입력해주세요.'
-                        onUpdate={({ editor }) => setContent(editor.getHTML())}
-                    />
+                <TiptapEditor
+                    ref={editorRef}
+                    isAllToolbar
+                    placeholder='내용을 입력해주세요.'
+                    onUpdate={({ editor }) => setContent(editor.getHTML())}
+                />
 
+                {!isLoading && (
                     <div className='flex gap-4 justify-end'>
                         <Button
                             type='button'
@@ -245,8 +247,8 @@ export const PostForm: FC = () => {
                         </Button>
                         <Button type='submit'>작성하기</Button>
                     </div>
-                </form>
-            </section>
-        )
+                )}
+            </form>
+        </section>
     )
 }

@@ -14,6 +14,10 @@ const post = {
     detail(id: string) {
         return post.root().concat(`/${id}`)
     },
+
+    edit(id?: string) {
+        return post.root().concat(id ? `/${id}/edit` : '/edit')
+    },
 }
 
 export const routePaths = {

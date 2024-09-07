@@ -1,6 +1,5 @@
 import { serverRequestGetDefaultPostList, serverRequestGetDetailPost } from '@/entities/post'
 import { DeletePostButton } from '@/features/post'
-import { getServerAdminAuth } from '@/lib/auth'
 import { getDateWithTime, textSanitizing } from '@/lib/utils'
 import { Post } from '@prisma/client'
 import type { FC } from 'react'

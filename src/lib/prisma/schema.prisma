@@ -30,6 +30,7 @@ model Post {
     content     String
     tags        String?
     createdAt   DateTime  @default(now())
+    order       Int?
     updatedAt   DateTime  @updatedAt
     isPublished Boolean   @default(false)
     author      User      @relation(fields: [authorId], references: [id])
@@ -37,6 +38,8 @@ model Post {
     comments    Comment[]
 
     @@index([title])
+    @@index([tags])
+    @@index([isPublished])
 }
 
 model Comment {

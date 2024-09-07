@@ -47,9 +47,21 @@ export const POST = async (request: NextRequest) => {
         const body = await request.json()
         const { title, content, tags = '', authorId, isPublished } = body
 
+        // TODO title debounce error
         if (!title || !content || !authorId) {
             return NextResponse.json({ error: 'Title, content, and authorId are required' }, { status: 400 })
         }
+
+        const lastPostOrder = (
+            await prisma.post.findFirst({
+                where: {
+                    isActive: true,
+                },
+                orderBy: {
+                    order: 'desc',
+                },
+            })
+        )?.order
 
         const createdPost = await prisma.post.create({
             data: {
@@ -59,14 +71,15 @@ export const POST = async (request: NextRequest) => {
                 content,
                 tags,
                 isPublished,
+                ...(lastPostOrder && { order: lastPostOrder + 1 }),
             },
         })
 
-        if (!createdPost) {
+        if (!createdPost || !createdPost?.id) {
             return NextResponse.json({ error: 'Failed to create post' }, { status: 500 })
         }
 
-        return NextResponse.json({ post: createdPost }, { status: 201 })
+        return NextResponse.json({ postId: createdPost.id }, { status: 201 })
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 })
     }

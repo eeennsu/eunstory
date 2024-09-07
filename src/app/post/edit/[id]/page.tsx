@@ -7,7 +7,7 @@ interface Props {
     }
 }
 
-const EditPostPage: FC<Props> = async ({ params: { id } }) => {
+const EditDetailPostPage: FC<Props> = async ({ params: { id } }) => {
     const response = await requestGetDetailPost({ id })
 
     if (!('post' in response)) {
@@ -25,4 +25,4 @@ const EditPostPage: FC<Props> = async ({ params: { id } }) => {
     )
 }
 
-export default EditPostPage
+export default EditDetailPostPage
