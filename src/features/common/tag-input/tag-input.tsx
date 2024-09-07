@@ -19,26 +19,42 @@ export const TagInput = forwardRef<TagInputRef, Props>(({ className, placeholder
     const inputRef = useRef<HTMLInputElement>(null)
     const [tags, setTags] = useState<string[]>([])
 
-    const handleRegisterTag = (e: KeyboardEvent<HTMLInputElement>) => {
-        switch (e.key) {
-            case 'Enter':
-                const value = inputRef.current?.value
+    const handleTagLimit = () => {
+        if (tags.length === 5) {
+            toast({
+                title: '태그는 최대 5개까지 등록할 수 있습니다.',
+            })
 
-                if (tags.length === 5) {
-                    toast({
-                        title: '태그는 최대 5개까지 등록할 수 있습니다.',
-                    })
+            if (inputRef.current) {
+                inputRef.current.value = ''
+
+                return true
+            }
+        }
+
+        return false
+    }
+
+    const handleRegisterTag = (e: KeyboardEvent<HTMLInputElement>) => {
+        const value = inputRef.current?.value
+
+        switch (e.key) {
+            case ',':
+                if (handleTagLimit()) {
+                    return
+                }
+
+                if (typeof value === 'string' && value.trim() !== '') {
+                    setTags((prev) => [...prev, value.trim().slice(0, -1)])
 
                     if (inputRef.current) {
                         inputRef.current.value = ''
                     }
-                    return
                 }
 
-                if (value?.includes(';')) {
-                    toast({
-                        title: '태그에는 세미콜론을 사용할 수 없습니다.',
-                    })
+                break
+            case 'Enter':
+                if (handleTagLimit()) {
                     return
                 }
 
@@ -58,12 +74,6 @@ export const TagInput = forwardRef<TagInputRef, Props>(({ className, placeholder
                         inputRef.current.value = ''
                     }
                 }
-
-                break
-            case 'Backspace':
-                if (tags.length === 0) return
-
-                setTags((prev) => prev.slice(0, -1))
 
                 break
         }

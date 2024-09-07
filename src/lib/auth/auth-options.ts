@@ -24,7 +24,7 @@ export const authOptions: AuthOptions = {
                 const password = credentials?.password
 
                 if (!id || !password) {
-                    throw new Error(ERROR_CODES.MISSING_ID_OR_PASSWORD)
+                    throw new Error(ERROR_CODES.MISSING_ID_OR_PASSWORD.code)
                 }
 
                 const admin = await prisma.user.findFirst({
@@ -32,13 +32,13 @@ export const authOptions: AuthOptions = {
                 })
 
                 if (!admin) {
-                    throw new Error(ERROR_CODES.USER_NOT_FOUND)
+                    throw new Error(ERROR_CODES.USER_NOT_FOUND.code)
                 }
 
                 const isPasswordMatch = bcrypt.compareSync(password, admin.password)
 
                 if (!isPasswordMatch) {
-                    throw new Error(ERROR_CODES.INCORRECT_ID_OR_PASSWORD)
+                    throw new Error(ERROR_CODES.INCORRECT_ID_OR_PASSWORD.code)
                 }
 
                 return { '@id': admin.id, name: admin.name, isAdmin: admin.isAdmin }

@@ -24,7 +24,7 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
     const onSubmit = async () => {
         if (!id.length || !password.length) {
             return toast({
-                title: '아이디 또는 비밀번호를 입력해주세요',
+                title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
                 position: 'top',
                 variant: 'warning',
             })
@@ -40,25 +40,25 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
             close()
         } else {
             switch (response?.error) {
-                case ERROR_CODES.MISSING_ID_OR_PASSWORD:
+                case ERROR_CODES.MISSING_ID_OR_PASSWORD.code:
                     return toast({
-                        title: '아이디 또는 비밀번호를 입력해주세요',
+                        title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
                         position: 'top',
                         variant: 'warning',
                     })
 
-                case ERROR_CODES.USER_NOT_FOUND:
+                case ERROR_CODES.USER_NOT_FOUND.code:
                     return toast({
-                        title: '유저를 찾을 수 없습니다.',
-                        description: '다시 입력해주세요.',
+                        title: ERROR_CODES.USER_NOT_FOUND.title,
+                        description: ERROR_CODES.USER_NOT_FOUND.description,
                         position: 'top',
                         variant: 'warning',
                     })
 
-                case ERROR_CODES.INCORRECT_ID_OR_PASSWORD:
+                case ERROR_CODES.INCORRECT_ID_OR_PASSWORD.code:
                     return toast({
-                        title: '아이디 또는 비밀번호가 일치하지 않습니다.',
-                        description: '다시 입력해주세요.',
+                        title: ERROR_CODES.INCORRECT_ID_OR_PASSWORD.title,
+                        description: ERROR_CODES.INCORRECT_ID_OR_PASSWORD.description,
                         position: 'top',
                         variant: 'warning',
                     })

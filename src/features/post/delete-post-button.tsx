@@ -13,14 +13,12 @@ interface Props {
 
 export const DeletePostButton: FC<Props> = ({ id }) => {
     const { isAdminAuthed } = useAdminAuth()
+    const { executeWithProgress, barRouter } = useProgressBar()
+    const { toast } = useToast()
 
     if (!isAdminAuthed) {
         return null
     }
-
-    const { executeWithProgress, barRouter } = useProgressBar()
-
-    const { toast } = useToast()
 
     const onDelete = async () => {
         if (!confirm('정말 삭제하시겠습니까?')) {

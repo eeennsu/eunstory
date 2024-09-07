@@ -12,6 +12,8 @@ import { useToast } from '@/lib/ui/use-toast'
 import { Post } from '@prisma/client'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { FormEvent, KeyboardEvent, useCallback, useEffect, useRef, useState, type FC } from 'react'
+import { Tooltip, TooltipContent, TooltipProvider } from '@/lib/ui/tooltip'
+import { TooltipTrigger } from '@radix-ui/react-tooltip'
 
 export const PostForm: FC = () => {
     const router = useRouter()
@@ -175,9 +177,12 @@ export const PostForm: FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedPost])
 
-    useAsync(async () => {
+    const { isLoading } = useAsync(async () => {
         if (temporarySavedPostId) {
-            const fetchTemporarySavedPost = await requestGetDetailPost({ id: temporarySavedPostId, isPublished: false })
+            const fetchTemporarySavedPost = await requestGetDetailPost({
+                id: temporarySavedPostId,
+                isPublished: false,
+            })
 
             if ('post' in fetchTemporarySavedPost) {
                 const { post } = fetchTemporarySavedPost
@@ -190,43 +195,58 @@ export const PostForm: FC = () => {
     }, [temporarySavedPostId])
 
     return (
-        <section className='flex w-full flex-1 flex-col bg-blue-200 items-center justify-center'>
-            <form
-                onSubmit={onSubmit}
-                className='flex flex-col gap-4 flex-1 py-10'>
-                <Input
-                    className='w-full text-2xl h-16 font-semibold'
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder='제목을 입력해주세요.'
-                    onKeyDown={preventEnterInInput}
-                />
-                <TagInput
-                    ref={tagInputRef}
-                    className='w-full h-12'
-                    placeholder='태그를 입력해주세요.'
-                    onKeyDown={preventEnterInInput}
-                />
-                <TiptapEditor
-                    ref={editorRef}
-                    isAllToolbar
-                    placeholder='내용을 입력해주세요.'
-                    onUpdate={({ editor }) => setContent(editor.getHTML())}
-                />
+        !isLoading && (
+            <section className='flex w-full flex-1 flex-col bg-blue-200 items-center justify-center'>
+                <form
+                    onSubmit={onSubmit}
+                    className='flex flex-col gap-4 flex-1 py-10'>
+                    <Input
+                        className='w-full text-2xl h-16 font-semibold'
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder='제목을 입력해주세요.'
+                        onKeyDown={preventEnterInInput}
+                    />
 
-                <div className='flex gap-4 justify-end'>
-                    <Button
-                        type='button'
-                        variant='secondary'
-                        onClick={() => {
-                            temporarySavePost()
-                            setIsSelfTemporarySaved(true)
-                        }}>
-                        임시 저장
-                    </Button>
-                    <Button type='submit'>작성하기</Button>
-                </div>
-            </form>
-        </section>
+                    <TooltipProvider delayDuration={300}>
+                        <Tooltip defaultOpen>
+                            <TooltipTrigger
+                                type='button'
+                                className='relative'>
+                                <TagInput
+                                    ref={tagInputRef}
+                                    className='w-full h-12'
+                                    placeholder='태그를 입력해주세요.'
+                                    onKeyDown={preventEnterInInput}
+                                />
+                            </TooltipTrigger>
+                            <TooltipContent className='absolute left-[84px] top-6 w-[320px]'>
+                                쉼표 혹은 엔터를 입력하면 태그가 등록됩니다. <br /> 클릭하면 삭제됩니다.
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+
+                    <TiptapEditor
+                        ref={editorRef}
+                        isAllToolbar
+                        placeholder='내용을 입력해주세요.'
+                        onUpdate={({ editor }) => setContent(editor.getHTML())}
+                    />
+
+                    <div className='flex gap-4 justify-end'>
+                        <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={() => {
+                                temporarySavePost()
+                                setIsSelfTemporarySaved(true)
+                            }}>
+                            임시 저장
+                        </Button>
+                        <Button type='submit'>작성하기</Button>
+                    </div>
+                </form>
+            </section>
+        )
     )
 }

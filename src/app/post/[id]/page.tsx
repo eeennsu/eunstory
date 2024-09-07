@@ -44,5 +44,3 @@ export const generateStaticParams = async () => {
         id: post.id,
     }))
 }
-
-export const revalidate = 600
