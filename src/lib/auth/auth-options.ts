@@ -38,7 +38,7 @@ export const authOptions: AuthOptions = {
                 const isPasswordMatch = bcrypt.compareSync(password, admin.password)
 
                 if (!isPasswordMatch) {
-                    throw new Error(ERROR_CODES.INCORRECT_PASSWORD)
+                    throw new Error(ERROR_CODES.INCORRECT_ID_OR_PASSWORD)
                 }
 
                 return { '@id': admin.id, name: admin.name, isAdmin: admin.isAdmin }

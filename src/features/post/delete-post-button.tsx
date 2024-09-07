@@ -5,6 +5,7 @@ import { useProgressBar } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import { useToast } from '@/lib/ui/use-toast'
+import { useRouter } from 'next/navigation'
 import type { FC } from 'react'
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 
 export const DeletePostButton: FC<Props> = ({ id }) => {
     const { executeWithProgress, barRouter } = useProgressBar()
+
     const { toast } = useToast()
 
     const onDelete = async () => {
@@ -22,12 +24,13 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
 
         executeWithProgress(async () => {
             try {
-                await requestDeletePost({ id })
+                await requestDeletePost({ id, revalidatePath: routePaths.post.list() })
             } catch (error) {
                 console.error(error)
                 toast({ title: '게시물 삭제에 실패했습니다', description: '다시 시도해주세요.' })
             } finally {
                 barRouter.replace(routePaths.post.list())
+                barRouter.refresh()
             }
         })
     }

@@ -22,7 +22,7 @@ export const requestGetPostList = async ({
 
 export const requestCreatePost = async ({ post }: { post: Partial<Post> }) => {
     return generateRequest<Partial<Post>, ResponseCreatePostType>({
-        url: `/api/post`,
+        url: '/api/post',
         method: 'POST',
         body: post,
     })
@@ -36,8 +36,8 @@ export const requestEditPost = async ({ id, post }: { id: string; post: Partial<
     })
 }
 
-export const requestDeletePost = async ({ id }: { id: string }) => {
-    return generateRequest<undefined, null>({ url: `/api/post/${id}`, method: 'DELETE' })
+export const requestDeletePost = async ({ id, revalidatePath }: { id: string; revalidatePath: string }) => {
+    return generateRequest<undefined, null>({ url: `/api/post/${id}?path=${revalidatePath}`, method: 'DELETE' })
 }
 
 export const requestGetDetailPost = async ({ id, isPublished }: { id: string; isPublished?: boolean }) => {

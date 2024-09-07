@@ -5,6 +5,7 @@ import { Button } from '@/lib/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/lib/ui/dialog'
 import { Input } from '@/lib/ui/input'
 import { Label } from '@/lib/ui/label'
+import { useToast } from '@/lib/ui/use-toast'
 import { X } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { Fragment, PropsWithChildren, useState, type FC } from 'react'
@@ -18,8 +19,17 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
     const [id, setId] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const { status } = useSession()
+    const { toast } = useToast()
 
     const onSubmit = async () => {
+        if (!id.length || !password.length) {
+            return toast({
+                title: '아이디 또는 비밀번호를 입력해주세요',
+                position: 'center',
+                variant: 'warning',
+            })
+        }
+
         const response = await signIn('credentials', {
             id,
             password,
@@ -31,13 +41,27 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
         } else {
             switch (response?.error) {
                 case ERROR_CODES.MISSING_ID_OR_PASSWORD:
-                    return alert('ID or Password is missing')
+                    return toast({
+                        title: '아이디 또는 비밀번호를 입력해주세요',
+                        position: 'center',
+                        variant: 'warning',
+                    })
 
                 case ERROR_CODES.USER_NOT_FOUND:
-                    return alert('User not found')
+                    return toast({
+                        title: '유저를 찾을 수 없습니다.',
+                        description: '다시 입력해주세요.',
+                        position: 'center',
+                        variant: 'warning',
+                    })
 
-                case ERROR_CODES.INCORRECT_PASSWORD:
-                    return alert('Incorrect password')
+                case ERROR_CODES.INCORRECT_ID_OR_PASSWORD:
+                    return toast({
+                        title: '아이디 또는 비밀번호가 일치하지 않습니다.',
+                        description: '다시 입력해주세요.',
+                        position: 'center',
+                        variant: 'warning',
+                    })
             }
         }
     }
@@ -49,6 +73,7 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
             <DialogTrigger className='cursor-default'>{children}</DialogTrigger>
             <DialogContent
                 className='sm:max-w-[425px]'
+                onInteractOutside={close}
                 isCloseHidden>
                 <DialogHeader>
                     <div className='flex justify-between items-center'>

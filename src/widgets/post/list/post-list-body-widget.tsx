@@ -8,10 +8,8 @@ export const PostListBodyWidget: FC = async () => {
     const response = await serverRequestGetDefaultPostList()
 
     if ('error' in response) {
-        redirect(routePaths.home())
+        return redirect(routePaths.home())
     }
 
     return <PostListByScroll initialPosts={response.posts} />
 }
-
-export const revalidate = 600

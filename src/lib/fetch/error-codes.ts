@@ -3,7 +3,7 @@ export const ERROR_CODES = {
     INVALID_ID_FORMAT: 'INVALID_ID_FORMAT', // ID 형식이 유효하지 않음
     INVALID_PASSWORD_FORMAT: 'INVALID_PASSWORD_FORMAT', // 비밀번호 형식이 유효하지 않음
     USER_NOT_FOUND: 'USER_NOT_FOUND', // 사용자 찾을 수 없음
-    INCORRECT_PASSWORD: 'INCORRECT_PASSWORD', // 비밀번호가 틀림
+    INCORRECT_ID_OR_PASSWORD: 'INCORRECT_ID_OR_PASSWORD', // ID 또는 비밀번호가 틀림
     FORBIDDEN: 'FORBIDDEN', // 접근 권한 없음
     UNAUTHORIZED: 'UNAUTHORIZED', // 접근 권한 인증 필요
     TOKEN_EXPIRED: 'TOKEN_EXPIRED', // 인증 토큰 만료

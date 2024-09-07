@@ -89,8 +89,7 @@ export const PostForm: FC = () => {
                 const response = await requestCreatePost({ post })
 
                 if ('post' in response) {
-                    const { dismiss } = toast({ title: '게시물이 생성되었습니다.' })
-                    
+                    toast({ title: '게시물이 생성되었습니다.' })
                 } else {
                     toast({ title: '게시물 생성에 실패하였습니다.', description: '다시 시도해주세요.' })
                 }

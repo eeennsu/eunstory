@@ -6,7 +6,7 @@ import { Button } from '@/lib/ui/button'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, type FC } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import { LoginModal } from '@/features/layout'
 
 export const Header: FC = () => {
@@ -14,6 +14,16 @@ export const Header: FC = () => {
     const isAdminLoggedIn = status === 'authenticated' && data?.user?.isAdmin
 
     const [count, setCount] = useState<number>(0)
+
+    useEffect(() => {
+        if (count === 0 || count === 3) return
+
+        const timer = setTimeout(() => {
+            setCount(0)
+        }, 500)
+
+        return () => clearTimeout(timer)
+    }, [count])
 
     return (
         <header className='bg-sky-200 w-full flex items-center justify-center'>

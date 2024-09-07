@@ -1,15 +1,15 @@
-'use client'
-
-import { useAdminAuth } from '@/lib/hooks'
+import { getServerAdminAuth } from '@/lib/auth'
+import { routePaths } from '@/lib/route'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { PostForm } from '@/widgets/home'
+import { redirect } from 'next/navigation'
 import type { FC } from 'react'
 
-const CreatePostPage: FC = () => {
-    const { isAdminAuthed } = useAdminAuth({ isProtectedRoute: true })
+const CreatePostPage: FC = async () => {
+    const { isAdminAuthed } = await getServerAdminAuth()
 
     if (!isAdminAuthed) {
-        return null
+        return redirect(routePaths.home())
     }
 
     return (

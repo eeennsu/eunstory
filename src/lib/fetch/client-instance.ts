@@ -20,9 +20,6 @@ export const generateRequest = async <TRequest extends RequestProps | undefined,
         headers: {
             'Content-Type': 'application/json',
         },
-        next: {
-            revalidate: 3600,
-        },
         ...config,
     }
 
@@ -34,6 +31,10 @@ export const generateRequest = async <TRequest extends RequestProps | undefined,
 
     if (response.status === 204) {
         return null as TResponse
+    }
+
+    if (!response.ok) {
+        throw new Error(response.statusText)
     }
 
     return response.json() as TResponse

@@ -1,7 +1,9 @@
 import type { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma/prisma-client'
 import { NextResponseData } from '@/lib/fetch'
+import prisma from '@/lib/prisma/prisma-client'
+import { getServerAdminAuth } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 
 // get post list
 export const GET = async (request: NextRequest) => {

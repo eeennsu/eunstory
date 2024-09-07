@@ -2,16 +2,11 @@
 
 import { ResponseGetDetailPostType } from '@/app/api/post/[id]/route'
 import { ResponseGetPostListType } from '@/app/api/post/route'
-import { getUrlFromServer, serverRequest } from '@/lib/fetch'
+import { getUrlFromServer, generateRequest } from '@/lib/fetch'
 
 export const serverRequestGetDefaultPostList = async () => {
-    return serverRequest<undefined, ResponseGetPostListType>({
+    return generateRequest<undefined, ResponseGetPostListType>({
         url: getUrlFromServer('/api/post/?curPage=1&perPage=5'),
-        config: {
-            next: {
-                tags: ['post-list'],
-            },
-        },
     })
 }
 
@@ -20,7 +15,7 @@ export const serverRequestGetDetailPost = async ({ id }: { id: string }) => {
         throw new Error(`Post ID is required`)
     }
 
-    return serverRequest<undefined, ResponseGetDetailPostType>({
+    return generateRequest<undefined, ResponseGetDetailPostType>({
         url: getUrlFromServer(`/api/post/${id}`),
     })
 }

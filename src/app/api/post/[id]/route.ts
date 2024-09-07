@@ -1,8 +1,9 @@
+import { getServerAdminAuth } from '@/lib/auth'
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
-import { routePaths } from '@/lib/route'
 import { Post } from '@prisma/client'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { NextRequest, NextResponse } from 'next/server'
 
 type Params = {
@@ -45,6 +46,12 @@ export type ResponseGetDetailPostType = NextResponseData<typeof GET>
 // edit post
 export const PATCH = async (request: NextRequest, { params }: Params) => {
     try {
+        const { isAdminAuthed } = await getServerAdminAuth()
+
+        if (!isAdminAuthed) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
+
         const id = params?.id
 
         if (!id) {
@@ -79,7 +86,13 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
 export type ResponsePatchDetailPostType = NextResponseData<typeof PATCH>
 
 // delete post
-export const DELETE = async (_: NextRequest, { params }: Params) => {
+export const DELETE = async (request: NextRequest, { params }: Params) => {
+    const { isAdminAuthed } = await getServerAdminAuth()
+
+    if (!isAdminAuthed) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     try {
         const id = params?.id
 
@@ -100,7 +113,14 @@ export const DELETE = async (_: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 })
         }
 
-        return new NextResponse(null, { status: 204 })
+        const path = request.nextUrl.searchParams.get('path')
+
+        if (path) {
+            revalidatePath(path)
+            redirect(path)
+        }
+
+        return NextResponse.json({ revalidate: true, now: Date.now(), message: 'Missing path to revalidate' })
     } catch (error) {
         console.log(error)
         return NextResponse.json({ error }, { status: 500 })
