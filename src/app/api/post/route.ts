@@ -2,7 +2,8 @@ import type { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
-import { getServerAdminAuth } from '@/lib/auth'
+import { routePaths } from '@/lib/route'
+import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 // get post list
@@ -11,6 +12,9 @@ export const GET = async (request: NextRequest) => {
     const curPage = Number(searchParams.get('curPage'))
     const perPage = Number(searchParams.get('perPage'))
     const tag = searchParams.get('tag') || ''
+
+    console.log('curPage', curPage)
+    console.log('perPage', perPage)
 
     try {
         const totalCount = await prisma.post.count()
@@ -21,11 +25,14 @@ export const GET = async (request: NextRequest) => {
                 tags: {
                     contains: tag,
                 },
+                order: {
+                    not: null,
+                },
             },
             skip: perPage * (curPage - 1),
             take: perPage,
             orderBy: {
-                createdAt: 'desc',
+                order: 'desc',
             },
         })) as Post[]
 
@@ -78,6 +85,8 @@ export const POST = async (request: NextRequest) => {
         if (!createdPost || !createdPost?.id) {
             return NextResponse.json({ error: 'Failed to create post' }, { status: 500 })
         }
+
+        revalidatePath(routePaths.post.list())
 
         return NextResponse.json({ postId: createdPost.id }, { status: 201 })
     } catch (error) {

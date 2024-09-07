@@ -7,6 +7,11 @@ import { getUrlFromServer, generateRequest } from '@/lib/fetch'
 export const serverRequestGetDefaultPostList = async () => {
     return generateRequest<undefined, ResponseGetPostListType>({
         url: getUrlFromServer('/api/post/?curPage=1&perPage=5'),
+        config: {
+            next: {
+                revalidate: 60 * 60, // 1 hours
+            },
+        },
     })
 }
 

@@ -11,7 +11,7 @@ interface Props {
 
 const ErrorPage: NextPage<Props> = ({ error, reset }) => {
     useEffect(() => {
-        console.log(error)
+        console.error(error)
     }, [error])
 
     return (

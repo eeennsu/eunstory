@@ -7,7 +7,6 @@ export type Parameters<T> = {
     method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
     body?: T
     config?: RequestInit
-    json?: boolean
 }
 
 export const generateRequest = async <TRequest extends RequestProps | undefined, TResponse>({
@@ -15,7 +14,6 @@ export const generateRequest = async <TRequest extends RequestProps | undefined,
     url,
     body,
     config,
-    json = true,
 }: Parameters<TRequest>) => {
     const requestOptions: RequestInit = {
         method,
@@ -37,11 +35,6 @@ export const generateRequest = async <TRequest extends RequestProps | undefined,
 
     if (!response.ok) {
         throw new Error(response.statusText)
-    }
-
-    if (!json) {
-        console.log('@#@#@#@#@#@response', response)
-        return response
     }
 
     return response.json() as TResponse

@@ -11,5 +11,6 @@ export const PostListBodyWidget: FC = async () => {
         return redirect(routePaths.home())
     }
 
-    return <PostListByScroll initialPosts={response.posts} />
+    return <PostListByScroll initialPosts={response?.posts} />
 }
+
