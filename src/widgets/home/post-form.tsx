@@ -14,6 +14,8 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState, type FC } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider } from '@/lib/ui/tooltip'
 import { TooltipTrigger } from '@radix-ui/react-tooltip'
+import { cn } from '@/lib/shadcn/shadcn-utils'
+import { Ellipsis } from 'lucide-react'
 
 export const PostForm: FC = () => {
     const router = useRouter()
@@ -82,9 +84,8 @@ export const PostForm: FC = () => {
             const post: Partial<Post> = {
                 title,
                 content,
-                ...(tags.length > 0 && { tags }),
                 authorId,
-                isPublished: true,
+                ...(tags.length > 0 && { tags }),
             }
 
             try {
@@ -135,7 +136,7 @@ export const PostForm: FC = () => {
                 post: {
                     ...post,
                     authorId,
-                    isPublished: false,
+                    order: null,
                 },
             })
 
@@ -180,7 +181,7 @@ export const PostForm: FC = () => {
         if (temporarySavedPostId) {
             const fetchTemporarySavedPost = await requestGetDetailPost({
                 id: temporarySavedPostId,
-                isPublished: false,
+                isPublished: false
             })
 
             if ('post' in fetchTemporarySavedPost) {
@@ -194,48 +195,54 @@ export const PostForm: FC = () => {
     }, [temporarySavedPostId])
 
     return (
-        <section className='flex w-full flex-1 flex-col bg-blue-200 items-center justify-center'>
-            <form
-                onSubmit={handleSubmit}
-                className='flex flex-col gap-4 flex-1 py-10'>
-                {!isLoading && (
-                    <>
-                        <Input
-                            className='w-full text-2xl h-16 font-semibold'
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder='제목을 입력해주세요.'
-                            onKeyDown={preventEnterInInput}
-                        />
+        <>
+            {isLoading && (
+                <section className='flex w-full h-full items-center justify-center flex-grow'>
+                    <div className='w-full flex justify-center'>
+                        <Ellipsis className='size-8 animate-ping' />
+                    </div>
+                </section>
+            )}
+            <section
+                className={cn(
+                    'flex w-full flex-1 flex-col bg-blue-200 items-center justify-center',
+                    isLoading ? 'hidden' : 'flex'
+                )}>
+                <form
+                    onSubmit={handleSubmit}
+                    className='flex flex-col gap-4 flex-1 py-10'>
+                    <Input
+                        className='w-full text-2xl h-16 font-semibold'
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder='제목을 입력해주세요.'
+                        onKeyDown={preventEnterInInput}
+                    />
+                    <TooltipProvider delayDuration={100}>
+                        <Tooltip defaultOpen>
+                            <TooltipTrigger
+                                type='button'
+                                className='relative'>
+                                <TagInput
+                                    ref={tagInputRef}
+                                    className='w-full h-12'
+                                    placeholder='태그를 입력해주세요.'
+                                    onKeyDown={preventEnterInInput}
+                                />
+                            </TooltipTrigger>
+                            <TooltipContent className='absolute left-[84px] top-6 w-[290px]'>
+                                쉼표 혹은 엔터를 입력하면 태그가 등록됩니다. <br /> 클릭하면 삭제됩니다.
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
 
-                        <TooltipProvider delayDuration={300}>
-                            <Tooltip defaultOpen>
-                                <TooltipTrigger
-                                    type='button'
-                                    className='relative'>
-                                    <TagInput
-                                        ref={tagInputRef}
-                                        className='w-full h-12'
-                                        placeholder='태그를 입력해주세요.'
-                                        onKeyDown={preventEnterInInput}
-                                    />
-                                </TooltipTrigger>
-                                <TooltipContent className='absolute left-[84px] top-6 w-[320px]'>
-                                    쉼표 혹은 엔터를 입력하면 태그가 등록됩니다. <br /> 클릭하면 삭제됩니다.
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    </>
-                )}
+                    <TiptapEditor
+                        ref={editorRef}
+                        isAllToolbar
+                        placeholder='내용을 입력해주세요.'
+                        onUpdate={({ editor }) => setContent(editor.getHTML())}
+                    />
 
-                <TiptapEditor
-                    ref={editorRef}
-                    isAllToolbar
-                    placeholder='내용을 입력해주세요.'
-                    onUpdate={({ editor }) => setContent(editor.getHTML())}
-                />
-
-                {!isLoading && (
                     <div className='flex gap-4 justify-end'>
                         <Button
                             type='button'
@@ -248,8 +255,8 @@ export const PostForm: FC = () => {
                         </Button>
                         <Button type='submit'>작성하기</Button>
                     </div>
-                )}
-            </form>
-        </section>
+                </form>
+            </section>
+        </>
     )
 }

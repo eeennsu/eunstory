@@ -41,9 +41,11 @@ export const requestDeletePost = async ({ id }: { id: string }) => {
 }
 
 export const requestGetDetailPost = async ({ id, isPublished }: { id: string; isPublished?: boolean }) => {
-    const query = isPublished !== undefined ? `?isPublished=${isPublished ? '1' : '0'}` : ''
+    const params = new URLSearchParams()
+
+    isPublished && params.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetDetailPostType>({
-        url: `/api/post/${id}${query}`,
+        url: `/api/post/${id}?${params.toString()}`,
     })
 }

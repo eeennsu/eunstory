@@ -7,7 +7,6 @@ import Link from 'next/link'
 import type { FC } from 'react'
 
 export const PostListHeadWidget: FC = () => {
-
     // 고정
     const { isAdminAuthed } = useAdminAuth()
 

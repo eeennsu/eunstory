@@ -8,32 +8,36 @@ import { redirect } from 'next/navigation'
 
 // get post list
 export const GET = async (request: NextRequest) => {
-    const searchParams = new URL(request.url).searchParams
-    const curPage = Number(searchParams.get('curPage'))
-    const perPage = Number(searchParams.get('perPage'))
-    const tag = searchParams.get('tag') || ''
+    const requestUrl = new URL(request.url)
+    const params = requestUrl.searchParams
+    const curPage = Number(params.get('curPage'))
+    const perPage = Number(params.get('perPage'))
+    const tag = params.get('tag')
 
-    console.log('curPage', curPage)
-    console.log('perPage', perPage)
+    const paginationParams = {
+        skip: perPage * (curPage - 1),
+        take: perPage,
+    }
 
     try {
         const totalCount = await prisma.post.count()
         const posts = (await prisma.post.findMany({
             where: {
                 isActive: true,
-                isPublished: true,
-                tags: {
-                    contains: tag,
-                },
                 order: {
                     not: null,
                 },
+
+                ...(tag && {
+                    tags: {
+                        contains: tag,
+                    },
+                }),
             },
-            skip: perPage * (curPage - 1),
-            take: perPage,
             orderBy: {
                 order: 'desc',
             },
+            ...(requestUrl && { ...paginationParams }),
         })) as Post[]
 
         if (!posts) {
@@ -52,23 +56,33 @@ export type ResponseGetPostListType = NextResponseData<typeof GET>
 export const POST = async (request: NextRequest) => {
     try {
         const body = await request.json()
-        const { title, content, tags = '', authorId, isPublished } = body
+        const { title, content, tags, authorId, order } = body
 
         // TODO title debounce error
         if (!title || !content || !authorId) {
             return NextResponse.json({ error: 'Title, content, and authorId are required' }, { status: 400 })
         }
 
-        const lastPostOrder = (
-            await prisma.post.findFirst({
-                where: {
-                    isActive: true,
-                },
-                orderBy: {
-                    order: 'desc',
-                },
-            })
-        )?.order
+        let isTemporarySave = false
+        let lastPostOrder = null
+
+        if (order === undefined) {
+            lastPostOrder = (
+                await prisma.post.findFirst({
+                    where: {
+                        isActive: true,
+                        order: {
+                            not: null,
+                        },
+                    },
+                    orderBy: {
+                        order: 'desc',
+                    },
+                })
+            )?.order
+        } else if (order === null) {
+            isTemporarySave = true
+        }
 
         const createdPost = await prisma.post.create({
             data: {
@@ -77,7 +91,6 @@ export const POST = async (request: NextRequest) => {
                 authorId,
                 content,
                 tags,
-                isPublished,
                 ...(lastPostOrder && { order: lastPostOrder + 1 }),
             },
         })
@@ -86,7 +99,9 @@ export const POST = async (request: NextRequest) => {
             return NextResponse.json({ error: 'Failed to create post' }, { status: 500 })
         }
 
-        revalidatePath(routePaths.post.list())
+        if (!isTemporarySave) {
+            revalidatePath(routePaths.post.list())
+        }
 
         return NextResponse.json({ postId: createdPost.id }, { status: 201 })
     } catch (error) {

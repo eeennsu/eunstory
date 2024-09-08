@@ -1,4 +1,4 @@
-import { serverRequestGetDefaultPostList, serverRequestGetDetailPost } from '@/entities/post'
+import { serverRequestGetAllPostList, serverRequestGetDetailPost } from '@/entities/post'
 import { DeletePostButton } from '@/features/post'
 import { getDateWithTime, textSanitizing } from '@/lib/utils'
 import { Post } from '@prisma/client'
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
-    const response = await serverRequestGetDetailPost({ id })
+    const response = await serverRequestGetDetailPost({ id, isPublished: true })
 
     if (!('post' in response)) {
         throw new Error('Post not found')
@@ -37,7 +37,7 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
 export default DetailPostPage
 
 export const generateStaticParams = async () => {
-    const response = (await serverRequestGetDefaultPostList()) as { posts: Post[]; totalCount: number }
+    const response = (await serverRequestGetAllPostList({ isPublished: true })) as { posts: Post[]; totalCount: number }
 
     return response.posts.map((post) => ({
         id: post.id,

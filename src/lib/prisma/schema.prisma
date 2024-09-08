@@ -24,22 +24,21 @@ model Visitor {
 }
 
 model Post {
-    id          String    @id @unique @default(cuid())
-    isActive    Boolean   @default(true)
-    title       String
-    content     String
-    tags        String?
-    createdAt   DateTime  @default(now())
-    order       Int?
-    updatedAt   DateTime  @updatedAt
-    isPublished Boolean   @default(false)
-    author      User      @relation(fields: [authorId], references: [id])
-    authorId    String
-    comments    Comment[]
+    id        String    @id @unique @default(cuid())
+    isActive  Boolean   @default(true)
+    title     String
+    content   String
+    tags      String?
+    createdAt DateTime  @default(now())
+    order     Int?
+    updatedAt DateTime  @updatedAt
+    author    User      @relation(fields: [authorId], references: [id])
+    authorId  String
+    comments  Comment[]
 
     @@index([title])
     @@index([tags])
-    @@index([isPublished])
+    @@index([order])
 }
 
 model Comment {
