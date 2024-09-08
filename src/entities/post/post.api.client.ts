@@ -36,16 +36,19 @@ export const requestEditPost = async ({ id, post }: { id: string; post: Partial<
     })
 }
 
-export const requestDeletePost = async ({ id }: { id: string }) => {
-    return generateRequest<undefined, null>({ url: `/api/post/${id}`, method: 'DELETE' })
+export const requestDeletePost = async ({ id, isPublished }: { id: string; isPublished: boolean }) => {
+    const searchParams = new URLSearchParams()
+    searchParams.append('isPublished', String(isPublished))
+
+    return generateRequest<undefined, null>({ url: `/api/post/${id}?${searchParams.toString()}`, method: 'DELETE' })
 }
 
 export const requestGetDetailPost = async ({ id, isPublished }: { id: string; isPublished?: boolean }) => {
-    const params = new URLSearchParams()
+    const searchParams = new URLSearchParams()
 
-    isPublished && params.append('isPublished', isPublished.toString())
+    isPublished && searchParams.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetDetailPostType>({
-        url: `/api/post/${id}?${params.toString()}`,
+        url: `/api/post/${id}?${searchParams.toString()}`,
     })
 }
