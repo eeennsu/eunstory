@@ -1,6 +1,7 @@
 // post list edit page
 
 import { serverRequestGetAllPostList } from '@/entities/post'
+import { EditPostOrderByDnd } from '@/features/post'
 import { getServerAdminAuth } from '@/lib/auth'
 import { routePaths } from '@/lib/route'
 import { redirect } from 'next/navigation'
@@ -21,7 +22,14 @@ const EditPostListPage: FC = async () => {
 
     return (
         <main className='page-container max-w-[1200px] mx-auto'>
-            <h2>내글 수정하기</h2>
+            {postListResponse.totalCount === 0 ? (
+                '게시글이 없습니다.'
+            ) : (
+                <EditPostOrderByDnd
+                    allPosts={postListResponse.posts}
+                    totalCount={postListResponse.totalCount}
+                />
+            )}
         </main>
     )
 }

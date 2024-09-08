@@ -52,3 +52,17 @@ export const requestGetDetailPost = async ({ id, isPublished }: { id: string; is
         url: `/api/post/${id}?${searchParams.toString()}`,
     })
 }
+
+type RequestEditPostListOrder = {
+    updatedSequences: Array<{ id: Post['id']; sequence: number }>
+}
+
+export const requestEditPostListOrder = async ({ updatedSequences }: RequestEditPostListOrder) => {
+    return generateRequest<RequestEditPostListOrder, {}>({
+        url: '/api/post',
+        method: 'PATCH',
+        body: {
+            updatedSequences,
+        },
+    })
+}

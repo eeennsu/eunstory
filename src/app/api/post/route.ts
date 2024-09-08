@@ -14,20 +14,26 @@ export const GET = async (request: NextRequest) => {
     const perPage = Number(params.get('perPage'))
     const tag = params.get('tag')
 
-    const paginationParams = {
-        skip: perPage * (curPage - 1),
-        take: perPage,
-    }
+    const paginationParams = curPage &&
+        perPage && {
+            skip: perPage * (curPage - 1),
+            take: perPage,
+        }
 
     try {
-        const totalCount = await prisma.post.count()
+        const totalCount = await prisma.post.count({
+            where: {
+                order: {
+                    not: null,
+                },
+            },
+        })
         const posts = (await prisma.post.findMany({
             where: {
                 isActive: true,
                 order: {
                     not: null,
                 },
-
                 ...(tag && {
                     tags: {
                         contains: tag,
@@ -37,7 +43,7 @@ export const GET = async (request: NextRequest) => {
             orderBy: {
                 order: 'desc',
             },
-            ...(requestUrl && { ...paginationParams }),
+            ...(paginationParams && { ...paginationParams }),
         })) as Post[]
 
         if (!posts) {
@@ -110,3 +116,36 @@ export const POST = async (request: NextRequest) => {
 }
 
 export type ResponseCreatePostType = NextResponseData<typeof POST>
+
+// update post order
+export const PATCH = async (request: NextRequest) => {
+    try {
+        const body = await request.json()
+        const updatedSequences = (body?.updatedSequences || []) as Array<{ id: string; sequence: number }>
+
+        if (!updatedSequences) {
+            return NextResponse.json({ error: 'Updated sequences are required' }, { status: 400 })
+        }
+
+        await Promise.all(
+            updatedSequences.map((post) =>
+                prisma.post.update({
+                    where: {
+                        id: post.id,
+                    },
+                    data: {
+                        order: post.sequence,
+                    },
+                })
+            )
+        )
+
+        revalidatePath(routePaths.post.list())
+
+        return NextResponse.json({ }, { status: 200 })
+    } catch (error) {
+        return NextResponse.json({ error }, { status: 500 })
+    }
+}
+
+export type ResponsePatchPostOrderType = NextResponseData<typeof PATCH>
