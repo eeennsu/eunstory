@@ -77,6 +77,9 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to edit post' }, { status: 500 })
         }
 
+        revalidatePath(routePaths.post.list())
+        revalidatePath(routePaths.post.detail(editedPost.id))
+
         return NextResponse.json({ post: editedPost })
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 })

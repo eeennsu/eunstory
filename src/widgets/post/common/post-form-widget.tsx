@@ -11,19 +11,17 @@ import { Input } from '@/shared/common'
 import { useToast } from '@/lib/ui/use-toast'
 import { Post } from '@prisma/client'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { FormEvent, KeyboardEvent, useEffect, useRef, useState, type FC } from 'react'
+import { FormEvent, KeyboardEvent, useCallback, useEffect, useRef, useState, type FC } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider } from '@/lib/ui/tooltip'
 import { TooltipTrigger } from '@radix-ui/react-tooltip'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Ellipsis } from 'lucide-react'
 
 interface Props {
-    prevTitle?: string
-    prevContent?: string
-    prevTags?: string
+    prevPost?: Post // prevPost 가 있으면 수정 폼, 없으면 생성 폼
 }
 
-export const PostFormWidget: FC<Props> = () => {
+export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const router = useRouter()
     const params = useSearchParams()
     const pathname = usePathname()
@@ -94,17 +92,33 @@ export const PostFormWidget: FC<Props> = () => {
                 ...(tags.length > 0 && { tags }),
             }
 
+            const toastKeyword = prevPost ? '수정' : '생성'
+
             try {
-                const response = await requestCreatePost({ post })
+                let response
+
+                if (prevPost) {
+                    response = await requestEditPost({
+                        id: prevPost.id,
+                        post,
+                    })
+                } else {
+                    response = await requestCreatePost({
+                        post: {
+                            ...post,
+                            order: null,
+                        },
+                    })
+                }
 
                 if (response) {
-                    toast({ title: '게시물이 생성되었습니다.' })
+                    toast({ title: `게시물이 ${toastKeyword}되었습니다` })
                 } else {
-                    toast({ title: '게시물 생성에 실패하였습니다.', description: '다시 시도해주세요.' })
+                    toast({ title: `게시물 ${toastKeyword}에 실패하였습니다.`, description: '다시 시도해주세요.' })
                 }
             } catch (error) {
                 console.error(error)
-                toast({ title: '게시물 생성에 실패하였습니다.', description: '다시 시도해주세요.' })
+                toast({ title: `게시물 ${toastKeyword}에 실패하였습니다.`, description: '다시 시도해주세요.' })
             } finally {
                 barRouter.replace(routePaths.post.list())
                 barRouter.refresh()
@@ -113,7 +127,7 @@ export const PostFormWidget: FC<Props> = () => {
     }
 
     // 임시저장 함수
-    const temporarySavePost = async () => {
+    const temporarySavePost = useCallback(async () => {
         let isSaved
 
         const tags = tagInputRef.current?.getTags().join(',') || ''
@@ -161,7 +175,7 @@ export const PostFormWidget: FC<Props> = () => {
                 title: '포스트가 임시 저장되었습니다.',
             })
         }
-    }
+    }, [title, content, temporarySavedPostId])
 
     // 엔터 입력시 submit 이벤트 방지
     const preventEnterInInput = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -172,7 +186,7 @@ export const PostFormWidget: FC<Props> = () => {
 
     // 제목 또는 내용이 변경되면 임시저장
     useEffect(() => {
-        if (!title.length || !content.length) return
+        if (prevPost || !title.length || !content.length) return
 
         if (!isSelfTemporarySaved) {
             temporarySavePost()
@@ -183,20 +197,31 @@ export const PostFormWidget: FC<Props> = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedPost])
 
+    // 만약 수정페이지라면 기존 포스트 정보를 가져와서 렌더링
+    useEffect(() => {
+        if (!prevPost) return
+
+        setTitle(prevPost.title)
+        setContent(prevPost.content)
+
+        prevPost.tags && tagInputRef.current?.setTagValues(prevPost.tags.split(','))
+    }, [prevPost])
+
     const { isLoading } = useAsync(async () => {
-        if (temporarySavedPostId) {
-            const fetchTemporarySavedPost = await requestGetDetailPost({
-                id: temporarySavedPostId,
-                isPublished: false,
-            })
+        if (!temporarySavedPostId || prevPost) return
 
-            if ('post' in fetchTemporarySavedPost) {
-                const { post } = fetchTemporarySavedPost
+        const fetchTemporarySavedPost = await requestGetDetailPost({
+            id: temporarySavedPostId,
+            isPublished: false,
+        })
 
-                setTitle(post.title)
-                editorRef.current?.setContent(post.content)
-                post.tags && tagInputRef.current?.setTagValues(post.tags.split(','))
-            }
+        if ('post' in fetchTemporarySavedPost) {
+            const { post } = fetchTemporarySavedPost
+
+            setTitle(post.title)
+
+            editorRef.current?.setContent(post.content)
+            post.tags && tagInputRef.current?.setTagValues(post.tags.split(','))
         }
     }, [temporarySavedPostId])
 
@@ -211,7 +236,7 @@ export const PostFormWidget: FC<Props> = () => {
             )}
             <section
                 className={cn(
-                    'flex w-full flex-1 flex-col bg-blue-200 items-center justify-center',
+                    'w-full flex-1 flex-col bg-blue-200 items-center justify-center',
                     isLoading ? 'hidden' : 'flex'
                 )}>
                 <form
@@ -247,19 +272,31 @@ export const PostFormWidget: FC<Props> = () => {
                         isAllToolbar
                         placeholder='내용을 입력해주세요.'
                         onUpdate={({ editor }) => setContent(editor.getHTML())}
+                        previousContent={prevPost?.content}
                     />
 
                     <div className='flex gap-4 justify-end'>
-                        <Button
-                            type='button'
-                            variant='secondary'
-                            onClick={() => {
-                                temporarySavePost()
-                                setIsSelfTemporarySaved(true)
-                            }}>
-                            임시 저장
-                        </Button>
-                        <Button type='submit'>작성하기</Button>
+                        {prevPost ? (
+                            <Button
+                                type='button'
+                                variant={'secondary'}
+                                onClick={() => {
+                                    router.replace(routePaths.post.detail(prevPost.id))
+                                }}>
+                                뒤로 가기
+                            </Button>
+                        ) : (
+                            <Button
+                                type='button'
+                                variant='secondary'
+                                onClick={() => {
+                                    temporarySavePost()
+                                    setIsSelfTemporarySaved(true)
+                                }}>
+                                임시 저장
+                            </Button>
+                        )}
+                        <Button type='submit'>{prevPost ? '수정하기' : '작성하기'}</Button>
                     </div>
                 </form>
             </section>
