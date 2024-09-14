@@ -45,4 +45,3 @@ export const generateStaticParams = async () => {
 }
 
 export const revalidate = 60 * 60 * 4 // 4 hours
-export const dynamicParams = true
