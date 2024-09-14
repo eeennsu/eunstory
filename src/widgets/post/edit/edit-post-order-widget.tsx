@@ -2,31 +2,26 @@
 
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Post } from '@prisma/client'
-import { use, useState, type FC } from 'react'
+import { useState, type FC } from 'react'
 import dynamic from 'next/dynamic'
 import { CustomSortableItem, Sortable } from '@/features/common/dnd/sortable'
-import { DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core'
-import { Button } from '@/lib/ui/button'
-import { useProgressBar } from '@/lib/hooks'
-import { requestEditPostListOrder } from '@/entities/post'
+import { DragEndEvent } from '@dnd-kit/core'
+import { EditPostListHeader } from '@/features/post/edit'
 
 interface Props {
     allPosts: Post[]
     totalCount: number
 }
 
-type DraggablePost = Post & CustomSortableItem
+export type DraggablePost = Post & CustomSortableItem
 
 const DndProviderWithNoSSR = dynamic(() => import('@/features/common/dnd').then((md) => md.DndProvider), { ssr: false })
 
 export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {
-    const { executeWithProgress } = useProgressBar()
-
     const [mode, setMode] = useState<'edit' | 'view'>('view')
     const [sortablePosts, setSortablePosts] = useState<DraggablePost[]>(
         allPosts.map((post, i) => ({ ...post, sequence: allPosts.length - i }))
     )
-    const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
     const removeItem = (id: string) => {
         setSortablePosts((prev) =>
@@ -54,51 +49,14 @@ export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {
         }
     }
 
-    const handleUpdatePostOrder = async () => {
-        executeWithProgress(async () => {
-            const updatedSequences = sortablePosts
-                .filter((post) => post.sequence !== post.order)
-                .map((post) => ({
-                    id: post.id,
-                    sequence: post.sequence,
-                }))
-
-            await requestEditPostListOrder({ updatedSequences })
-        })
-
-        setMode('view')
-    }
-
-    const handleDragCancel = () => {
-        setActiveIndex(null)
-    }
-
-    const handleDragStart = (e: DragStartEvent) => {
-        setActiveIndex(e.active.id as number)
-    }
-
     return (
         <section className='flex flex-col gap-6 '>
-            <div className='flex w-full justify-between bg-emerald-100 items-center'>
-                <div>
-                    <h2>내글 수정하기</h2>
-                    <p>총 개수 : {totalCount}</p>
-                </div>
-                <div className='flex gap-4'>
-                    {mode === 'view' ? (
-                        <Button onClick={() => setMode('edit')}>순서 수정</Button>
-                    ) : (
-                        <>
-                            <Button onClick={handleUpdatePostOrder}>적용</Button>
-                            <Button
-                                onClick={() => setMode('view')}
-                                variant='outline'>
-                                취소
-                            </Button>
-                        </>
-                    )}
-                </div>
-            </div>
+            <EditPostListHeader
+                mode={mode}
+                setMode={setMode}
+                totalCount={totalCount}
+                sortablePosts={sortablePosts}
+            />
             <section className='flex flex-col gap-2'>
                 {mode === 'view' ? (
                     <div className='flex flex-col gap-6'>
@@ -112,10 +70,7 @@ export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {
                         ))}
                     </div>
                 ) : (
-                    <DndProviderWithNoSSR
-                        onDragStart={handleDragStart}
-                        onDragCancel={handleDragCancel}
-                        onDragEnd={handleDragEnd}>
+                    <DndProviderWithNoSSR onDragEnd={handleDragEnd}>
                         <SortableContext
                             items={sortablePosts.map((post) => post.sequence)}
                             strategy={verticalListSortingStrategy}>
@@ -132,14 +87,6 @@ export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {
                                 </Sortable>
                             ))}
                         </SortableContext>
-                        {/* <DragOverlay dropAnimation={}>
-                            {activeIndex !== null && (
-                                <div className='w-full bg-slate-200 p-2'>
-                                    <h3>{sortablePosts[activeIndex]?.title}</h3>
-                                    <p>{sortablePosts[activeIndex]?.content}</p>
-                                </div>
-                            )}
-                        </DragOverlay> */}
                     </DndProviderWithNoSSR>
                 )}
             </section>
