@@ -1,13 +1,10 @@
+import { assertValue } from '@/lib/utils'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 export const createDefaultAdmin = async (prisma: PrismaClient) => {
-    const adminId = process.env.ADMIN_ID
-    const adminPassword = process.env.ADMIN_PASSWORD
-
-    if (!adminId || !adminPassword) {
-        throw new Error('ADMIN_ID and ADMIN_PASSWORD must be set in .env')
-    }
+    const adminId = assertValue(process.env.ADMIN_ID)
+    const adminPassword = assertValue(process.env.ADMIN_PASSWORD)
 
     const adminCount = await prisma.user.count()
 
@@ -23,6 +20,7 @@ export const createDefaultAdmin = async (prisma: PrismaClient) => {
                     password: hash,
                     name: 'Eunstory Admin',
                     isAdmin: true,
+                    
                 },
             })
         })

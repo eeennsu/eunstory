@@ -154,7 +154,7 @@ function toast({ className, position = 'bottom', ...props }: Toast & { position?
             ...props,
             className: cn(
                 'fixed z-[100] flex max-h-screen right-12 flex-col-reverse text-center p-4 w-fit max-md:w-full max-sm:max-w-[400px]',
-                position !== 'top' ? 'top-12' : 'bottom-12',
+                position === 'top' ? 'top-12' : 'bottom-12',
                 className
             ),
             id,

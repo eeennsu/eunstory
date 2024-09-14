@@ -4,7 +4,9 @@ import { AuthOptions } from 'next-auth'
 import CredentialsProvider, { CredentialInput } from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import GitHubProvider from 'next-auth/providers/github'
 import prisma from '@/lib/prisma/prisma-client'
+import { assertValue } from '@/lib//utils'
 
 export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
@@ -31,7 +33,7 @@ export const authOptions: AuthOptions = {
                     where: { username: id },
                 })
 
-                if (!admin) {
+                if (!admin || !admin?.password) {
                     throw new Error(ERROR_CODES.USER_NOT_FOUND.code)
                 }
 
@@ -44,13 +46,22 @@ export const authOptions: AuthOptions = {
                 return { '@id': admin.id, name: admin.name, isAdmin: admin.isAdmin }
             },
         }),
+        GitHubProvider({
+            clientId: assertValue(process.env.GITHUB_CLIENT_ID),
+            clientSecret: assertValue(process.env.GITHUB_CLIENT_SECRET),
+            authorization: {
+                params: {
+                    scope: 'read:user user:email',
+                },
+            },
+        }),
     ],
     session: {
         strategy: 'jwt',
         maxAge: 60 * 60 * 6, // 6 hours
     },
 
-    secret: process.env.JWT_SECRET,
+    secret: assertValue(process.env.JWT_SECRET),
 
     callbacks: {
         jwt: async ({ token, user }) => {
@@ -67,5 +78,9 @@ export const authOptions: AuthOptions = {
 
             return Promise.resolve(session)
         },
+        // redirect: async ({ url, baseUrl }) => {
+        //     const redirectUrl = url.startsWith('/') ? new URL(url, baseUrl).toString() : url
+        //     return redirectUrl
+        // },
     },
 }

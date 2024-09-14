@@ -1,11 +1,15 @@
 import { CommentInput, CommentList } from '@/features/post/detail'
 import type { FC } from 'react'
 
-export const UserCommentWidget: FC = () => {
+interface Props {
+    postId: string
+}
+
+export const UserCommentWidget: FC<Props> = ({ postId }) => {
     return (
-        <section>
+        <section className='flex flex-col p-5 bg-slate-200 gap-6'>
             <CommentInput />
-            <CommentList />
+            <CommentList postId={postId} />
         </section>
     )
 }

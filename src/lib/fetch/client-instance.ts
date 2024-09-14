@@ -15,7 +15,7 @@ export const generateRequest = async <TRequest extends RequestProps | undefined,
     body,
     config,
 }: Parameters<TRequest>) => {
-    const requestOptions: RequestInit = {
+    const requestOption: RequestInit = {
         method,
         headers: {
             'Content-Type': 'application/json',
@@ -24,17 +24,17 @@ export const generateRequest = async <TRequest extends RequestProps | undefined,
     }
 
     if (body && typeof body !== 'undefined') {
-        requestOptions.body = JSON.stringify(body)
+        requestOption.body = JSON.stringify(body)
     }
 
-    const response = await fetch(url, requestOptions)
-
-    if (response.status === 204) {
-        return null as TResponse
-    }
+    const response = await fetch(url, requestOption)
 
     if (!response.ok) {
         throw new Error(response.statusText)
+    }
+
+    if (response.status === 204) {
+        return null as TResponse
     }
 
     return response.json() as TResponse

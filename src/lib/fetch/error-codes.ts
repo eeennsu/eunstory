@@ -23,8 +23,8 @@ export const ERROR_CODES = {
     },
     INCORRECT_ID_OR_PASSWORD: {
         code: 'INCORRECT_ID_OR_PASSWORD',
-        title: '비밀번호가 틀렸습니다.',
-        description: '비밀번호를 다시 확인해주세요.',
+        title: '아이디 혹은 비밀번호가 일치하지 않습니다.',
+        description: '다시 확인해주세요.',
     },
     FORBIDDEN: {
         code: 'FORBIDDEN',

@@ -1,89 +1,158 @@
 'use client'
 
 import { ERROR_CODES } from '@/lib/fetch'
+import { useProgressBar } from '@/lib/hooks'
 import { Button } from '@/lib/ui/button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/lib/ui/dialog'
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/lib/ui/dialog'
 import { Input } from '@/lib/ui/input'
 import { Label } from '@/lib/ui/label'
 import { useToast } from '@/lib/ui/use-toast'
-import { X } from 'lucide-react'
+import { Github, X } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { Fragment, PropsWithChildren, useState, type FC } from 'react'
+import { Fragment, useState, type FC } from 'react'
 
-interface Props {
-    isTriggered: boolean
-    close: () => void
-}
-
-export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered, close }) => {
+export const LoginModal: FC = () => {
+    const { executeWithProgress } = useProgressBar()
     const [id, setId] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const { status } = useSession()
     const { toast } = useToast()
 
-    const onSubmit = async () => {
-        if (!id.length || !password.length) {
-            return toast({
-                title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
+    const isValidatedForm = () => {
+        if (!id.length) {
+            toast({
+                title: 'ID를 입력해주세요.',
                 position: 'top',
                 variant: 'warning',
             })
+
+            return false
         }
 
-        const response = await signIn('credentials', {
-            id,
-            password,
-            redirect: false,
-        })
+        if (!password.length) {
+            toast({
+                title: '비밀번호를 입력해주세요.',
+                position: 'top',
+                variant: 'warning',
+            })
 
-        if (response?.ok && response.status === 200) {
-            close()
-        } else {
-            switch (response?.error) {
-                case ERROR_CODES.MISSING_ID_OR_PASSWORD.code:
-                    return toast({
-                        title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
-                        position: 'top',
-                        variant: 'warning',
-                    })
+            return false
+        }
 
-                case ERROR_CODES.USER_NOT_FOUND.code:
-                    return toast({
-                        title: ERROR_CODES.USER_NOT_FOUND.title,
-                        description: ERROR_CODES.USER_NOT_FOUND.description,
-                        position: 'top',
-                        variant: 'warning',
-                    })
+        return true
+    }
 
-                case ERROR_CODES.INCORRECT_ID_OR_PASSWORD.code:
-                    return toast({
-                        title: ERROR_CODES.INCORRECT_ID_OR_PASSWORD.title,
-                        description: ERROR_CODES.INCORRECT_ID_OR_PASSWORD.description,
-                        position: 'top',
-                        variant: 'warning',
-                    })
+    const handleSignIn = () => {
+        if (!isValidatedForm()) return
+
+        executeWithProgress(async () => {
+            if (!id.length || !password.length) {
+                toast({
+                    title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
+                    position: 'top',
+                    variant: 'warning',
+                })
             }
-        }
+
+            try {
+                const response = await signIn('credentials', {
+                    id,
+                    password,
+                    redirect: false,
+                })
+
+                if (response?.ok && response?.status === 200) {
+                    toast({
+                        title: '로그인에 성공했습니다.',
+                        position: 'bottom',
+                    })
+                } else {
+                    switch (response?.error) {
+                        case ERROR_CODES.MISSING_ID_OR_PASSWORD.code:
+                            toast({
+                                title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
+                                position: 'top',
+                                variant: 'warning',
+                            })
+
+                            return
+
+                        case ERROR_CODES.USER_NOT_FOUND.code:
+                            toast({
+                                title: ERROR_CODES.USER_NOT_FOUND.title,
+                                description: ERROR_CODES.USER_NOT_FOUND.description,
+                                position: 'top',
+                                variant: 'warning',
+                            })
+
+                            return
+
+                        case ERROR_CODES.INCORRECT_ID_OR_PASSWORD.code:
+                            toast({
+                                title: ERROR_CODES.INCORRECT_ID_OR_PASSWORD.title,
+                                description: ERROR_CODES.INCORRECT_ID_OR_PASSWORD.description,
+                                position: 'top',
+                                variant: 'warning',
+                            })
+
+                            return
+                    }
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        })
+    }
+
+    const handleGithubSignIn = () => {
+        executeWithProgress(async () => {
+            try {
+                const response = await signIn('github', {
+                    redirect: false,
+                })
+
+                console.table(response)
+
+                if (response?.ok && response?.status === 200) {
+                    toast({
+                        title: '로그인에 성공했습니다.',
+                        position: 'bottom',
+                    })
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        })
     }
 
     return (
-        <Dialog
-            open={isTriggered}
-            modal>
-            <DialogTrigger className='cursor-default'>{children}</DialogTrigger>
+        <Dialog modal>
+            <DialogTrigger
+                asChild
+                className='cursor-default'>
+                <Button variant='secondary'>Login</Button>
+            </DialogTrigger>
             <DialogContent
                 className='sm:max-w-[425px]'
-                onInteractOutside={close}
                 isCloseHidden>
                 <DialogHeader>
                     <div className='flex justify-between items-center'>
                         <DialogTitle>Hello Eunsu!</DialogTitle>
-                        <Button
-                            variant='ghost'
-                            className='p-3'
-                            onClick={close}>
-                            <X className='size-4' />
-                        </Button>
+                        <DialogClose>
+                            <Button
+                                variant='ghost'
+                                className='p-3'>
+                                <X className='size-4' />
+                            </Button>
+                        </DialogClose>
                     </div>
                 </DialogHeader>
                 {status === 'unauthenticated' ? (
@@ -117,11 +186,18 @@ export const LoginModal: FC<PropsWithChildren<Props>> = ({ children, isTriggered
                                 />
                             </div>
                         </div>
-                        <DialogFooter>
+                        <DialogFooter className='flex flex-col gap-2'>
                             <Button
-                                type='submit'
-                                onClick={onSubmit}>
-                                Login
+                                className='w-full'
+                                type='button'
+                                onClick={handleSignIn}>
+                                Sign In
+                            </Button>
+                            <Button
+                                className='w-full !ml-0 gap-3 bg-[#24292E]'
+                                onClick={handleGithubSignIn}>
+                                <Github size={20} />
+                                Sign in with Git Hub
                             </Button>
                         </DialogFooter>
                     </Fragment>

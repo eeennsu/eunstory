@@ -15,6 +15,11 @@ interface Props {
 
 export type DraggablePost = Post & CustomSortableItem
 
+/* 
+    DnDProvider를 dynamic을 사용하여 import 하는 이유
+    --> 브라우저 환경에서만 작동하는 DOM 요소를 사용하기 때문에, SSR 환경에서는 제대로 작동하지 않을 수 있음
+*/
+
 const DndProviderWithNoSSR = dynamic(() => import('@/features/common/dnd').then((md) => md.DndProvider), { ssr: false })
 
 export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {

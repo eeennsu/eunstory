@@ -3,26 +3,16 @@
 import { routePaths } from '@/lib/route'
 import { NAV_LINKS } from '@/shared/constants'
 import { Button } from '@/lib/ui/button'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState, type FC } from 'react'
+import { type FC } from 'react'
 import { LoginModal } from '@/features/layout'
 import { useAdminAuth } from '@/lib/hooks'
 
 export const Header: FC = () => {
+    const { status } = useSession()
     const { isAdminAuthed } = useAdminAuth()
-    const [count, setCount] = useState<number>(0)
-
-    useEffect(() => {
-        if (count === 0 || count === 3) return
-
-        const timer = setTimeout(() => {
-            setCount(0)
-        }, 500)
-
-        return () => clearTimeout(timer)
-    }, [count])
 
     return (
         <header className='bg-sky-200 w-full flex items-center justify-center'>
@@ -35,14 +25,7 @@ export const Header: FC = () => {
                         alt='EunStory Logo'
                     />
                 </Link>
-                <LoginModal
-                    isTriggered={count === 3}
-                    close={() => setCount(0)}>
-                    <div
-                        className='absolute bottom-0 left-1/2 right-1/2 -translate-x-1/2 w-40 h-14 '
-                        onClick={() => setCount((prev) => prev + 1)}
-                    />
-                </LoginModal>
+
                 <nav className='flex gap-4 py-4 justify-center'>
                     {NAV_LINKS.map((link) => (
                         <Button
@@ -52,15 +35,13 @@ export const Header: FC = () => {
                             <Link href={link.url}>{link.title}</Link>
                         </Button>
                     ))}
+                    {status === 'authenticated' ? <Button onClick={() => signOut()}>Logout</Button> : <LoginModal />}
                     {isAdminAuthed && (
-                        <>
-                            <Button
-                                asChild
-                                variant='secondary'>
-                                <Link href={routePaths.admin()}>Admin</Link>
-                            </Button>
-                            <Button onClick={() => signOut()}>Logout</Button>
-                        </>
+                        <Button
+                            asChild
+                            variant='secondary'>
+                            <Link href={routePaths.admin()}>Admin</Link>
+                        </Button>
                     )}
                 </nav>
             </section>

@@ -1,5 +1,21 @@
+import { serverRequestGetCommentList } from '@/entities/post-comment/post-comment.api.server'
+import { getServerSession } from 'next-auth'
 import type { FC } from 'react'
 
-export const CommentList: FC = () => {
-    return <div>CommentList</div>
+interface Props {
+    postId: string
+}
+
+export const CommentList: FC<Props> = async ({ postId }) => {
+    const response = await serverRequestGetCommentList({ postId })
+
+    const session = await getServerSession()
+
+    console.log('session', session)
+
+    return (
+        <div>
+            <h3>댓글 목록</h3>
+        </div>
+    )
 }
