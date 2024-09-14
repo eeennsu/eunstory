@@ -5,7 +5,7 @@ import { Post } from '@prisma/client'
 import { use, useState, type FC } from 'react'
 import dynamic from 'next/dynamic'
 import { CustomSortableItem, Sortable } from '@/features/common/dnd/sortable'
-import { DragEndEvent } from '@dnd-kit/core'
+import { DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core'
 import { Button } from '@/lib/ui/button'
 import { useProgressBar } from '@/lib/hooks'
 import { requestEditPostListOrder } from '@/entities/post'
@@ -26,6 +26,7 @@ export const EditPostOrderByDnd: FC<Props> = ({ allPosts, totalCount }) => {
     const [sortablePosts, setSortablePosts] = useState<DraggablePost[]>(
         allPosts.map((post, i) => ({ ...post, sequence: allPosts.length - i }))
     )
+    const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
     const removeItem = (id: string) => {
         setSortablePosts((prev) =>
@@ -68,6 +69,14 @@ export const EditPostOrderByDnd: FC<Props> = ({ allPosts, totalCount }) => {
         setMode('view')
     }
 
+    const handleDragCancel = () => {
+        setActiveIndex(null)
+    }
+
+    const handleDragStart = (e: DragStartEvent) => {
+        setActiveIndex(e.active.id as number)
+    }
+
     return (
         <section className='flex flex-col gap-6 '>
             <div className='flex w-full justify-between bg-emerald-100 items-center'>
@@ -103,7 +112,10 @@ export const EditPostOrderByDnd: FC<Props> = ({ allPosts, totalCount }) => {
                         ))}
                     </div>
                 ) : (
-                    <DndProviderWithNoSSR onDragEnd={handleDragEnd}>
+                    <DndProviderWithNoSSR
+                        onDragStart={handleDragStart}
+                        onDragCancel={handleDragCancel}
+                        onDragEnd={handleDragEnd}>
                         <SortableContext
                             items={sortablePosts.map((post) => post.sequence)}
                             strategy={verticalListSortingStrategy}>
@@ -120,6 +132,14 @@ export const EditPostOrderByDnd: FC<Props> = ({ allPosts, totalCount }) => {
                                 </Sortable>
                             ))}
                         </SortableContext>
+                        {/* <DragOverlay dropAnimation={}>
+                            {activeIndex !== null && (
+                                <div className='w-full bg-slate-200 p-2'>
+                                    <h3>{sortablePosts[activeIndex]?.title}</h3>
+                                    <p>{sortablePosts[activeIndex]?.content}</p>
+                                </div>
+                            )}
+                        </DragOverlay> */}
                     </DndProviderWithNoSSR>
                 )}
             </section>

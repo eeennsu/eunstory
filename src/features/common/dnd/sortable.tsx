@@ -4,7 +4,7 @@ import { Data } from '@dnd-kit/core'
 import { useSortable } from '@dnd-kit/sortable'
 import { Arguments } from '@dnd-kit/sortable/dist/hooks/useSortable'
 import { XIcon } from 'lucide-react'
-import type { PropsWithChildren, ReactNode } from 'react'
+import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 
 export type CustomSortableItem = { id: any; sequence: number }
@@ -32,7 +32,7 @@ export const Sortable = <T extends Data & CustomSortableItem>({
         ...props,
     })
 
-    const parentStyles = {
+    const parentStyles: CSSProperties = {
         transform: CSS.Transform.toString(transform),
         transition,
     }
@@ -42,7 +42,9 @@ export const Sortable = <T extends Data & CustomSortableItem>({
             ref={setNodeRef}
             className={cn(
                 'flex flex-col w-full h-fit gap-6 bg-white rounded-lg border border-gray-500',
-                isDragging ? 'opacity-60 z-100 cursor-grabbing' : 'cursor-grab'
+                isDragging
+                    ? 'opacity-60 z-100 cursor-grabbing'
+                    : 'cursor-grab transition-transform ease-in-out duration-300'
             )}
             style={parentStyles}>
             <div className='bg-secondary w-full rounded-md flex justify-between items-center gap-2 overflow-hidden'>
