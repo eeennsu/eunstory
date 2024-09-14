@@ -175,6 +175,8 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                 title: '포스트가 임시 저장되었습니다.',
             })
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [title, content, temporarySavedPostId])
 
     // 엔터 입력시 submit 이벤트 방지

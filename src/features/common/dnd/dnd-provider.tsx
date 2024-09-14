@@ -1,5 +1,13 @@
 import type { FC, PropsWithChildren } from 'react'
-import { closestCenter, DndContext, DndContextProps, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
+import {
+    closestCenter,
+    DndContext,
+    DndContextProps,
+    PointerSensor,
+    TouchSensor,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core'
 
 interface Props extends Omit<DndContextProps, 'sensors'> {}
 
@@ -14,8 +22,7 @@ export const DndProvider: FC<PropsWithChildren<Props>> = ({ children, ...props }
         <DndContext
             {...props}
             sensors={sensors}
-            collisionDetection={closestCenter}
-            >
+            collisionDetection={closestCenter}>
             {children}
         </DndContext>
     )
