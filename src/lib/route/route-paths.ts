@@ -16,7 +16,7 @@ const post = {
     },
 
     edit(id?: string) {
-        return post.root().concat(id ? `/${id}/edit` : '/edit')
+        return post.root().concat(id ? `/edit/${id}` : '/edit')
     },
 }
 

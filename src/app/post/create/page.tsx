@@ -1,7 +1,7 @@
 import { getServerAdminAuth } from '@/lib/auth'
 import { routePaths } from '@/lib/route'
 import { cn } from '@/lib/shadcn/shadcn-utils'
-import { PostForm } from '@/widgets/home'
+import { PostFormWidget } from '@/widgets/home'
 import { redirect } from 'next/navigation'
 import type { FC } from 'react'
 
@@ -14,7 +14,7 @@ const CreatePostPage: FC = async () => {
 
     return (
         <main className={cn('page-container')}>
-            <PostForm />
+            <PostFormWidget />
         </main>
     )
 }

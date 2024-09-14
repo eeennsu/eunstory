@@ -20,7 +20,7 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
         return null
     }
 
-    const onDelete = async () => {
+    const handleDelete = async () => {
         if (!confirm('정말 삭제하시겠습니까?')) {
             return
         }
@@ -42,7 +42,7 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
         isAdminAuthed && (
             <Button
                 type='button'
-                onClick={onDelete}>
+                onClick={handleDelete}>
                 DeletePostButton
             </Button>
         )

@@ -19,7 +19,7 @@ type DraggablePost = Post & CustomSortableItem
 
 const DndProviderWithNoSSR = dynamic(() => import('@/features/common/dnd').then((md) => md.DndProvider), { ssr: false })
 
-export const EditPostOrderByDnd: FC<Props> = ({ allPosts, totalCount }) => {
+export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {
     const { executeWithProgress } = useProgressBar()
 
     const [mode, setMode] = useState<'edit' | 'view'>('view')

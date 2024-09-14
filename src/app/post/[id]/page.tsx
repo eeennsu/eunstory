@@ -1,7 +1,7 @@
 import { ResponseGetPostIdListType } from '@/app/api/post/id-list/route'
 import { serverRequestGetDetailPost, serverRequestGetPostIdList } from '@/entities/post'
-import { DeletePostButton } from '@/features/post'
-import { getDateWithTime, textSanitizing } from '@/lib/utils'
+import { UserCommentWidget } from '@/widgets/post/detail'
+import { DetailPostWidget } from '@/widgets/post/detail/detail-post-widget'
 import type { FC } from 'react'
 
 interface Props {
@@ -17,18 +17,13 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
         throw new Error('Post not found')
     }
 
-    const { post } = response
+    const post = response?.post
 
     return (
         <main className='page-container'>
-            <article className='flex flex-col items-center'>
-                <h1 className='text-5xl font-bold'>{post.title}</h1>
-                <section
-                    className='tiptap-editor-content'
-                    dangerouslySetInnerHTML={{ __html: textSanitizing(post.content) }}
-                />
-                {post.createdAt && <div>{getDateWithTime(post.createdAt)}</div>}
-                <DeletePostButton id={id} />
+            <article className='flex flex-col gap-3'>
+                <DetailPostWidget post={post} />
+                <UserCommentWidget />
             </article>
         </main>
     )

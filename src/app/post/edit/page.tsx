@@ -1,9 +1,9 @@
 // post list edit page
 
 import { serverRequestGetAllPostList } from '@/entities/post'
-import { EditPostOrderByDnd } from '@/features/post'
 import { getServerAdminAuth } from '@/lib/auth'
 import { routePaths } from '@/lib/route'
+import { EditPostOrderWidget } from '@/widgets/post/edit'
 import { redirect } from 'next/navigation'
 import { FC } from 'react'
 
@@ -25,7 +25,7 @@ const EditPostListPage: FC = async () => {
             {postListResponse.totalCount === 0 ? (
                 '게시글이 없습니다.'
             ) : (
-                <EditPostOrderByDnd
+                <EditPostOrderWidget
                     allPosts={postListResponse.posts}
                     totalCount={postListResponse.totalCount}
                 />

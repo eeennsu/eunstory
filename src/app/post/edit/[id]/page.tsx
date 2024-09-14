@@ -1,4 +1,5 @@
 import { requestGetDetailPost } from '@/entities/post'
+import { PostFormWidget } from '@/widgets/post/common'
 import type { FC } from 'react'
 
 interface Props {
@@ -17,11 +18,9 @@ const EditDetailPostPage: FC<Props> = async ({ params: { id } }) => {
     const { post } = response
 
     return (
-        <div>
-            <h2>edit post page</h2>
-            <div>{post.title}</div>
-            <div>{post.content}</div>
-        </div>
+        <main>
+            <PostFormWidget />
+        </main>
     )
 }
 

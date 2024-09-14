@@ -17,7 +17,13 @@ import { TooltipTrigger } from '@radix-ui/react-tooltip'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Ellipsis } from 'lucide-react'
 
-export const PostForm: FC = () => {
+interface Props {
+    prevTitle?: string
+    prevContent?: string
+    prevTags?: string
+}
+
+export const PostFormWidget: FC<Props> = () => {
     const router = useRouter()
     const params = useSearchParams()
     const pathname = usePathname()
@@ -181,7 +187,7 @@ export const PostForm: FC = () => {
         if (temporarySavedPostId) {
             const fetchTemporarySavedPost = await requestGetDetailPost({
                 id: temporarySavedPostId,
-                isPublished: false
+                isPublished: false,
             })
 
             if ('post' in fetchTemporarySavedPost) {
