@@ -49,3 +49,9 @@ export const serverRequestGetDetailPost = async ({ id, isPublished }: { id: stri
         url: getUrlFromServer(`/api/post/${id}?${params.toString()}`),
     })
 }
+
+export const serverRequestGetPostIdList = async () => {
+    return generateRequest<undefined, ResponseGetPostListType>({
+        url: getUrlFromServer(`/api/post/id-list`),
+    })
+}

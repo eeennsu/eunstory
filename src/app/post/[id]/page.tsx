@@ -1,7 +1,7 @@
-import { serverRequestGetAllPostList, serverRequestGetDetailPost } from '@/entities/post'
+import { ResponseGetPostIdListType } from '@/app/api/post/id-list/route'
+import { serverRequestGetDetailPost, serverRequestGetPostIdList } from '@/entities/post'
 import { DeletePostButton } from '@/features/post'
 import { getDateWithTime, textSanitizing } from '@/lib/utils'
-import { Post } from '@prisma/client'
 import type { FC } from 'react'
 
 interface Props {
@@ -37,9 +37,12 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
 export default DetailPostPage
 
 export const generateStaticParams = async () => {
-    const response = (await serverRequestGetAllPostList({ isPublished: true })) as { posts: Post[]; totalCount: number }
+    const response = (await serverRequestGetPostIdList()) as ResponseGetPostIdListType
 
-    return response.posts.map((post) => ({
-        id: post.id,
-    }))
+    if ('error' in response) return []
+
+    return response.ids
 }
+
+export const revalidate = 60 * 60 * 4 // 4 hours
+export const dynamicParams = true

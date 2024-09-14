@@ -5,19 +5,26 @@ import { Post } from '@prisma/client'
 
 export const requestGetPostList = async ({
     tag,
-    curPage = 1,
-    perPage = 5,
+    curPage,
+    perPage,
+    isPublished,
 }: {
-    curPage: number
-    perPage: number
+    curPage?: number
+    perPage?: number
     tag?: string
+    isPublished?: boolean
 }) => {
     const params = new URLSearchParams()
     tag && params.append('tag', tag)
-    params.append('curPage', curPage.toString())
-    params.append('perPage', perPage.toString())
+    curPage && params.append('curPage', curPage.toString())
+    perPage && params.append('perPage', perPage.toString())
+    isPublished && params.append('isPublished', isPublished.toString())
 
-    return generateRequest<undefined, ResponseGetPostListType>({ url: `/api/post?${params.toString()}` })
+    const url = params.size !== 0 ? `/api/post?${params.toString()}` : '/api/post'
+
+    return generateRequest<undefined, ResponseGetPostListType>({
+        url,
+    })
 }
 
 export const requestCreatePost = async ({ post }: { post: Partial<Post> }) => {

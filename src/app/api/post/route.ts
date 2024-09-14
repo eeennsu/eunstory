@@ -4,7 +4,6 @@ import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
 import { routePaths } from '@/lib/route'
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 
 // get post list
 export const GET = async (request: NextRequest) => {
@@ -13,6 +12,7 @@ export const GET = async (request: NextRequest) => {
     const curPage = Number(params.get('curPage'))
     const perPage = Number(params.get('perPage'))
     const tag = params.get('tag')
+    const isPublished = params.get('isPublished')?.toString() === 'true'
 
     const paginationParams = curPage &&
         perPage && {
@@ -31,9 +31,7 @@ export const GET = async (request: NextRequest) => {
         const posts = (await prisma.post.findMany({
             where: {
                 isActive: true,
-                order: {
-                    not: null,
-                },
+                ...(isPublished && { order: { not: null } }),
                 ...(tag && {
                     tags: {
                         contains: tag,
@@ -142,7 +140,7 @@ export const PATCH = async (request: NextRequest) => {
 
         revalidatePath(routePaths.post.list())
 
-        return NextResponse.json({ }, { status: 200 })
+        return NextResponse.json({}, { status: 200 })
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 })
     }

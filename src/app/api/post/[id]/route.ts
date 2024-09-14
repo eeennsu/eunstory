@@ -17,7 +17,7 @@ export const GET = async (request: NextRequest, { params }: Params) => {
     const id = params?.id
     const searchParams = request.nextUrl.searchParams
 
-    const isPublished = searchParams.get('isPublished')
+    const isPublished = searchParams.get('isPublished')?.toString() === 'true'
 
     if (!id) {
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
@@ -27,7 +27,7 @@ export const GET = async (request: NextRequest, { params }: Params) => {
         const post = (await prisma.post.findFirst({
             where: {
                 id,
-                order: isPublished ? { not: null } : null,
+                ...(isPublished && { order: { not: null } }),
             },
         })) as Post
 
