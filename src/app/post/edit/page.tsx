@@ -1,14 +1,14 @@
 // post list edit page
 
 import { serverRequestGetAllPostList } from '@/entities/post'
-import { getServerAdminAuth } from '@/lib/auth'
+import { getServerAuth } from '@/lib/auth'
 import { routePaths } from '@/lib/route'
 import { EditPostOrderWidget } from '@/widgets/post/edit'
 import { redirect } from 'next/navigation'
 import { FC } from 'react'
 
 const EditPostListPage: FC = async () => {
-    const { isAdminAuthed } = await getServerAdminAuth()
+    const { isAdminAuthed } = await getServerAuth()
 
     if (!isAdminAuthed) {
         return redirect(routePaths.home())

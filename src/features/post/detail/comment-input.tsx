@@ -20,9 +20,6 @@ export const CommentInput: FC = () => {
             })
             return
         }
-        
-        
-
     }
 
     return (

@@ -1,4 +1,4 @@
-import { getServerAdminAuth } from '@/lib/auth'
+import { getServerAuth } from '@/lib/auth'
 import { routePaths } from '@/lib/route'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { PostFormWidget } from '@/widgets/post/common'
@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 import type { FC } from 'react'
 
 const CreatePostPage: FC = async () => {
-    const { isAdminAuthed } = await getServerAdminAuth()
+    const { isAdminAuthed } = await getServerAuth()
 
     if (!isAdminAuthed) {
         return redirect(routePaths.home())

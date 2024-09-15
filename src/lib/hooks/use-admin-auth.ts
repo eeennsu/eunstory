@@ -30,7 +30,7 @@ export const useAdminAuth = ({ isProtectedRoute = false, options = { required: t
             }
         },
     })
-    
+
     const isOtherAuthed = status === 'authenticated' && session?.user?.isAdmin === false && session.expires
     const isAdminAuthed = status === 'authenticated' && session?.user?.isAdmin === true && session.expires
     const adminId = session?.user['@id'] || undefined

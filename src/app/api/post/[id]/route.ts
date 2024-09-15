@@ -1,4 +1,4 @@
-import { getServerAdminAuth } from '@/lib/auth'
+import { getServerAuth } from '@/lib/auth'
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
 import { routePaths } from '@/lib/route'
@@ -44,7 +44,7 @@ export const GET = async (request: NextRequest, { params }: Params) => {
 // edit post
 export const PATCH = async (request: NextRequest, { params }: Params) => {
     try {
-        const { isAdminAuthed } = await getServerAdminAuth()
+        const { isAdminAuthed } = await getServerAuth()
 
         if (!isAdminAuthed) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -110,7 +110,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
 
 // delete post
 export const DELETE = async (request: NextRequest, { params }: Params) => {
-    const { isAdminAuthed } = await getServerAdminAuth()
+    const { isAdminAuthed } = await getServerAuth()
 
     if (!isAdminAuthed) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

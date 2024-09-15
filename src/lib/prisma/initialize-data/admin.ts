@@ -20,7 +20,6 @@ export const createDefaultAdmin = async (prisma: PrismaClient) => {
                     password: hash,
                     name: 'Eunstory Admin',
                     isAdmin: true,
-                    
                 },
             })
         })
