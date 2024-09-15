@@ -23,6 +23,7 @@ export const GET = async (_: NextRequest, { params }: Params) => {
         const comments = await prisma.comment.findMany({
             where: {
                 postId,
+                isActive: true,
             },
             orderBy: {
                 createdAt: 'desc',
@@ -36,6 +37,7 @@ export const GET = async (_: NextRequest, { params }: Params) => {
         const commentCount = await prisma.comment.count({
             where: {
                 postId,
+                isActive: true,
             },
         })
 
@@ -132,10 +134,12 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to delete comment' }, { status: 500 })
         }
 
+        revalidateTag('post-comment')
         revalidatePath(routePaths.post.detail(postId))
 
-        return NextResponse.json({}, { status: 204 })
+        return new NextResponse(null, { status: 204 })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }

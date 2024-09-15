@@ -21,7 +21,7 @@ interface Props {
 
 export const CommentItem: FC<Props> = ({ postId, commentId, content, createdAt, authorName, authorImage, isOwner }) => {
     const { user } = useCustomSession()
-    const { executeWithProgress } = useProgressBar()
+    const { executeWithProgress, barRouter } = useProgressBar()
     const { toast } = useToast()
 
     const [isDeleting, setIsDeleting] = useState<boolean>(false)
@@ -53,6 +53,7 @@ export const CommentItem: FC<Props> = ({ postId, commentId, content, createdAt, 
                 console.error(error)
             } finally {
                 setIsDeleting(false)
+                barRouter.refresh()
             }
         })
     }
