@@ -57,9 +57,33 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
         }
 
         const body = await request.json()
+        const { title, content, tags, order } = body
 
         if (!body) {
             return NextResponse.json({ error: 'Invalid body' }, { status: 400 })
+        }
+
+        // order 가 -1인것은, 임시저장된 포스트가 생성되기 위해 사용되는 값임.
+        if (order === -1) {
+            const lastPostOrder = (
+                await prisma.post.findFirst({
+                    where: {
+                        isActive: true,
+                        order: {
+                            not: null,
+                        },
+                    },
+                    orderBy: {
+                        order: 'desc',
+                    },
+                })
+            )?.order
+
+            if (!lastPostOrder) {
+                return NextResponse.json({ error: 'Failed to get last post order' }, { status: 500 })
+            }
+
+            body.order = lastPostOrder + 1
         }
 
         const editedPost = (await prisma.post.update({
@@ -150,6 +174,6 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 }
 
 export type ResponseGetDetailPostType = NextResponseData<typeof GET>
-export type RequestEditDetailPostType = Partial<Pick<Post, 'title' | 'content' | 'tags'>>
+export type RequestEditDetailPostType = Partial<Pick<Post, 'title' | 'content' | 'tags' | 'order'>>
 export type ResponseEditDetailPostType = NextResponseData<typeof PATCH>
 export type ResponseDeleteDetailPostType = NextResponseData<typeof DELETE>

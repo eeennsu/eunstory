@@ -57,7 +57,7 @@ export const GET = async (request: NextRequest) => {
 // create post
 export const POST = async (request: NextRequest) => {
     try {
-        const body = await request.json()
+        const body = (await request.json()) as RequestCreatePostType
         const { title, content, tags, authorId, order } = body
 
         // TODO title debounce error
@@ -68,7 +68,8 @@ export const POST = async (request: NextRequest) => {
         let isTemporarySave = false
         let lastPostOrder = null
 
-        if (order === undefined) {
+        // order가 -1이면, 마지막 post의 order + 1로 설정
+        if (order === -1) {
             lastPostOrder = (
                 await prisma.post.findFirst({
                     where: {

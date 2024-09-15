@@ -104,17 +104,34 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                         editedPost,
                     })
                 } else {
-                    const createdPost: RequestCreatePostType = {
-                        title,
-                        content,
-                        authorId: authorId!,
-                        tags: tags || null,
-                        order: null,
-                    }
+                    // 임시 저장된 기존 포스트라면? 임시저장된 포스트를 수정
+                    if (!!temporarySavedPostId) {
+                        const editedPost: RequestEditDetailPostType = {
+                            title,
+                            content,
+                            tags: tags || null,
+                            order: -1,
+                        }
 
-                    response = await requestCreatePost({
-                        createdPost,
-                    })
+                        response = await requestEditPost({
+                            postId: temporarySavedPostId,
+                            editedPost,
+                        })
+
+                        // 임시 저장된 포스트가 없으면? 새로운 포스트 생성
+                    } else {
+                        const createdPost: RequestCreatePostType = {
+                            title,
+                            content,
+                            authorId: authorId!,
+                            tags: tags || null,
+                            order: -1,
+                        }
+
+                        response = await requestCreatePost({
+                            createdPost,
+                        })
+                    }
                 }
 
                 if (response) {
