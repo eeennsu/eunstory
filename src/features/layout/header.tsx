@@ -3,7 +3,7 @@
 import { routePaths } from '@/lib/route'
 import { NAV_LINKS } from '@/shared/constants'
 import { Button } from '@/lib/ui/button'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { type FC } from 'react'
@@ -11,7 +11,7 @@ import { LoginModal } from '@/features/layout'
 import { useAdminSession } from '@/lib/hooks'
 
 export const Header: FC = () => {
-    const { isAdminAuthed, status } = useAdminSession()
+    const { isAdminAuthed, status } = useAdminSession({ options: { required: false } })
 
     return (
         <header className='bg-sky-200 w-full flex items-center justify-center'>
@@ -34,12 +34,8 @@ export const Header: FC = () => {
                             <Link href={link.url}>{link.title}</Link>
                         </Button>
                     ))}
-                    {status !== 'loading' &&
-                        (status === 'authenticated' ? (
-                            <Button onClick={() => signOut()}>Logout</Button>
-                        ) : (
-                            <LoginModal />
-                        ))}
+                    {status === 'authenticated' && <Button onClick={() => signOut()}>Logout</Button>}
+                    {status === 'unauthenticated' && <LoginModal />}
                     {isAdminAuthed && (
                         <Button
                             asChild

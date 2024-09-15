@@ -12,7 +12,6 @@ type Params = {
 }
 
 export const useAdminSession = ({ isProtectedRoute = false, options = { required: true } }: Params = {}) => {
-    
     const router = useRouter()
     const { toast } = useToast()
     const { data: session, status } = useSession({
@@ -33,7 +32,7 @@ export const useAdminSession = ({ isProtectedRoute = false, options = { required
     })
 
     const isAdminAuthed = status === 'authenticated' && session?.user?.isAdmin === true && session.expires
-    const adminId = session?.user['@id'] || undefined
+    const adminId = (!!session?.user['@id'] && session?.user?.isAdmin === true ) && session.user['@id'] || undefined
 
     return { isAdminAuthed, adminId, status }
 }
