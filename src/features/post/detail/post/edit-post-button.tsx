@@ -1,7 +1,6 @@
 'use client'
 
-import { requestDeletePost } from '@/entities/post'
-import { useAdminAuth, useProgressBar } from '@/lib/hooks'
+import { useAdminSession, useProgressBar } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import type { FC } from 'react'
@@ -11,7 +10,7 @@ interface Props {
 }
 
 export const EditPostButton: FC<Props> = ({ id }) => {
-    const { isAdminAuthed } = useAdminAuth()
+    const { isAdminAuthed } = useAdminSession()
     const { barRouter } = useProgressBar()
 
     if (!isAdminAuthed) {

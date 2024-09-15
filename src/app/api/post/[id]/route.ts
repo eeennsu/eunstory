@@ -110,7 +110,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
 
 // delete post
 export const DELETE = async (request: NextRequest, { params }: Params) => {
-    const { isAdminAuthed } = await getServerAuth()
+    const { isAdminAuthed, user } = await getServerAuth()
 
     if (!isAdminAuthed) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -131,6 +131,10 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
                 id,
             },
         })) as Post
+
+        if (user?.['@id'] !== beDeletedPost.authorId) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
+        }
 
         const softDeletedPost = (await prisma.post.update({
             where: {

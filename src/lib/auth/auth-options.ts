@@ -78,8 +78,6 @@ export const authOptions: AuthOptions = {
             session.user['@id'] = (token['@id'] || token?.sub) as string | undefined
             session.user.url = token.url as string | undefined
 
-            console.log('session', session)
-
             return Promise.resolve(session)
         },
     },

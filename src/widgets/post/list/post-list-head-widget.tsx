@@ -1,6 +1,6 @@
 'use client'
 
-import { useAdminAuth } from '@/lib/hooks'
+import { useAdminSession } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import Link from 'next/link'
@@ -8,7 +8,7 @@ import type { FC } from 'react'
 
 export const PostListHeadWidget: FC = () => {
     // 고정
-    const { isAdminAuthed } = useAdminAuth()
+    const { isAdminAuthed } = useAdminSession()
 
     return (
         <section className='flex justify-between w-full mt-4'>

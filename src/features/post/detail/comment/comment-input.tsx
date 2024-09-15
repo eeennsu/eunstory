@@ -2,11 +2,10 @@
 
 import { requestCreatePostComment } from '@/entities/post-comment/post-comment.api.client'
 import { useProgressBar } from '@/lib/hooks'
+import { useCustomSession } from '@/lib/hooks/use-custom-session'
 import { Button } from '@/lib/ui/button'
 import { Input } from '@/lib/ui/input'
 import { useToast } from '@/lib/ui/use-toast'
-import dayjs from 'dayjs'
-import { useSession } from 'next-auth/react'
 import { useState, type FC, type FormEvent } from 'react'
 
 interface Props {
@@ -15,8 +14,8 @@ interface Props {
 
 export const CommentInput: FC<Props> = ({ postId }) => {
     const { toast } = useToast()
-    const { executeWithProgress } = useProgressBar()
-    const { data: session } = useSession()
+    const { executeWithProgress, barRouter } = useProgressBar()
+    const { isAuthenticated, user } = useCustomSession()
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
     const [comment, setComment] = useState<string>('')
@@ -24,7 +23,7 @@ export const CommentInput: FC<Props> = ({ postId }) => {
     const handleComment = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if (!session?.user || !session?.user?.id) {
+        if (!isAuthenticated) {
             toast({
                 title: '로그인이 필요합니다.',
                 position: 'bottom',
@@ -51,7 +50,7 @@ export const CommentInput: FC<Props> = ({ postId }) => {
                     postId,
                     comment: {
                         content: comment,
-                        authorId: session?.user.id,
+                        authorId: user?.['@id']!,
                     },
                 })
             } catch (error) {
@@ -64,6 +63,8 @@ export const CommentInput: FC<Props> = ({ postId }) => {
                 })
             } finally {
                 setIsSubmitting(false)
+                setComment('')
+                barRouter.refresh()
             }
         })
     }

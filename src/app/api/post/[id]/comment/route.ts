@@ -3,8 +3,7 @@ import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
 import { routePaths } from '@/lib/route'
 import { Comment } from '@prisma/client'
-import { getServerSession } from 'next-auth'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 
 type Params = {
@@ -28,6 +27,10 @@ export const GET = async (_: NextRequest, { params }: Params) => {
             orderBy: {
                 createdAt: 'desc',
             },
+            include: {
+                author: true,
+                parent: true,
+            },
         })
 
         const commentCount = await prisma.comment.count({
@@ -47,9 +50,9 @@ export const GET = async (_: NextRequest, { params }: Params) => {
 }
 
 export const POST = async (request: NextRequest, { params }: Params) => {
-    const { isAuthenticated } = await getServerAuth()
+    const { isAuthenticated, user } = await getServerAuth()
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !user?.['@id']) {
         return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 })
     }
 
@@ -80,6 +83,7 @@ export const POST = async (request: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to create comment' }, { status: 500 })
         }
 
+        revalidateTag('post-comment')
         revalidatePath(routePaths.post.detail(postId))
 
         return NextResponse.json({ comment: createdComment }, { status: 201 })
@@ -89,9 +93,9 @@ export const POST = async (request: NextRequest, { params }: Params) => {
 }
 
 export const DELETE = async (request: NextRequest, { params }: Params) => {
-    const session = await getServerSession()
+    const { isAuthenticated, user } = await getServerAuth()
 
-    if (!session?.user || !session?.user.id) {
+    if (!isAuthenticated) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -103,7 +107,16 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 
     try {
         const body = await request.json()
-        const commentId = body?.commentId
+        const commentId = body?.id
+        const userId = body?.userId
+
+        if (!commentId || !userId) {
+            return NextResponse.json({ error: 'Comment id and user id are required' }, { status: 400 })
+        }
+
+        if (user?.['@id'] !== userId) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
+        }
 
         const deletedComment = await prisma.comment.update({
             where: {
@@ -130,4 +143,5 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 export type ResponseGetPostCommentListType = NextResponseData<typeof GET>
 export type RequestCreatePostCommentType = Pick<Comment, 'authorId' | 'content'>
 export type ResponseCreatePostCommentType = NextResponseData<typeof POST>
+export type RequestDeletePostCommentType = Pick<Comment, 'id'> & { userId: string }
 export type ResponseDeletePostCommentType = NextResponseData<typeof DELETE>

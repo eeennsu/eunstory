@@ -81,6 +81,9 @@ export const POST = async (request: NextRequest) => {
                     orderBy: {
                         order: 'desc',
                     },
+                    select: {
+                        order: true,
+                    },
                 })
             )?.order
         } else if (order === null) {

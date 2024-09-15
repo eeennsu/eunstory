@@ -4,5 +4,10 @@ import { generateRequest, getUrlFromServer } from '@/lib/fetch'
 export const serverRequestGetCommentList = async ({ postId }: { postId: string }) => {
     return generateRequest<undefined, ResponseGetPostCommentListType>({
         url: getUrlFromServer(`/api/post/${postId}/comment`),
+        config: {
+            next: {
+                tags: ['post-comment'],
+            },
+        },
     })
 }

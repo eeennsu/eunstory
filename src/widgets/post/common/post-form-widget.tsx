@@ -3,7 +3,7 @@
 import { requestCreatePost, requestEditPost, requestGetDetailPost } from '@/entities/post'
 import { TagInput, TagInputRef } from '@/features/common/tag-input'
 import { TiptapEditor, TiptapRefType } from '@/features/common/tiptap-editor'
-import { useAdminAuth, useAsync, useProgressBar } from '@/lib/hooks'
+import { useAdminSession, useAsync, useProgressBar } from '@/lib/hooks'
 import { useDebouncedValue } from '@/lib/hooks/use-debounced-value'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
@@ -29,7 +29,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const pathname = usePathname()
     const temporarySavedPostId = params.get('id')
 
-    const { adminId: authorId } = useAdminAuth()
+    const { adminId: authorId } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
     const { toast } = useToast()
 

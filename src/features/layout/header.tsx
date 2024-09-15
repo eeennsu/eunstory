@@ -3,16 +3,15 @@
 import { routePaths } from '@/lib/route'
 import { NAV_LINKS } from '@/shared/constants'
 import { Button } from '@/lib/ui/button'
-import { signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { type FC } from 'react'
 import { LoginModal } from '@/features/layout'
-import { useAdminAuth } from '@/lib/hooks'
+import { useAdminSession } from '@/lib/hooks'
 
 export const Header: FC = () => {
-    const { status, data: session } = useSession()
-    const { isAdminAuthed } = useAdminAuth()
+    const { isAdminAuthed, status } = useAdminSession()
 
     return (
         <header className='bg-sky-200 w-full flex items-center justify-center'>

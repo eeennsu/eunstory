@@ -1,7 +1,7 @@
 'use client'
 
 import { requestDeletePost } from '@/entities/post'
-import { useAdminAuth, useProgressBar } from '@/lib/hooks'
+import { useAdminSession, useProgressBar } from '@/lib/hooks'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import { useToast } from '@/lib/ui/use-toast'
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const DeletePostButton: FC<Props> = ({ id }) => {
-    const { isAdminAuthed } = useAdminAuth()
+    const { isAdminAuthed } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
     const { toast } = useToast()
 
