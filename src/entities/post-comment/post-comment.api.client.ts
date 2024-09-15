@@ -1,6 +1,8 @@
 import {
     RequestCreatePostCommentType,
     RequestDeletePostCommentType,
+    RequestEditPostCommentType,
+    ResponseEditPostCommentType,
     ResponseGetPostCommentListType,
 } from '@/app/api/post/[id]/comment/route'
 import { generateRequest } from '@/lib/fetch'
@@ -16,6 +18,23 @@ export const requestCreatePostComment = async ({
         url: `/api/post/${postId}/comment`,
         method: 'POST',
         body: comment,
+    })
+}
+
+export const requestEditPostComment = async ({
+    postId,
+    content,
+    id: commentId,
+    userId,
+}: RequestEditPostCommentType & { postId: string }) => {
+    return generateRequest<RequestEditPostCommentType, ResponseEditPostCommentType>({
+        url: `/api/post/${postId}/comment`,
+        method: 'PATCH',
+        body: {
+            id: commentId,
+            content,
+            userId,
+        },
     })
 }
 

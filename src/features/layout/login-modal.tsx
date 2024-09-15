@@ -135,9 +135,7 @@ export const LoginModal: FC = () => {
 
     return (
         <Dialog modal>
-            <DialogTrigger
-                asChild
-                className='cursor-default'>
+            <DialogTrigger asChild>
                 <Button variant='secondary'>Login</Button>
             </DialogTrigger>
             <DialogContent

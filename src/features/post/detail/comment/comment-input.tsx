@@ -5,7 +5,9 @@ import { useProgressBar } from '@/lib/hooks'
 import { useCustomSession } from '@/lib/hooks/use-custom-session'
 import { Button } from '@/lib/ui/button'
 import { Input } from '@/lib/ui/input'
+import { Textarea } from '@/lib/ui/textarea'
 import { useToast } from '@/lib/ui/use-toast'
+import { LoaderCircle } from 'lucide-react'
 import { useState, type FC, type FormEvent } from 'react'
 
 interface Props {
@@ -73,17 +75,17 @@ export const CommentInput: FC<Props> = ({ postId }) => {
         <form
             className='flex gap-3 items-center'
             onSubmit={handleComment}>
-            <Input
-                className='flex-[0.95]'
+            <Textarea
+                className='flex-1'
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
             />
             <Button
                 type='submit'
-                className='flex-[0.05]'
-                variant={isSubmitting ? 'secondary' : 'default'}
-                disabled={isSubmitting}>
-                {isSubmitting ? 'loading...' : '작성'}
+                disabled={isSubmitting}
+                className='h-20 w-16'
+                variant={isSubmitting ? 'loading' : 'default'}>
+                {isSubmitting ? <LoaderCircle className='animate-spin' /> : '등록'}
             </Button>
         </form>
     )

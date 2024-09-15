@@ -94,6 +94,55 @@ export const POST = async (request: NextRequest, { params }: Params) => {
     }
 }
 
+export const PATCH = async (request: NextRequest, { params }: Params) => {
+    const { isAuthenticated, user } = await getServerAuth()
+
+    if (!isAuthenticated) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    try {
+        const postId = params?.id
+
+        if (!postId) {
+            return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+        }
+
+        const body = await request.json()
+        const commentId = body?.id
+        const content = body?.content
+        const userId = body?.userId
+
+        if (!commentId || !content || !userId) {
+            return NextResponse.json({ error: 'Comment id, content, and user id are required' }, { status: 400 })
+        }
+
+        if (user?.['@id'] !== userId) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
+        }
+
+        const editedComment = await prisma.comment.update({
+            where: {
+                id: commentId,
+            },
+            data: {
+                content,
+            },
+        })
+
+        if (!editedComment) {
+            return NextResponse.json({ error: 'Failed to edit comment' }, { status: 500 })
+        }
+
+        revalidateTag('post-comment')
+        revalidatePath(routePaths.post.detail(postId))
+
+        return NextResponse.json({ comment: editedComment })
+    } catch (error) {
+        return NextResponse.json({ error }, { status: 500 })
+    }
+}
+
 export const DELETE = async (request: NextRequest, { params }: Params) => {
     const { isAuthenticated, user } = await getServerAuth()
 
@@ -147,5 +196,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 export type ResponseGetPostCommentListType = NextResponseData<typeof GET>
 export type RequestCreatePostCommentType = Pick<Comment, 'authorId' | 'content'>
 export type ResponseCreatePostCommentType = NextResponseData<typeof POST>
+export type RequestEditPostCommentType = Pick<Comment, 'id' | 'content'> & { userId: string }
+export type ResponseEditPostCommentType = NextResponseData<typeof PATCH>
 export type RequestDeletePostCommentType = Pick<Comment, 'id'> & { userId: string }
 export type ResponseDeletePostCommentType = NextResponseData<typeof DELETE>
