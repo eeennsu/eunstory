@@ -8,5 +8,7 @@ export const getServerAuth = async () => {
 
     const isAdminAuthed = Boolean(session?.user?.isAdmin && session.user['@id'])
 
-    return { isAdminAuthed }
+    const isAuthenticated = Boolean(session?.user && session?.user?.id)
+
+    return { isAdminAuthed, isAuthenticated }
 }

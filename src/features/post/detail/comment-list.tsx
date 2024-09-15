@@ -8,9 +8,24 @@ interface Props {
 export const CommentList: FC<Props> = async ({ postId }) => {
     const response = await serverRequestGetCommentList({ postId })
 
+    if ('error' in response) {
+        return null
+    }
+
     return (
-        <div>
-            <h3>댓글 목록</h3>
-        </div>
+        <section>
+            <div className='w-full flex gap-2'>
+                <h2>댓글 목록</h2>
+                <p>{response?.commentCount} 개</p>
+            </div>
+            <ul>
+                {response?.comments?.map((comment) => (
+                    <li key={comment.id}>
+                        <div>{comment.content}</div>
+                        <div>{comment.authorId}</div>
+                    </li>
+                ))}
+            </ul>
+        </section>
     )
 }

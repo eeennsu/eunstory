@@ -11,7 +11,7 @@ import { LoginModal } from '@/features/layout'
 import { useAdminAuth } from '@/lib/hooks'
 
 export const Header: FC = () => {
-    const { status } = useSession()
+    const { status, data: session } = useSession()
     const { isAdminAuthed } = useAdminAuth()
 
     return (
@@ -35,7 +35,12 @@ export const Header: FC = () => {
                             <Link href={link.url}>{link.title}</Link>
                         </Button>
                     ))}
-                    {status === 'authenticated' ? <Button onClick={() => signOut()}>Logout</Button> : <LoginModal />}
+                    {status !== 'loading' &&
+                        (status === 'authenticated' ? (
+                            <Button onClick={() => signOut()}>Logout</Button>
+                        ) : (
+                            <LoginModal />
+                        ))}
                     {isAdminAuthed && (
                         <Button
                             asChild

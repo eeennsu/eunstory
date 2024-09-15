@@ -58,29 +58,29 @@ export const authOptions: AuthOptions = {
     ],
     session: {
         strategy: 'jwt',
-        maxAge: 60 * 60 * 6, // 6 hours
+        maxAge: 60 * 60 * 24, // 24 hours
     },
 
     secret: assertValue(process.env.JWT_SECRET),
 
     callbacks: {
-        jwt: async ({ token, user }) => {
-            if (user) {
+        jwt: async ({ token, user, profile }) => {
+            if (user && profile) {
                 token.isAdmin = user.isAdmin
                 token['@id'] = user['@id']
+                token['url'] = profile?.html_url || undefined // TODO: add google url
             }
 
             return Promise.resolve(token)
         },
         session: async ({ session, token }) => {
             session.user.isAdmin = token.isAdmin as boolean | undefined
-            session.user['@id'] = token['@id'] as string | undefined
+            session.user['@id'] = (token['@id'] || token?.sub) as string | undefined
+            session.user.url = token.url as string | undefined
+
+            console.log('session', session)
 
             return Promise.resolve(session)
         },
-        // redirect: async ({ url, baseUrl }) => {
-        //     const redirectUrl = url.startsWith('/') ? new URL(url, baseUrl).toString() : url
-        //     return redirectUrl
-        // },
     },
 }

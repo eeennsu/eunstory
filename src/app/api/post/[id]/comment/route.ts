@@ -1,6 +1,8 @@
+import { getServerAuth } from '@/lib/auth'
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
 import { routePaths } from '@/lib/route'
+import { Comment } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
@@ -45,10 +47,10 @@ export const GET = async (_: NextRequest, { params }: Params) => {
 }
 
 export const POST = async (request: NextRequest, { params }: Params) => {
-    const session = await getServerSession()
+    const { isAuthenticated } = await getServerAuth()
 
-    if (!session?.user || !session?.user.id) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!isAuthenticated) {
+        return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 })
     }
 
     try {
@@ -126,5 +128,6 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 }
 
 export type ResponseGetPostCommentListType = NextResponseData<typeof GET>
+export type RequestCreatePostCommentType = Pick<Comment, 'authorId' | 'content'>
 export type ResponseCreatePostCommentType = NextResponseData<typeof POST>
 export type ResponseDeletePostCommentType = NextResponseData<typeof DELETE>

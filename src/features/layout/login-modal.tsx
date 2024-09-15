@@ -119,7 +119,7 @@ export const LoginModal: FC = () => {
                     redirect: false,
                 })
 
-                console.table(response)
+                console.log('zzzzz', response)
 
                 if (response?.ok && response?.status === 200) {
                     toast({
@@ -146,7 +146,7 @@ export const LoginModal: FC = () => {
                 <DialogHeader>
                     <div className='flex justify-between items-center'>
                         <DialogTitle>Hello Eunsu!</DialogTitle>
-                        <DialogClose>
+                        <DialogClose asChild>
                             <Button
                                 variant='ghost'
                                 className='p-3'>
