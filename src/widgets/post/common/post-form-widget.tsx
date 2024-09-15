@@ -85,10 +85,9 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         if (!isValidatedForm()) return
 
         const tags = tagInputRef.current?.getTags().join(',') || ''
+        const toastKeyword = prevPost ? '수정' : '생성'
 
         executeWithProgress(async () => {
-            const toastKeyword = prevPost ? '수정' : '생성'
-
             try {
                 let response
 
@@ -97,6 +96,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                         title,
                         content,
                         tags: tags || null,
+                        authorId: authorId!,
                     }
 
                     response = await requestEditPost({
@@ -110,6 +110,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                             title,
                             content,
                             tags: tags || null,
+                            authorId: authorId!,
                             order: -1,
                         }
 
@@ -150,7 +151,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     }
 
     // 임시저장 함수
-    const temporarySavePost = useCallback(async () => {
+    const temporarySavePost = async () => {
         if (!authorId) return
 
         let isSaved
@@ -204,7 +205,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [title, content, temporarySavedPostId])
+    }
 
     // 엔터 입력시 submit 이벤트 방지
     const preventEnterInInput = (e: KeyboardEvent<HTMLInputElement>) => {

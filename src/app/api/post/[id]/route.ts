@@ -174,6 +174,6 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 }
 
 export type ResponseGetDetailPostType = NextResponseData<typeof GET>
-export type RequestEditDetailPostType = Partial<Pick<Post, 'title' | 'content' | 'tags' | 'order'>>
+export type RequestEditDetailPostType = Partial<Pick<Post, 'title' | 'content' | 'tags' | 'order' | 'authorId'>>
 export type ResponseEditDetailPostType = NextResponseData<typeof PATCH>
 export type ResponseDeleteDetailPostType = NextResponseData<typeof DELETE>
