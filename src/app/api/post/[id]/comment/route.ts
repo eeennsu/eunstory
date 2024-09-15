@@ -1,4 +1,3 @@
-import { getServerAdminAuth } from '@/lib/auth'
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
 import { routePaths } from '@/lib/route'
@@ -13,10 +12,6 @@ type Params = {
 }
 
 export const GET = async (_: NextRequest, { params }: Params) => {
-    const { isAdminAuthed } = await getServerAdminAuth()
-
-    console.log('isAdminAuthed', isAdminAuthed)
-
     try {
         const postId = params?.id
 
@@ -49,9 +44,13 @@ export const GET = async (_: NextRequest, { params }: Params) => {
     }
 }
 
-export type ResponseGetCommentListType = NextResponseData<typeof GET>
-
 export const POST = async (request: NextRequest, { params }: Params) => {
+    const session = await getServerSession()
+
+    if (!session?.user || !session?.user.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     try {
         const postId = params?.id
 
@@ -87,16 +86,45 @@ export const POST = async (request: NextRequest, { params }: Params) => {
     }
 }
 
-export type ResponseCreateCommentType = NextResponseData<typeof POST>
-
 export const DELETE = async (request: NextRequest, { params }: Params) => {
+    const session = await getServerSession()
+
+    if (!session?.user || !session?.user.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const postId = params?.id
+
+    if (!postId) {
+        return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+    }
+
     try {
-        // const session = await getServerSession()
-        // if (!session?.user.id)
-        // const commentId = params?.id
-        // const body = await request.json()
-        // const authorId = body?.authorId
+        const body = await request.json()
+        const commentId = body?.commentId
+
+        const deletedComment = await prisma.comment.update({
+            where: {
+                id: commentId,
+            },
+            data: {
+                isActive: false,
+                deletedAt: new Date(),
+            },
+        })
+
+        if (!deletedComment) {
+            return NextResponse.json({ error: 'Failed to delete comment' }, { status: 500 })
+        }
+
+        revalidatePath(routePaths.post.detail(postId))
+
+        return NextResponse.json({}, { status: 204 })
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 })
     }
 }
+
+export type ResponseGetPostCommentListType = NextResponseData<typeof GET>
+export type ResponseCreatePostCommentType = NextResponseData<typeof POST>
+export type ResponseDeletePostCommentType = NextResponseData<typeof DELETE>

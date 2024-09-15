@@ -9,7 +9,7 @@ interface Props {
 }
 
 const EditDetailPostPage: FC<Props> = async ({ params: { id } }) => {
-    const response = await serverRequestGetDetailPost({ id, isPublished: true })
+    const response = await serverRequestGetDetailPost({ postId: id, isPublished: true })
 
     if (!('post' in response)) {
         throw response.error

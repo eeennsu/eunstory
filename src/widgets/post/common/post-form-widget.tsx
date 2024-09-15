@@ -16,6 +16,8 @@ import { Tooltip, TooltipContent, TooltipProvider } from '@/lib/ui/tooltip'
 import { TooltipTrigger } from '@radix-ui/react-tooltip'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Ellipsis } from 'lucide-react'
+import { RequestCreatePostType } from '@/app/api/post/route'
+import { RequestEditDetailPostType } from '@/app/api/post/[id]/route'
 
 interface Props {
     prevPost?: Post // prevPost 가 있으면 수정 폼, 없으면 생성 폼
@@ -85,29 +87,33 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         const tags = tagInputRef.current?.getTags().join(',') || ''
 
         executeWithProgress(async () => {
-            const post: Partial<Post> = {
-                title,
-                content,
-                authorId,
-                ...(tags.length > 0 && { tags }),
-            }
-
             const toastKeyword = prevPost ? '수정' : '생성'
 
             try {
                 let response
 
                 if (prevPost) {
+                    const editedPost: RequestEditDetailPostType = {
+                        title,
+                        content,
+                        tags: tags || null,
+                    }
+
                     response = await requestEditPost({
-                        id: prevPost.id,
-                        post,
+                        postId: prevPost.id,
+                        editedPost,
                     })
                 } else {
+                    const createdPost: RequestCreatePostType = {
+                        title,
+                        content,
+                        authorId: authorId!,
+                        tags: tags || null,
+                        order: null,
+                    }
+
                     response = await requestCreatePost({
-                        post: {
-                            ...post,
-                            order: null,
-                        },
+                        createdPost,
                     })
                 }
 
@@ -128,21 +134,23 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
 
     // 임시저장 함수
     const temporarySavePost = useCallback(async () => {
+        if (!authorId) return
+
         let isSaved
 
         const tags = tagInputRef.current?.getTags().join(',') || ''
 
-        const post: Partial<Post> = {
+        const post: RequestEditDetailPostType = {
             title,
             content: editorRef.current?.getHtml() || '',
-            ...(tags.length > 0 && { tags }),
+            tags: tags || null,
         }
 
         // 임시 저장된 포스트가 있으면? 임시저장된 포스트 내용 변경하며 임시저장
         if (!!temporarySavedPostId) {
             const updatedTemporarySavedPost = await requestEditPost({
-                id: temporarySavedPostId,
-                post,
+                postId: temporarySavedPostId,
+                editedPost: post,
             })
 
             if ('post' in updatedTemporarySavedPost) {
@@ -153,8 +161,10 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         // 임시 저장된 포스트가 없으면? 새로운 포스트 생성하며 임시저장
         else {
             const temporarySavedResponse = await requestCreatePost({
-                post: {
-                    ...post,
+                createdPost: {
+                    title,
+                    content,
+                    tags,
                     authorId,
                     order: null,
                 },
@@ -213,7 +223,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         if (!temporarySavedPostId || prevPost) return
 
         const fetchTemporarySavedPost = await requestGetDetailPost({
-            id: temporarySavedPostId,
+            postId: temporarySavedPostId,
             isPublished: false,
         })
 

@@ -54,8 +54,6 @@ export const GET = async (request: NextRequest) => {
     }
 }
 
-export type ResponseGetPostListType = NextResponseData<typeof GET>
-
 // create post
 export const POST = async (request: NextRequest) => {
     try {
@@ -113,8 +111,6 @@ export const POST = async (request: NextRequest) => {
     }
 }
 
-export type ResponseCreatePostType = NextResponseData<typeof POST>
-
 // update post order
 export const PATCH = async (request: NextRequest) => {
     try {
@@ -146,4 +142,7 @@ export const PATCH = async (request: NextRequest) => {
     }
 }
 
+export type ResponseGetPostListType = NextResponseData<typeof GET>
+export type RequestCreatePostType = Pick<Post, 'title' | 'content' | 'tags' | 'authorId' | 'order'>
+export type ResponseCreatePostType = NextResponseData<typeof POST>
 export type ResponsePatchPostOrderType = NextResponseData<typeof PATCH>

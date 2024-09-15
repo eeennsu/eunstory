@@ -1,5 +1,9 @@
-import { ResponseGetDetailPostType } from '@/app/api/post/[id]/route'
-import { ResponseCreatePostType, ResponseGetPostListType } from '@/app/api/post/route'
+import {
+    RequestEditDetailPostType,
+    ResponseEditDetailPostType,
+    ResponseGetDetailPostType,
+} from '@/app/api/post/[id]/route'
+import { RequestCreatePostType, ResponseCreatePostType, ResponseGetPostListType } from '@/app/api/post/route'
 import { generateRequest } from '@/lib/fetch'
 import { Post } from '@prisma/client'
 
@@ -27,36 +31,42 @@ export const requestGetPostList = async ({
     })
 }
 
-export const requestCreatePost = async ({ post }: { post: Partial<Post> }) => {
-    return generateRequest<Partial<Post>, ResponseCreatePostType>({
+export const requestCreatePost = async ({ createdPost }: { createdPost: RequestCreatePostType }) => {
+    return generateRequest<RequestCreatePostType, ResponseCreatePostType>({
         url: '/api/post',
         method: 'POST',
-        body: post,
+        body: createdPost,
     })
 }
 
-export const requestEditPost = async ({ id, post }: { id: string; post: Partial<Post> }) => {
-    return generateRequest<Partial<Post>, ResponseCreatePostType>({
-        url: `/api/post/${id}`,
+export const requestEditPost = async ({
+    postId,
+    editedPost,
+}: {
+    postId: string
+    editedPost: RequestEditDetailPostType
+}) => {
+    return generateRequest<RequestEditDetailPostType, ResponseEditDetailPostType>({
+        url: `/api/post/${postId}`,
         method: 'PATCH',
-        body: post,
+        body: editedPost,
     })
 }
 
-export const requestDeletePost = async ({ id, isPublished }: { id: string; isPublished: boolean }) => {
+export const requestDeletePost = async ({ postId, isPublished }: { postId: string; isPublished: boolean }) => {
     const searchParams = new URLSearchParams()
     searchParams.append('isPublished', String(isPublished))
 
-    return generateRequest<undefined, null>({ url: `/api/post/${id}?${searchParams.toString()}`, method: 'DELETE' })
+    return generateRequest<undefined, null>({ url: `/api/post/${postId}?${searchParams.toString()}`, method: 'DELETE' })
 }
 
-export const requestGetDetailPost = async ({ id, isPublished }: { id: string; isPublished?: boolean }) => {
+export const requestGetDetailPost = async ({ postId, isPublished }: { postId: string; isPublished?: boolean }) => {
     const searchParams = new URLSearchParams()
 
     isPublished && searchParams.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetDetailPostType>({
-        url: `/api/post/${id}?${searchParams.toString()}`,
+        url: `/api/post/${postId}?${searchParams.toString()}`,
     })
 }
 

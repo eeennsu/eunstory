@@ -41,8 +41,6 @@ export const GET = async (request: NextRequest, { params }: Params) => {
     }
 }
 
-export type ResponseGetDetailPostType = NextResponseData<typeof GET>
-
 // edit post
 export const PATCH = async (request: NextRequest, { params }: Params) => {
     try {
@@ -86,8 +84,6 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
     }
 }
 
-export type ResponsePatchDetailPostType = NextResponseData<typeof PATCH>
-
 // delete post
 export const DELETE = async (request: NextRequest, { params }: Params) => {
     const { isAdminAuthed } = await getServerAdminAuth()
@@ -96,15 +92,15 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const searchParams = request.nextUrl.searchParams
-    const isPublishedDelete = searchParams.get('isPublished')
+    const id = params?.id
+
+    if (!id) {
+        return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+    }
 
     try {
-        const id = params?.id
-
-        if (!id) {
-            return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
-        }
+        const { searchParams } = request.nextUrl
+        const isPublishedDelete = searchParams.get('isPublished')
 
         const beDeletedPost = (await prisma.post.findFirst({
             where: {
@@ -119,6 +115,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
             data: {
                 isActive: false,
                 order: null,
+                deletedAt: new Date(),
             },
         })) as Post
 
@@ -152,4 +149,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
     }
 }
 
+export type ResponseGetDetailPostType = NextResponseData<typeof GET>
+export type RequestEditDetailPostType = Partial<Pick<Post, 'title' | 'content' | 'tags'>>
+export type ResponseEditDetailPostType = NextResponseData<typeof PATCH>
 export type ResponseDeleteDetailPostType = NextResponseData<typeof DELETE>

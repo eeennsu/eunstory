@@ -37,16 +37,16 @@ export const serverRequestGetSomePostList = async ({
     })
 }
 
-export const serverRequestGetDetailPost = async ({ id, isPublished }: { id: string; isPublished: boolean }) => {
-    if (!id) {
-        throw new Error(`Post ID is required`)
+export const serverRequestGetDetailPost = async ({ postId, isPublished }: { postId: string; isPublished: boolean }) => {
+    if (!postId) {
+        throw new Error(`Post id must be required`)
     }
 
     const params = new URLSearchParams()
     params.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetDetailPostType>({
-        url: getUrlFromServer(`/api/post/${id}?${params.toString()}`),
+        url: getUrlFromServer(`/api/post/${postId}?${params.toString()}`),
     })
 }
 

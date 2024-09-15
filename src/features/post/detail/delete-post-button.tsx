@@ -27,7 +27,7 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
 
         executeWithProgress(async () => {
             try {
-                await requestDeletePost({ id, isPublished: true })
+                await requestDeletePost({ postId: id, isPublished: true })
             } catch (error) {
                 console.error(error)
                 toast({ title: '게시물 삭제에 실패했습니다', description: '다시 시도해주세요.' })
