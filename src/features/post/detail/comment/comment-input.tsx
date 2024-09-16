@@ -1,12 +1,11 @@
 'use client'
 
 import { requestCreatePostComment } from '@/entities/post-comment/post-comment.api.client'
+import { callToast } from '@/lib/fetch'
 import { useProgressBar } from '@/lib/hooks'
 import { useCustomSession } from '@/lib/hooks/use-custom-session'
 import { Button } from '@/lib/ui/button'
-import { Input } from '@/lib/ui/input'
 import { Textarea } from '@/lib/ui/textarea'
-import { useToast } from '@/lib/ui/use-toast'
 import { LoaderCircle } from 'lucide-react'
 import { useState, type FC, type FormEvent } from 'react'
 
@@ -15,9 +14,8 @@ interface Props {
 }
 
 export const CommentInput: FC<Props> = ({ postId }) => {
-    const { toast } = useToast()
     const { executeWithProgress, barRouter } = useProgressBar()
-    const { isAuthenticated, user } = useCustomSession()
+    const { isAuthenticated } = useCustomSession()
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
     const [comment, setComment] = useState<string>('')
@@ -26,8 +24,8 @@ export const CommentInput: FC<Props> = ({ postId }) => {
         e.preventDefault()
 
         if (!isAuthenticated) {
-            toast({
-                title: '로그인이 필요합니다.',
+            callToast({
+                type: 'NEED_AUTHENTICATE',
                 position: 'bottom',
                 variant: 'warning',
             })
@@ -36,7 +34,7 @@ export const CommentInput: FC<Props> = ({ postId }) => {
         }
 
         if (!comment.length) {
-            toast({
+            callToast({
                 title: '댓글을 입력해주세요.',
                 position: 'bottom',
                 variant: 'warning',
@@ -52,17 +50,16 @@ export const CommentInput: FC<Props> = ({ postId }) => {
                     postId,
                     comment: {
                         content: comment,
-                        authorId: user?.['@id']!,
+                        parentId: null,
                     },
                 })
             } catch (error) {
-                console.error(error)
-                toast({
+                callToast({
                     title: '댓글을 작성에 실패했습니다.',
                     description: '관리자에게 문의해주세요.',
-                    position: 'bottom',
-                    variant: 'warning',
+                    variant: 'destructive',
                 })
+                console.error(error)
             } finally {
                 setIsSubmitting(false)
                 setComment('')
@@ -77,6 +74,7 @@ export const CommentInput: FC<Props> = ({ postId }) => {
             onSubmit={handleComment}>
             <Textarea
                 className='flex-1'
+                placeholder='댓글을 입력해주세요.'
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
             />

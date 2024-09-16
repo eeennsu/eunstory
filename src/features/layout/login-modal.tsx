@@ -1,6 +1,6 @@
 'use client'
 
-import { ERROR_CODES } from '@/lib/fetch'
+import { callToast, ERROR_CODES } from '@/lib/fetch'
 import { useProgressBar } from '@/lib/hooks'
 import { Button } from '@/lib/ui/button'
 import {
@@ -14,7 +14,6 @@ import {
 } from '@/lib/ui/dialog'
 import { Input } from '@/lib/ui/input'
 import { Label } from '@/lib/ui/label'
-import { useToast } from '@/lib/ui/use-toast'
 import { Github, X } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { Fragment, useState, type FC } from 'react'
@@ -24,11 +23,10 @@ export const LoginModal: FC = () => {
     const [id, setId] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const { status } = useSession()
-    const { toast } = useToast()
 
     const isValidatedForm = () => {
         if (!id.length) {
-            toast({
+            callToast({
                 title: 'ID를 입력해주세요.',
                 position: 'top',
                 variant: 'warning',
@@ -38,7 +36,7 @@ export const LoginModal: FC = () => {
         }
 
         if (!password.length) {
-            toast({
+            callToast({
                 title: '비밀번호를 입력해주세요.',
                 position: 'top',
                 variant: 'warning',
@@ -55,9 +53,8 @@ export const LoginModal: FC = () => {
 
         executeWithProgress(async () => {
             if (!id.length || !password.length) {
-                toast({
+                callToast({
                     title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
-                    position: 'top',
                     variant: 'warning',
                 })
             }
@@ -70,36 +67,31 @@ export const LoginModal: FC = () => {
                 })
 
                 if (response?.ok && response?.status === 200) {
-                    toast({
+                    callToast({
                         title: '로그인에 성공했습니다.',
                         position: 'bottom',
                     })
                 } else {
                     switch (response?.error) {
                         case ERROR_CODES.MISSING_ID_OR_PASSWORD.code:
-                            toast({
-                                title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
-                                position: 'top',
+                            callToast({
+                                type: 'MISSING_ID_OR_PASSWORD',
                                 variant: 'warning',
                             })
 
                             return
 
                         case ERROR_CODES.USER_NOT_FOUND.code:
-                            toast({
-                                title: ERROR_CODES.USER_NOT_FOUND.title,
-                                description: ERROR_CODES.USER_NOT_FOUND.description,
-                                position: 'top',
+                            callToast({
+                                type: 'USER_NOT_FOUND',
                                 variant: 'warning',
                             })
 
                             return
 
                         case ERROR_CODES.INCORRECT_ID_OR_PASSWORD.code:
-                            toast({
-                                title: ERROR_CODES.INCORRECT_ID_OR_PASSWORD.title,
-                                description: ERROR_CODES.INCORRECT_ID_OR_PASSWORD.description,
-                                position: 'top',
+                            callToast({
+                                type: 'INCORRECT_ID_OR_PASSWORD',
                                 variant: 'warning',
                             })
 
@@ -122,7 +114,7 @@ export const LoginModal: FC = () => {
                 console.log('zzzzz', response)
 
                 if (response?.ok && response?.status === 200) {
-                    toast({
+                    callToast({
                         title: '로그인에 성공했습니다.',
                         position: 'bottom',
                     })

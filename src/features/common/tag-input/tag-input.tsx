@@ -1,5 +1,6 @@
 'use client'
 
+import { callToast } from '@/lib/fetch'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Badge } from '@/lib/ui/badge'
 import { toast } from '@/lib/ui/use-toast'
@@ -21,10 +22,9 @@ export const TagInput = forwardRef<TagInputRef, Props>(({ className, placeholder
 
     const handleTagLimit = () => {
         if (tags.length === 5) {
-            toast({
+            callToast({
                 title: '태그는 최대 5개까지 등록할 수 있습니다.',
             })
-
             if (inputRef.current) {
                 inputRef.current.value = ''
 

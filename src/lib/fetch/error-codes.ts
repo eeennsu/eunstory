@@ -1,6 +1,11 @@
-import { toast } from '../ui/use-toast'
+import { ToastPosition, ToastVariant, useToast } from '../ui/use-toast'
 
 export const ERROR_CODES = {
+    NEED_AUTHENTICATE: {
+        code: 'NEED_AUTHENTICATE',
+        title: '로그인이 필요합니다.',
+        description: null,
+    },
     MISSING_ID_OR_PASSWORD: {
         code: 'MISSING_ID_OR_PASSWORD',
         title: 'ID 또는 비밀번호를 입력해주세요.',
@@ -63,11 +68,33 @@ export const ERROR_CODES = {
     },
 } as const
 
-export const callErrorToast = (type: keyof typeof ERROR_CODES = 'UNKNOWN') => {
-    const { title, description } = ERROR_CODES[type] || ERROR_CODES.UNKNOWN
+export const callToast = ({
+    title,
+    description,
+    type,
+    position = 'top',
+    variant = 'default',
+}: {
+    title?: string
+    description?: string
+    type?: keyof typeof ERROR_CODES
+    position?: ToastPosition
+    variant?: ToastVariant
+}) => {
+    const { toast } = useToast()
+    let defaultTitle
+    let defaultDescription
+
+    if (type) {
+        const errorCode = ERROR_CODES[type]
+        defaultTitle = errorCode?.title
+        defaultDescription = errorCode?.description
+    }
 
     toast({
-        title,
-        description,
+        title: title || defaultTitle,
+        description: description || defaultDescription,
+        variant,
+        position,
     })
 }

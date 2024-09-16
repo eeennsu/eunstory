@@ -57,7 +57,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
         }
 
         const body = await request.json()
-        const { title, content, tags, order } = body
+        const order = body?.order
 
         if (!body) {
             return NextResponse.json({ error: 'Invalid body' }, { status: 400 })
@@ -133,7 +133,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
         })) as Post
 
         if (user?.['@id'] !== beDeletedPost.authorId) {
-            return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
         }
 
         const softDeletedPost = (await prisma.post.update({
@@ -170,7 +170,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 
         revalidatePath(routePaths.post.list())
 
-        return NextResponse.json({})
+        return new NextResponse(null, { status: 204 })
     } catch (error) {
         console.log(error)
         return NextResponse.json({ error }, { status: 500 })

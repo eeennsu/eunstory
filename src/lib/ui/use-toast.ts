@@ -138,7 +138,10 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, 'id'>
 
-function toast({ className, position = 'bottom', ...props }: Toast & { position?: 'top' | 'bottom' }) {
+export type ToastVariant = Toast['variant']
+export type ToastPosition = 'top' | 'bottom'
+
+function toast({ className, position = 'bottom', ...props }: Toast & { position?: ToastPosition }) {
     const id = genId()
 
     const update = (props: ToasterToast) =>

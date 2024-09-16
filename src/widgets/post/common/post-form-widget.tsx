@@ -8,16 +8,16 @@ import { useDebouncedValue } from '@/lib/hooks/use-debounced-value'
 import { routePaths } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import { Input } from '@/shared/common'
-import { useToast } from '@/lib/ui/use-toast'
 import { Post } from '@prisma/client'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { FormEvent, KeyboardEvent, useCallback, useEffect, useRef, useState, type FC } from 'react'
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState, type FC } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider } from '@/lib/ui/tooltip'
 import { TooltipTrigger } from '@radix-ui/react-tooltip'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Ellipsis } from 'lucide-react'
 import { RequestCreatePostType } from '@/app/api/post/route'
 import { RequestEditDetailPostType } from '@/app/api/post/[id]/route'
+import { callToast } from '@/lib/fetch'
 
 interface Props {
     prevPost?: Post // prevPost 가 있으면 수정 폼, 없으면 생성 폼
@@ -29,10 +29,8 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const pathname = usePathname()
     const temporarySavedPostId = params.get('id')
 
-    const { adminId: authorId } = useAdminSession()
+    const { adminId: authorId, isAdminAuthed } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
-    const { toast } = useToast()
-
     const editorRef = useRef<TiptapRefType>(null)
     const tagInputRef = useRef<TagInputRef>(null)
 
@@ -43,16 +41,17 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const debouncedPost = useDebouncedValue({ title, content }, 5000)
 
     const isValidatedForm = () => {
-        if (!authorId) {
-            toast({
-                title: '인증이 필요합니다.',
+        if (!authorId || !isAdminAuthed) {
+            callToast({
+                type: 'FORBIDDEN',
+                variant: 'destructive',
             })
 
             return false
         }
 
         if (!title.length && editorRef.current?.isEmpty()) {
-            toast({
+            callToast({
                 title: '제목과 내용을 입력해주세요.',
             })
 
@@ -60,7 +59,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         }
 
         if (!title.length) {
-            toast({
+            callToast({
                 title: '제목을 입력해주세요.',
             })
 
@@ -68,7 +67,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         }
 
         if (editorRef.current?.isEmpty()) {
-            toast({
+            callToast({
                 title: '내용을 입력해주세요.',
             })
 
@@ -136,13 +135,21 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                 }
 
                 if (response) {
-                    toast({ title: `게시물이 ${toastKeyword}되었습니다` })
+                    callToast({ title: `게시물이 ${toastKeyword}되었습니다` })
                 } else {
-                    toast({ title: `게시물 ${toastKeyword}에 실패하였습니다.`, description: '다시 시도해주세요.' })
+                    callToast({
+                        title: `게시물 ${toastKeyword}에 실패하였습니다.`,
+                        description: '다시 시도해주세요.',
+                        variant: 'destructive',
+                    })
                 }
             } catch (error) {
+                callToast({
+                    title: `게시물 ${toastKeyword}에 실패하였습니다.`,
+                    description: '다시 시도해주세요.',
+                    variant: 'destructive',
+                })
                 console.error(error)
-                toast({ title: `게시물 ${toastKeyword}에 실패하였습니다.`, description: '다시 시도해주세요.' })
             } finally {
                 barRouter.replace(routePaths.post.list())
                 barRouter.refresh()
@@ -199,7 +206,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         }
 
         if (isSaved) {
-            toast({
+            callToast({
                 title: '포스트가 임시 저장되었습니다.',
             })
         }

@@ -12,6 +12,7 @@ type Params = {
     }
 }
 
+// get detail post comment
 export const GET = async (_: NextRequest, { params }: Params) => {
     try {
         const postId = params?.id
@@ -26,7 +27,7 @@ export const GET = async (_: NextRequest, { params }: Params) => {
                 isActive: true,
             },
             orderBy: {
-                createdAt: 'desc',
+                createdAt: 'asc',
             },
             include: {
                 author: true,
@@ -38,11 +39,16 @@ export const GET = async (_: NextRequest, { params }: Params) => {
             where: {
                 postId,
                 isActive: true,
+                parentId: null,
             },
         })
 
         if (!comments) {
             return NextResponse.json({ error: 'Comments not found' }, { status: 404 })
+        }
+
+        if (!comments.length) {
+            return NextResponse.json({ comments: [], commentCount: 0 })
         }
 
         return NextResponse.json({ comments, commentCount })
@@ -51,6 +57,7 @@ export const GET = async (_: NextRequest, { params }: Params) => {
     }
 }
 
+// create post comment
 export const POST = async (request: NextRequest, { params }: Params) => {
     const { isAuthenticated, user } = await getServerAuth()
 
@@ -67,9 +74,9 @@ export const POST = async (request: NextRequest, { params }: Params) => {
 
         const body = await request.json()
         const content = body?.content
-        const authorId = body?.authorId
+        const parentId = body?.parentId
 
-        if (!content || !authorId) {
+        if (!content) {
             return NextResponse.json({ error: 'Content and authorId are required' }, { status: 400 })
         }
 
@@ -77,7 +84,8 @@ export const POST = async (request: NextRequest, { params }: Params) => {
             data: {
                 postId,
                 content,
-                authorId,
+                authorId: user['@id'],
+                ...(parentId && { parentId }),
             },
         })
 
@@ -94,6 +102,7 @@ export const POST = async (request: NextRequest, { params }: Params) => {
     }
 }
 
+// edit post comment
 export const PATCH = async (request: NextRequest, { params }: Params) => {
     const { isAuthenticated, user } = await getServerAuth()
 
@@ -118,7 +127,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
         }
 
         if (user?.['@id'] !== userId) {
-            return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
         }
 
         const editedComment = await prisma.comment.update({
@@ -143,6 +152,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
     }
 }
 
+// delete post comment
 export const DELETE = async (request: NextRequest, { params }: Params) => {
     const { isAuthenticated, user } = await getServerAuth()
 
@@ -166,7 +176,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
         }
 
         if (user?.['@id'] !== userId) {
-            return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
         }
 
         const deletedComment = await prisma.comment.update({
@@ -194,7 +204,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 }
 
 export type ResponseGetPostCommentListType = NextResponseData<typeof GET>
-export type RequestCreatePostCommentType = Pick<Comment, 'authorId' | 'content'>
+export type RequestCreatePostCommentType = Pick<Comment, 'content' | 'parentId'>
 export type ResponseCreatePostCommentType = NextResponseData<typeof POST>
 export type RequestEditPostCommentType = Pick<Comment, 'id' | 'content'> & { userId: string }
 export type ResponseEditPostCommentType = NextResponseData<typeof PATCH>
