@@ -221,6 +221,9 @@ export const CommentItem: FC<Props> = ({
                             {replies.map((reply) => (
                                 <ReplyItem
                                     key={reply.id}
+                                    replyId={reply.id}
+                                    postId={postId}
+                                    userId={userId}
                                     authorImage={reply.author.image}
                                     authorName={reply.author.name}
                                     content={reply.content}

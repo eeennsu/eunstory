@@ -1,5 +1,6 @@
 'use client'
 
+import { requestEditPostComment } from '@/entities/post-comment/post-comment.api.client'
 import { callToast } from '@/lib/fetch'
 import { useProgressBar } from '@/lib/hooks'
 import { Avatar, AvatarImage } from '@/lib/ui/avatar'
@@ -11,6 +12,9 @@ import { FilePenLine, LoaderCircle, Pencil, Trash, Undo2 } from 'lucide-react'
 import { useState, type FC } from 'react'
 
 interface Props {
+    replyId: string
+    postId: string
+    userId?: string
     authorImage: string | null
     authorName: string
     content: string
@@ -18,7 +22,16 @@ interface Props {
     isOwner: boolean
 }
 
-export const ReplyItem: FC<Props> = ({ authorImage, authorName, content, createdAt, isOwner }) => {
+export const ReplyItem: FC<Props> = ({
+    replyId,
+    postId,
+    userId,
+    authorImage,
+    authorName,
+    content,
+    createdAt,
+    isOwner,
+}) => {
     const { executeWithProgress, barRouter } = useProgressBar()
 
     const [editedContent, setEditedContent] = useState<string>(content)
@@ -26,11 +39,22 @@ export const ReplyItem: FC<Props> = ({ authorImage, authorName, content, created
     const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
     const handleEditReply = () => {
+        if (!userId) {
+            callToast({
+                type: 'NEED_AUTHENTICATE',
+                variant: 'destructive',
+            })
+            return
+        }
+
         executeWithProgress(async () => {
             try {
-
-
-
+                await requestEditPostComment({
+                    id: replyId,
+                    content: editedContent,
+                    postId,
+                    userId,
+                })
             } catch (error) {
                 callToast({
                     title: '답글 수정에 실패하였습니다.',
