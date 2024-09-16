@@ -28,9 +28,9 @@ model Post {
     title     String
     content   String
     tags      String?
-    createdAt DateTime  @default(now())
     order     Int?
-    updatedAt DateTime  @updatedAt
+    createdAt DateTime  @default(now())
+    updatedAt DateTime?
     deletedAt DateTime?
     authorId  String
     author    User      @relation(fields: [authorId], references: [id])
@@ -48,6 +48,7 @@ model Comment {
     postId    String
     post      Post      @relation(fields: [postId], references: [id])
     createdAt DateTime  @default(now())
+    updatedAt DateTime?
     deletedAt DateTime?
     authorId  String
     author    User      @relation(fields: [authorId], references: [id])

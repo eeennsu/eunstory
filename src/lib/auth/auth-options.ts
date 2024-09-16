@@ -65,7 +65,7 @@ export const authOptions: AuthOptions = {
 
     callbacks: {
         jwt: async ({ token, user, profile }) => {
-            if (user && profile) {
+            if (user) {
                 token.isAdmin = user.isAdmin
                 token['@id'] = user['@id']
                 token['url'] = profile?.html_url || undefined // TODO: add google url

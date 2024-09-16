@@ -97,6 +97,7 @@ export const POST = async (request: NextRequest) => {
                 authorId,
                 content,
                 tags,
+                updatedAt: null,
                 ...(lastPostOrder && { order: lastPostOrder + 1 }),
             },
         })

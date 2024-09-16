@@ -1,4 +1,4 @@
-import { ToastPosition, ToastVariant, useToast } from '../ui/use-toast'
+import { toast, ToastPosition, ToastVariant } from '../ui/use-toast'
 
 export const ERROR_CODES = {
     NEED_AUTHENTICATE: {
@@ -81,7 +81,6 @@ export const callToast = ({
     position?: ToastPosition
     variant?: ToastVariant
 }) => {
-    const { toast } = useToast()
     let defaultTitle
     let defaultDescription
 

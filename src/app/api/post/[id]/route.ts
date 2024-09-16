@@ -92,6 +92,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
             },
             data: {
                 ...body,
+                updatedAt: new Date(),
             },
         })) as Post
 

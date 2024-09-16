@@ -1,59 +1,52 @@
 'use client'
 
-import { requestEditPostComment } from '@/entities/post-comment/post-comment.api.client'
+import { requestDeletePostComment, requestEditPostComment } from '@/entities/post-comment/post-comment.api.client'
+import { PostComment } from '@/entities/post-comment/post-comment.types'
 import { callToast } from '@/lib/fetch'
 import { useProgressBar } from '@/lib/hooks'
 import { Avatar, AvatarImage } from '@/lib/ui/avatar'
 import { Button } from '@/lib/ui/button'
 import { Textarea } from '@/lib/ui/textarea'
+import { formatBeforeTime } from '@/lib/utils'
 import { defaultUserIcon } from '@/shared/constants'
-import dayjs from 'dayjs'
 import { FilePenLine, LoaderCircle, Pencil, Trash, Undo2 } from 'lucide-react'
 import { useState, type FC } from 'react'
 
 interface Props {
-    replyId: string
-    postId: string
-    userId?: string
-    authorImage: string | null
-    authorName: string
-    content: string
-    createdAt: Date
+    reply: PostComment
+    currentUserId?: string
     isOwner: boolean
 }
 
-export const ReplyItem: FC<Props> = ({
-    replyId,
-    postId,
-    userId,
-    authorImage,
-    authorName,
-    content,
-    createdAt,
-    isOwner,
-}) => {
+export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
     const { executeWithProgress, barRouter } = useProgressBar()
 
-    const [editedContent, setEditedContent] = useState<string>(content)
+    const [editedContent, setEditedContent] = useState<string>(reply.content)
     const [editMode, setEditMode] = useState<'view' | 'edit'>('view')
     const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
-    const handleEditReply = () => {
-        if (!userId) {
+    const isValidateCheck = () => {
+        if (!currentUserId) {
             callToast({
                 type: 'NEED_AUTHENTICATE',
                 variant: 'destructive',
             })
-            return
+            return false
         }
+
+        return true
+    }
+
+    const handleEditReply = () => {
+        if (!isValidateCheck()) return
 
         executeWithProgress(async () => {
             try {
                 await requestEditPostComment({
-                    id: replyId,
+                    id: reply?.id,
                     content: editedContent,
-                    postId,
-                    userId,
+                    postId: reply?.postId,
+                    userId: currentUserId!,
                 })
             } catch (error) {
                 callToast({
@@ -70,7 +63,32 @@ export const ReplyItem: FC<Props> = ({
         })
     }
 
-    const handleDeleteReply = () => {}
+    const handleDeleteReply = () => {
+        if (!isValidateCheck()) return
+
+        executeWithProgress(async () => {
+            try {
+                await requestDeletePostComment({
+                    id: reply?.id,
+
+                    postId: reply?.postId,
+                    userId: currentUserId!,
+                })
+            } catch (error) {
+                callToast({
+                    title: '답글 수정에 실패하였습니다.',
+                    description: '관리자에게 문의해주세요.',
+                    variant: 'destructive',
+                })
+                console.error(error)
+            } finally {
+                setEditMode('view')
+                setEditedContent('')
+                setIsDeleting(false)
+                barRouter.refresh()
+            }
+        })
+    }
 
     return (
         <section className='flex flex-col gap-3 rounded-lg bg-indigo-200 p-5'>
@@ -78,13 +96,17 @@ export const ReplyItem: FC<Props> = ({
                 <div className='flex gap-3 items-center'>
                     <Avatar>
                         <AvatarImage
-                            src={authorImage || defaultUserIcon}
-                            alt={authorName}
+                            src={reply?.author?.image || defaultUserIcon}
+                            alt={reply?.author?.name}
                         />
                     </Avatar>
                     <div className='flex flex-col gap-1'>
-                        <p>{authorName}</p>
-                        <time>{dayjs(createdAt).format('YYYY-MM-DD HH:mm')}</time>
+                        <p>{reply?.author?.name}</p>
+
+                        <div className='flex gap-2'>
+                            <time>{formatBeforeTime(reply?.createdAt)}</time>
+                            {reply?.updatedAt && <span>(수정됨)</span>}
+                        </div>
                     </div>
                 </div>
                 {isOwner && (
@@ -127,7 +149,7 @@ export const ReplyItem: FC<Props> = ({
                 )}
             </section>
             {editMode === 'view' ? (
-                <p>{content}</p>
+                <p>{reply?.content}</p>
             ) : (
                 <Textarea
                     className='w-full'

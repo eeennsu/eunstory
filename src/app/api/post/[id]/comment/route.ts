@@ -30,7 +30,15 @@ export const GET = async (_: NextRequest, { params }: Params) => {
                 createdAt: 'asc',
             },
             include: {
-                author: true,
+                author: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        image: true,
+                        isAdmin: true,
+                    },
+                },
                 parent: true,
             },
         })
@@ -85,6 +93,7 @@ export const POST = async (request: NextRequest, { params }: Params) => {
                 postId,
                 content,
                 authorId: user['@id'],
+                updatedAt: null,
                 ...(parentId && { parentId }),
             },
         })
@@ -136,6 +145,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
             },
             data: {
                 content,
+                updatedAt: new Date(),
             },
         })
 

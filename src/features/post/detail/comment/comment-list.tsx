@@ -2,6 +2,7 @@ import { serverRequestGetCommentList } from '@/entities/post-comment/post-commen
 import type { FC } from 'react'
 import { CommentItem } from './comment-item'
 import { getServerAuth } from '@/lib/auth'
+import { PostComment } from '@/entities/post-comment/post-comment.types'
 
 interface Props {
     postId: string
@@ -16,12 +17,23 @@ export const CommentList: FC<Props> = async ({ postId }) => {
         return null
     }
 
-    // TODO: reply 처리
-    const parentComments = response.comments.filter((comment) => !comment.parentId)
-    const reducedComment = parentComments.map((comment) => ({
-        ...comment,
-        replies: response.comments.filter((reply) => reply.parentId === comment.id),
-    }))
+    const comments = response.comments as PostComment[]
+
+    const reducedComment = comments.reduce<PostComment[]>((acc, cur) => {
+        // parentId 가 없는 것은 댓글
+        if (!cur.parentId) {
+            const replies = comments.filter((comment) => comment.parentId === cur.id)
+
+            return [...acc, { ...cur, replies: !!replies.length ? replies : null }]
+        }
+
+        // parentId 가 있는 것은 답글
+        else {
+            const parent = comments.find((comment) => comment.id === cur.parentId)
+
+            return [...acc, { ...cur, parent }]
+        }
+    }, [])
 
     return (
         <section>
@@ -29,21 +41,17 @@ export const CommentList: FC<Props> = async ({ postId }) => {
                 <h2>댓글 목록</h2>
                 <p>{response?.commentCount} 개</p>
             </div>
-            <ul className='flex flex-col gap-2 bg-teal-100 rounded-md p-4'>
-                {reducedComment.map((comment) => (
-                    <CommentItem
-                        key={comment.id}
-                        postId={postId}
-                        commentId={comment.id}
-                        authorImage={comment.author.image}
-                        authorName={comment.author.name}
-                        content={comment.content}
-                        createdAt={comment.createdAt}
-                        isOwner={currentUserId === comment.author.id}
-                        replies={comment.replies}
-                    />
-                ))}
-            </ul>
+            {!!reducedComment?.length && (
+                <ul className='flex flex-col gap-2 bg-teal-100 rounded-md p-4'>
+                    {reducedComment?.map((comment) => (
+                        <CommentItem
+                            key={comment?.id}
+                            comment={comment}
+                            currentUserId={currentUserId}
+                        />
+                    ))}
+                </ul>
+            )}
         </section>
     )
 }

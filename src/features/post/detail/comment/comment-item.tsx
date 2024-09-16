@@ -6,55 +6,38 @@ import {
     requestEditPostComment,
 } from '@/entities/post-comment/post-comment.api.client'
 import { useProgressBar } from '@/lib/hooks'
-import { useCustomSession } from '@/lib/hooks/use-custom-session'
 import { Avatar, AvatarImage } from '@/lib/ui/avatar'
 import { Button } from '@/lib/ui/button'
 import { Textarea } from '@/lib/ui/textarea'
-import { Comment, User } from '@prisma/client'
-import dayjs from 'dayjs'
 import { FilePenLine, LoaderCircle, MessageCircleReply, Pencil, Trash, Undo2 } from 'lucide-react'
 import { useState, type FC } from 'react'
 import { ReplyItem } from './reply-item'
 import { defaultUserIcon } from '@/shared/constants'
 import { callToast } from '@/lib/fetch'
+import { formatBeforeTime } from '@/lib/utils'
+import { PostComment } from '@/entities/post-comment/post-comment.types'
 
 interface Props {
-    postId: string
-    commentId: string
-    authorName: string
-    authorImage: string | null
-    content: string
-    createdAt: Date
-    isOwner: boolean
-    replies: Array<Comment & { author: User }>
+    comment: PostComment
+    currentUserId?: string
 }
 
-export const CommentItem: FC<Props> = ({
-    postId,
-    commentId,
-    content,
-    createdAt,
-    authorName,
-    authorImage,
-    isOwner,
-    replies,
-}) => {
-    replies
-    const { user } = useCustomSession()
+export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     const { executeWithProgress, barRouter } = useProgressBar()
 
     const [editMode, setEditMode] = useState<'view' | 'edit'>('view')
     const [replyMode, setReplyMode] = useState<'view' | 'reply'>('view')
     const [isDeleting, setIsDeleting] = useState<boolean>(false)
     const [isReplying, setIsReplying] = useState<boolean>(false)
-    const [editedContent, setEditedContent] = useState<string>(content)
+    const [editedContent, setEditedContent] = useState<string>(comment.content)
     const [replyContent, setReplyContent] = useState<string>('')
-    const userId = user?.['@id']
+
+    const isOwner = currentUserId === comment.author.id
 
     const isDisabled = isDeleting || isReplying
 
     const isValidateCheck = () => {
-        if (!userId) {
+        if (!currentUserId) {
             callToast({
                 type: 'NEED_AUTHENTICATE',
             })
@@ -72,10 +55,10 @@ export const CommentItem: FC<Props> = ({
             executeWithProgress(async () => {
                 try {
                     await requestEditPostComment({
-                        postId,
+                        postId: comment.postId,
                         content: editedContent,
-                        id: commentId,
-                        userId: userId!,
+                        id: comment.id,
+                        userId: currentUserId!,
                     })
                 } catch (error) {
                     callToast({
@@ -102,9 +85,9 @@ export const CommentItem: FC<Props> = ({
                 setIsDeleting(true)
 
                 await requestDeletePostComment({
-                    postId,
-                    id: commentId,
-                    userId: userId!,
+                    postId: comment.postId,
+                    id: comment.id,
+                    userId: currentUserId!,
                 })
             } catch (error) {
                 callToast({
@@ -127,10 +110,10 @@ export const CommentItem: FC<Props> = ({
         executeWithProgress(async () => {
             try {
                 await requestCreatePostComment({
-                    postId,
+                    postId: comment.postId,
                     comment: {
                         content: replyContent,
-                        parentId: commentId,
+                        parentId: comment.id,
                     },
                 })
             } catch (error) {
@@ -142,6 +125,7 @@ export const CommentItem: FC<Props> = ({
                 console.error(error)
             } finally {
                 setReplyMode('view')
+                setReplyContent('')
                 setIsReplying(false)
                 barRouter.refresh()
             }
@@ -155,13 +139,16 @@ export const CommentItem: FC<Props> = ({
                     <div className='flex gap-3 items-center'>
                         <Avatar>
                             <AvatarImage
-                                src={authorImage || defaultUserIcon}
-                                alt={authorName}
+                                src={comment?.author?.image || defaultUserIcon}
+                                alt={comment?.author?.name}
                             />
                         </Avatar>
                         <div className='flex flex-col gap-1'>
-                            <p>{authorName}</p>
-                            <time>{dayjs(createdAt).format('YYYY-MM-DD HH:mm')}</time>
+                            <p>{comment?.author?.name}</p>
+                            <div className='flex gap-2'>
+                                <time>{formatBeforeTime(comment?.createdAt)}</time>
+                                {comment?.updatedAt && <span>(수정됨)</span>}
+                            </div>
                         </div>
                     </div>
                     {isOwner && (
@@ -170,7 +157,10 @@ export const CommentItem: FC<Props> = ({
                                 <Button
                                     size='icon-md'
                                     variant='outline'
-                                    onClick={() => setEditMode('edit')}>
+                                    onClick={() => {
+                                        replyMode === 'reply' && setReplyMode('view')
+                                        setEditMode('edit')
+                                    }}>
                                     <FilePenLine className='size-5' />
                                 </Button>
                             ) : (
@@ -204,7 +194,7 @@ export const CommentItem: FC<Props> = ({
                     )}
                 </section>
                 {editMode === 'view' ? (
-                    <p>{content}</p>
+                    <p>{comment?.content}</p>
                 ) : (
                     <Textarea
                         className='w-full'
@@ -216,18 +206,13 @@ export const CommentItem: FC<Props> = ({
 
             <section className='flex flex-col gap-3'>
                 <div className='flex flex-col gap-3 pl-7'>
-                    {!!replies.length && (
+                    {!!comment?.replies?.length && (
                         <div className='flex flex-col gap-4'>
-                            {replies.map((reply) => (
+                            {comment?.replies?.map((reply) => (
                                 <ReplyItem
                                     key={reply.id}
-                                    replyId={reply.id}
-                                    postId={postId}
-                                    userId={userId}
-                                    authorImage={reply.author.image}
-                                    authorName={reply.author.name}
-                                    content={reply.content}
-                                    createdAt={reply.createdAt}
+                                    reply={reply}
+                                    currentUserId={currentUserId}
                                     isOwner={isOwner}
                                 />
                             ))}
@@ -238,7 +223,10 @@ export const CommentItem: FC<Props> = ({
                             size='sm'
                             variant='outline'
                             className='w-fit gap-2'
-                            onClick={() => setReplyMode('reply')}>
+                            onClick={() => {
+                                editMode === 'edit' && setEditMode('view')
+                                setReplyMode('reply')
+                            }}>
                             답글 달기
                             <MessageCircleReply className='size-5' />
                         </Button>
