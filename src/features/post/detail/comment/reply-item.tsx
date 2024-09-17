@@ -93,7 +93,7 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
     return (
         <li className='flex w-full gap-5'>
             <CornerDownRight className='mt-4' />
-            <section className='flex flex-grow flex-col gap-3 rounded-lg bg-indigo-200 p-5'>
+            <section className='flex flex-grow flex-col gap-3 rounded-lg bg-indigo-200 p-5 max-w-[876px]'>
                 {reply?.isActive ? (
                     <>
                         <section className='flex w-full justify-between'>
