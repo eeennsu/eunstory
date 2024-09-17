@@ -16,6 +16,7 @@ import { defaultUserIcon } from '@/shared/constants'
 import { callToast } from '@/lib/fetch'
 import { formatBeforeTime } from '@/lib/utils'
 import { PostComment } from '@/entities/post-comment/post-comment.types'
+import { cn } from '@/lib/shadcn/shadcn-utils'
 
 interface Props {
     comment: PostComment
@@ -106,6 +107,16 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     const handleCreateReply = () => {
         if (!isValidateCheck()) return
 
+        if (replyContent.trim() === '') {
+            callToast({
+                title: '답글을 입력해주세요.',
+                variant: 'warning',
+                position: 'bottom',
+            })
+
+            return
+        }
+
         setIsReplying(true)
         executeWithProgress(async () => {
             try {
@@ -134,130 +145,145 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
 
     return (
         <li className='flex flex-col gap-4 p-2'>
-            <section className='flex flex-col gap-3 rounded-lg bg-red-200 p-5'>
-                <section className='flex w-full justify-between'>
-                    <div className='flex gap-3 items-center'>
-                        <Avatar>
-                            <AvatarImage
-                                src={comment?.author?.image || defaultUserIcon}
-                                alt={comment?.author?.name}
-                            />
-                        </Avatar>
-                        <div className='flex flex-col gap-1'>
-                            <p>{comment?.author?.name}</p>
-                            <div className='flex gap-2'>
-                                <time>{formatBeforeTime(comment?.createdAt)}</time>
-                                {comment?.updatedAt && <span>(수정됨)</span>}
-                            </div>
-                        </div>
-                    </div>
-                    {isOwner && (
-                        <div className='flex items-center gap-3'>
-                            {editMode === 'view' ? (
-                                <Button
-                                    size='icon-md'
-                                    variant='outline'
-                                    onClick={() => {
-                                        replyMode === 'reply' && setReplyMode('view')
-                                        setEditMode('edit')
-                                    }}>
-                                    <FilePenLine className='size-5' />
-                                </Button>
-                            ) : (
-                                <>
-                                    <Button
-                                        size='icon-md'
-                                        variant='outline'
-                                        onClick={() => setEditMode('view')}>
-                                        <Undo2 className='size-5' />
-                                    </Button>
-                                    <Button
-                                        size='icon-md'
-                                        variant='default'
-                                        onClick={handleEditComment}>
-                                        <Pencil className='size-5' />
-                                    </Button>
-                                </>
-                            )}
-                            <Button
-                                onClick={handleDeleteComment}
-                                disabled={isDisabled}
-                                variant={isDeleting ? 'loading' : 'default'}
-                                size='icon-md'>
-                                {isDeleting ? (
-                                    <LoaderCircle className='animate-spin size-5' />
-                                ) : (
-                                    <Trash className='size-5' />
+            <section className='rounded-lg bg-red-200 p-5'>
+                {comment.isActive ? (
+                    <div className='flex flex-col gap-3'>
+                        <div className='flex w-full justify-between gap-4'>
+                            <section className='flex flex-col gap-4 flex-grow max-w-[788px] break-words'>
+                                <figure className='flex gap-3 items-center'>
+                                    <Avatar>
+                                        <AvatarImage
+                                            src={comment?.author?.image || defaultUserIcon}
+                                            alt={comment?.author?.name}
+                                        />
+                                    </Avatar>
+                                    <div className='flex flex-col gap-1'>
+                                        <figcaption>{comment?.author?.name}</figcaption>
+                                        <div className='flex gap-2'>
+                                            <time>{formatBeforeTime(comment?.createdAt)}</time>
+                                            {comment?.updatedAt && <span>(수정됨)</span>}
+                                        </div>
+                                    </div>
+                                </figure>
+                                {comment.isActive && editMode === 'view' && (
+                                    <p className='break-words w-full'>{comment.content}</p>
                                 )}
-                            </Button>
+                            </section>
+                            <section
+                                className={cn(
+                                    'flex flex-col justify-between',
+                                    editMode === 'view' ? 'w-[84px]' : 'w-fit'
+                                )}>
+                                {isOwner && (
+                                    <div className='flex items-center gap-3'>
+                                        {editMode === 'view' ? (
+                                            <Button
+                                                size='icon-md'
+                                                variant='outline'
+                                                onClick={() => {
+                                                    replyMode === 'reply' && setReplyMode('view')
+                                                    setEditMode('edit')
+                                                }}>
+                                                <FilePenLine className='size-5' />
+                                            </Button>
+                                        ) : (
+                                            <>
+                                                <Button
+                                                    size='icon-md'
+                                                    variant='outline'
+                                                    className='text-xs'
+                                                    onClick={() => setEditMode('view')}>
+                                                    취소
+                                                </Button>
+                                                <Button
+                                                    size='icon-md'
+                                                    variant='default'
+                                                    onClick={handleEditComment}>
+                                                    <Pencil className='size-5' />
+                                                </Button>
+                                            </>
+                                        )}
+                                        <Button
+                                            onClick={handleDeleteComment}
+                                            disabled={isDisabled}
+                                            variant={isDeleting ? 'loading' : 'default'}
+                                            size='icon-md'>
+                                            {isDeleting ? (
+                                                <LoaderCircle className='animate-spin size-5' />
+                                            ) : (
+                                                <Trash className='size-5' />
+                                            )}
+                                        </Button>
+                                    </div>
+                                )}
+                                {replyMode === 'view' ? (
+                                    editMode === 'view' && (
+                                        <Button
+                                            size='sm'
+                                            variant='outline'
+                                            className='w-full gap-2'
+                                            onClick={() => {
+                                                setReplyMode('reply')
+                                            }}>
+                                            답글 달기
+                                        </Button>
+                                    )
+                                ) : (
+                                    <Button
+                                        size='sm'
+                                        variant='outline'
+                                        className='w-full gap-2'
+                                        onClick={() => {
+                                            setReplyMode('view')
+                                        }}>
+                                        취소
+                                    </Button>
+                                )}
+                            </section>
                         </div>
-                    )}
-                </section>
-                {editMode === 'view' ? (
-                    <p>{comment?.content}</p>
+                        {comment.isActive && editMode === 'edit' && (
+                            <Textarea
+                                className='w-full'
+                                value={editedContent}
+                                onChange={(e) => setEditedContent(e.target.value)}
+                            />
+                        )}
+                    </div>
                 ) : (
-                    <Textarea
-                        className='w-full'
-                        value={editedContent}
-                        onChange={(e) => setEditedContent(e.target.value)}
-                    />
+                    <p>삭제된 댓글입니다.</p>
                 )}
             </section>
 
-            <section className='flex flex-col gap-3'>
-                <div className='flex flex-col gap-3 pl-7'>
-                    {!!comment?.replies?.length && (
-                        <div className='flex flex-col gap-4'>
-                            {comment?.replies?.map((reply) => (
-                                <ReplyItem
-                                    key={reply.id}
-                                    reply={reply}
-                                    currentUserId={currentUserId}
-                                    isOwner={isOwner}
-                                />
-                            ))}
-                        </div>
-                    )}
-                    {replyMode === 'view' ? (
-                        <Button
-                            size='sm'
-                            variant='outline'
-                            className='w-fit gap-2'
-                            onClick={() => {
-                                editMode === 'edit' && setEditMode('view')
-                                setReplyMode('reply')
-                            }}>
-                            답글 달기
-                            <MessageCircleReply className='size-5' />
-                        </Button>
-                    ) : (
-                        <>
-                            <Button
-                                size='sm'
-                                variant='outline'
-                                className='w-fit gap-2'
-                                onClick={() => setReplyMode('view')}>
-                                <Undo2 className='size-5' />
-                            </Button>
-                            <div className='flex gap-3'>
-                                <Textarea
-                                    className='w-full flex-1'
-                                    placeholder='답글을 입력해주세요.'
-                                    value={replyContent}
-                                    onChange={(e) => setReplyContent(e.target.value)}
-                                />
-                                <Button
-                                    className='h-20'
-                                    onClick={handleCreateReply}
-                                    disabled={isDisabled}
-                                    variant={isReplying ? 'loading' : 'default'}>
-                                    {isReplying ? <LoaderCircle className='animate-spin' /> : '등록'}
-                                </Button>
-                            </div>
-                        </>
-                    )}
+            {!!comment?.replies?.length && (
+                <ul className='flex flex-col gap-4 pl-4'>
+                    {comment?.replies?.map((reply) => (
+                        <ReplyItem
+                            key={reply.id}
+                            reply={reply}
+                            currentUserId={currentUserId}
+                            isOwner={isOwner}
+                        />
+                    ))}
+                </ul>
+            )}
+
+            {comment?.isActive && replyMode === 'reply' && (
+                <div className='flex gap-3 pl-[60px]'>
+                    <Textarea
+                        className='w-full flex-1'
+                        placeholder='답글을 입력해주세요.'
+                        value={replyContent}
+                        onChange={(e) => setReplyContent(e.target.value)}
+                    />
+                    <Button
+                        className='h-20'
+                        onClick={handleCreateReply}
+                        disabled={isDisabled}
+                        variant={isReplying ? 'loading' : 'default'}>
+                        {isReplying ? <LoaderCircle className='animate-spin' /> : '등록'}
+                    </Button>
                 </div>
-            </section>
+            )}
         </li>
     )
 }

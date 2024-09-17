@@ -24,7 +24,6 @@ export const GET = async (_: NextRequest, { params }: Params) => {
         const comments = await prisma.comment.findMany({
             where: {
                 postId,
-                isActive: true,
             },
             orderBy: {
                 createdAt: 'asc',

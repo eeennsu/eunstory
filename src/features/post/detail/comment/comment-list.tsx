@@ -31,7 +31,10 @@ export const CommentList: FC<Props> = async ({ postId }) => {
         else {
             const parent = comments.find((comment) => comment.id === cur.parentId)
 
-            return [...acc, { ...cur, parent }]
+            return acc.map((comment) => ({
+                ...comment,
+                parent,
+            }))
         }
     }, [])
 
