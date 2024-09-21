@@ -42,9 +42,7 @@ export const Sortable = <T extends Data & CustomSortableItem>({
             ref={setNodeRef}
             className={cn(
                 'flex flex-col w-full h-fit gap-6 bg-white rounded-lg border border-gray-500',
-                isDragging
-                    ? 'opacity-60 z-100 cursor-grabbing'
-                    : 'cursor-grab transition-transform ease-in-out duration-300'
+                isDragging ? 'opacity-60 z-100 cursor-grabbing' : 'cursor-grab'
             )}
             style={parentStyles}>
             <div className='bg-secondary w-full rounded-md flex justify-between items-center gap-2 overflow-hidden'>

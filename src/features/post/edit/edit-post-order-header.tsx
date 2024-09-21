@@ -13,7 +13,7 @@ interface Props {
     sortablePosts: DraggablePost[]
 }
 
-export const EditPostListHeader: FC<Props> = ({ totalCount, mode, setMode, sortablePosts }) => {
+export const EditPostOrderHeader: FC<Props> = ({ totalCount, mode, setMode, sortablePosts }) => {
     const { executeWithProgress } = useProgressBar()
 
     const handleUpdatePostOrder = async () => {
@@ -25,7 +25,7 @@ export const EditPostListHeader: FC<Props> = ({ totalCount, mode, setMode, sorta
                     sequence: post.sequence,
                 }))
 
-            await requestEditPostListOrder({ updatedSequences })
+        await requestEditPostListOrder({ updatedSequences })
         })
 
         setMode('view')
