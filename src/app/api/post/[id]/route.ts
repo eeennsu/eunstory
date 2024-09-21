@@ -37,6 +37,7 @@ export const GET = async (request: NextRequest, { params }: Params) => {
 
         return NextResponse.json({ post })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }
@@ -105,6 +106,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
 
         return NextResponse.json({ post: editedPost })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }
@@ -179,6 +181,8 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 }
 
 export type ResponseGetDetailPostType = NextResponseData<typeof GET>
-export type RequestEditDetailPostType = Partial<Pick<Post, 'title' | 'content' | 'tags' | 'order' | 'authorId'>>
+export type RequestEditDetailPostType = Partial<
+    Pick<Post, 'title' | 'content' | 'tags' | 'order' | 'authorId' | 'summary' | 'thumbnail'>
+>
 export type ResponseEditDetailPostType = NextResponseData<typeof PATCH>
 export type ResponseDeleteDetailPostType = NextResponseData<typeof DELETE>

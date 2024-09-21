@@ -75,6 +75,7 @@ export const GET = async (_: NextRequest, { params }: Params) => {
 
         return NextResponse.json({ comments: filteredComments, commentCount })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }
@@ -121,6 +122,7 @@ export const POST = async (request: NextRequest, { params }: Params) => {
 
         return NextResponse.json({ comment: createdComment }, { status: 201 })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }
@@ -172,6 +174,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
 
         return NextResponse.json({ comment: editedComment })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }

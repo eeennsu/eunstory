@@ -32,6 +32,7 @@ interface TiptapEditorProps {
 
 export interface TiptapRefType {
     getHtml: () => string
+    getText: () => string
     setContent: (content: string) => void
     extractImgId: () => string[]
     isEmpty: () => boolean
@@ -121,6 +122,9 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
         useImperativeHandle(
             ref,
             () => ({
+                getText: () => {
+                    return editor?.getText() || ''
+                },
                 getHtml: () => {
                     return editor?.getHTML() || ''
                 },

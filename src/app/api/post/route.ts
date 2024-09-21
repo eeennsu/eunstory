@@ -54,6 +54,7 @@ export const GET = async (request: NextRequest) => {
             return NextResponse.json({ totalCount: posts.length, posts })
         }
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }
@@ -62,7 +63,7 @@ export const GET = async (request: NextRequest) => {
 export const POST = async (request: NextRequest) => {
     try {
         const body = (await request.json()) as RequestCreatePostType
-        const { title, content, tags, authorId, order } = body
+        const { title, content, tags, authorId, order, thumbnail, summary } = body
 
         // TODO title debounce error
         if (!title || !content || !authorId) {
@@ -102,6 +103,8 @@ export const POST = async (request: NextRequest) => {
                 content,
                 tags,
                 updatedAt: null,
+                thumbnail,
+                summary,
                 ...(lastPostOrder && { order: lastPostOrder + 1 }),
             },
         })
@@ -116,6 +119,7 @@ export const POST = async (request: NextRequest) => {
 
         return NextResponse.json({ postId: createdPost.id }, { status: 201 })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }
@@ -147,11 +151,15 @@ export const PATCH = async (request: NextRequest) => {
 
         return NextResponse.json({}, { status: 200 })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }
 
 export type ResponseGetPostListType = NextResponseData<typeof GET>
-export type RequestCreatePostType = Pick<Post, 'title' | 'content' | 'tags' | 'authorId' | 'order'>
+export type RequestCreatePostType = Pick<
+    Post,
+    'title' | 'content' | 'tags' | 'authorId' | 'order' | 'thumbnail' | 'summary'
+>
 export type ResponseCreatePostType = NextResponseData<typeof POST>
 export type ResponsePatchPostOrderType = NextResponseData<typeof PATCH>

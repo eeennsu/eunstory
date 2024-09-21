@@ -2,11 +2,10 @@
 
 import { requestGetPostList } from '@/entities/post'
 import { useInfiniteScroll, useLoading } from '@/lib/hooks'
-import { routePaths } from '@/lib/route'
 import { Post } from '@prisma/client'
 import { Ellipsis } from 'lucide-react'
-import Link from 'next/link'
 import { FC, useEffect, useState } from 'react'
+import { PostItem } from './post-item'
 
 interface Props {
     initialPosts: Post[]
@@ -50,12 +49,13 @@ export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
     return (
         <section className='flex gap-10 flex-col'>
             {postList.map((post) => (
-                <Link
+                <PostItem
                     key={post.id}
-                    href={routePaths.post.detail(post.id)}
-                    className='hover:scale-110'>
-                    <div className='border-2 border-black p-2 h-80 text-5xl'>{post.title}</div>
-                </Link>
+                    id={post.id}
+                    thumbnail={post.thumbnail}
+                    title={post.title}
+                    summary={post.summary}
+                />
             ))}
             {isLoading && (
                 <div className='w-full flex justify-center'>

@@ -19,13 +19,16 @@ export const serverRequestGetAllPostList = async ({ isPublished }: { isPublished
 export const serverRequestGetSomePostList = async ({
     curPage = 1,
     perPage = 5,
+    isPublished,
 }: {
     curPage?: number
     perPage?: number
+    isPublished: boolean
 }) => {
     const params = new URLSearchParams()
     params.append('curPage', curPage.toString())
     params.append('perPage', perPage.toString())
+    params.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetPostListType>({
         url: getUrlFromServer(`/api/post/?${params.toString()}`),

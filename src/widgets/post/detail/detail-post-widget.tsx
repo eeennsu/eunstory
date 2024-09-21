@@ -15,6 +15,13 @@ export const DetailPostWidget: FC<Props> = ({ post }) => {
             {!!post?.tags?.length && (
                 <div className='flex gap-2'>{post?.tags.split(',').map((tag) => <Badge key={tag}>{tag}</Badge>)}</div>
             )}
+            {post.thumbnail && (
+                <img
+                    src={post.thumbnail}
+                    alt={post.title}
+                    className='w-full h-[500px] object-contain rounded-md'
+                />
+            )}
             {post?.content && (
                 <section
                     className='mt-4'

@@ -22,6 +22,7 @@ export const GET = async (_: NextRequest) => {
 
         return NextResponse.json({ ids })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error }, { status: 500 })
     }
 }

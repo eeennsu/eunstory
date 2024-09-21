@@ -35,10 +35,10 @@ model Post {
     authorId  String
     author    User      @relation(fields: [authorId], references: [id])
     comments  Comment[]
+    thumbnail String?
+    summary   String
 
-    @@index([title])
-    @@index([tags])
-    @@index([order])
+    @@index([isActive, title, tags, order])
 }
 
 model Comment {
