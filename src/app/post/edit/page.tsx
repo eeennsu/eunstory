@@ -8,9 +8,9 @@ import { redirect } from 'next/navigation'
 import { FC } from 'react'
 
 const EditPostListPage: FC = async () => {
-    const { isAdminAuthed } = await getServerAuth()
+    const { isAdminAuthorized } = await getServerAuth()
 
-    if (!isAdminAuthed) {
+    if (!isAdminAuthorized) {
         return redirect(routePaths.home())
     }
 

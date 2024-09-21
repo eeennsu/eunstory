@@ -11,12 +11,12 @@ import { LoginModal } from '@/features/layout'
 import { useAdminSession } from '@/lib/hooks'
 
 export const Header: FC = () => {
-    const { isAdminAuthed, status } = useAdminSession({ options: { required: false } })
+    const { isAdminAuthorized, status } = useAdminSession({ options: { required: false } })
 
     return (
         <header className='bg-sky-200 w-full flex items-center justify-center'>
             <section className='relative flex w-full max-w-[900px] justify-between items-center'>
-                <Link href={isAdminAuthed ? routePaths.admin() : routePaths.home()}>
+                <Link href={isAdminAuthorized ? routePaths.admin() : routePaths.home()}>
                     <Image
                         src={'/images/eunstory-logo.png'}
                         width={200}
@@ -36,7 +36,7 @@ export const Header: FC = () => {
                     ))}
                     {status === 'authenticated' && <Button onClick={() => signOut()}>Logout</Button>}
                     {status === 'unauthenticated' && <LoginModal />}
-                    {isAdminAuthed && (
+                    {isAdminAuthorized && (
                         <Button
                             asChild
                             variant='secondary'>

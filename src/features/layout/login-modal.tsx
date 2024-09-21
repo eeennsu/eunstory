@@ -1,5 +1,6 @@
 'use client'
 
+import { useLoginModalStore } from '@/entities/user'
 import { callToast, ERROR_CODES } from '@/lib/fetch'
 import { useProgressBar } from '@/lib/hooks'
 import { Button } from '@/lib/ui/button'
@@ -19,6 +20,7 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import { Fragment, useState, type FC } from 'react'
 
 export const LoginModal: FC = () => {
+    const [isOpen, setIsOpen] = useLoginModalStore((state) => [state.isOpen, state.setIsOpen])
     const { executeWithProgress } = useProgressBar()
     const [id, setId] = useState<string>('')
     const [password, setPassword] = useState<string>('')
@@ -126,7 +128,10 @@ export const LoginModal: FC = () => {
     }
 
     return (
-        <Dialog modal>
+        <Dialog
+            modal
+            open={isOpen}
+            onOpenChange={(trigger) => setIsOpen(trigger)}>
             <DialogTrigger asChild>
                 <Button variant='secondary'>Login</Button>
             </DialogTrigger>

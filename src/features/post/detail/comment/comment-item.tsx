@@ -17,6 +17,7 @@ import { callToast } from '@/lib/fetch'
 import { formatBeforeTime } from '@/lib/utils'
 import { PostComment } from '@/entities/post-comment/post-comment.types'
 import { cn } from '@/lib/shadcn/shadcn-utils'
+import { triggerUserLoginModal } from '@/entities/user'
 
 interface Props {
     comment: PostComment
@@ -143,6 +144,22 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
         })
     }
 
+    const handleReplyTextareaOpen = () => {
+        if (!currentUserId) {
+            callToast({
+                type: 'NEED_AUTHENTICATE',
+                position: 'bottom',
+                variant: 'warning',
+            })
+
+            triggerUserLoginModal(true)
+
+            return
+        }
+
+        setReplyMode('reply')
+    }
+
     return (
         <li className='flex flex-col gap-4 p-2'>
             <section className='rounded-lg bg-red-200 p-5'>
@@ -178,7 +195,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                     <div className='flex items-center gap-3'>
                                         {editMode === 'view' ? (
                                             <Button
-                                                size='icon-md'
+                                                size='icon-sm'
                                                 variant='outline'
                                                 onClick={() => {
                                                     replyMode === 'reply' && setReplyMode('view')
@@ -189,14 +206,14 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                         ) : (
                                             <>
                                                 <Button
-                                                    size='icon-md'
+                                                    size='icon-sm'
                                                     variant='outline'
                                                     className='text-xs'
                                                     onClick={() => setEditMode('view')}>
                                                     취소
                                                 </Button>
                                                 <Button
-                                                    size='icon-md'
+                                                    size='icon-sm'
                                                     variant='default'
                                                     onClick={handleEditComment}>
                                                     <Pencil className='size-5' />
@@ -207,7 +224,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                             onClick={handleDeleteComment}
                                             disabled={isDisabled}
                                             variant={isDeleting ? 'loading' : 'default'}
-                                            size='icon-md'>
+                                            size='icon-sm'>
                                             {isDeleting ? (
                                                 <LoaderCircle className='animate-spin size-5' />
                                             ) : (
@@ -222,9 +239,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                             size='sm'
                                             variant='outline'
                                             className='w-full gap-2'
-                                            onClick={() => {
-                                                setReplyMode('reply')
-                                            }}>
+                                            onClick={handleReplyTextareaOpen}>
                                             답글 달기
                                         </Button>
                                     )

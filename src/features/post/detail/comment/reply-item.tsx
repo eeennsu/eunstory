@@ -116,7 +116,7 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                                 <div className='flex items-center gap-3'>
                                     {editMode === 'view' ? (
                                         <Button
-                                            size='icon-md'
+                                            size='icon-sm'
                                             variant='outline'
                                             onClick={() => setEditMode('edit')}>
                                             <FilePenLine className='size-5' />
@@ -124,13 +124,13 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                                     ) : (
                                         <>
                                             <Button
-                                                size='icon-md'
+                                                size='icon-sm'
                                                 variant='outline'
                                                 onClick={() => setEditMode('view')}>
                                                 <Undo2 className='size-5' />
                                             </Button>
                                             <Button
-                                                size='icon-md'
+                                                size='icon-sm'
                                                 variant='default'
                                                 onClick={handleEditReply}>
                                                 <Pencil className='size-5' />
@@ -141,7 +141,7 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                                         onClick={handleDeleteReply}
                                         disabled={isDeleting}
                                         variant={isDeleting ? 'loading' : 'default'}
-                                        size='icon-md'>
+                                        size='icon-sm'>
                                         {isDeleting ? (
                                             <LoaderCircle className='animate-spin size-5' />
                                         ) : (

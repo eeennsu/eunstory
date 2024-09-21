@@ -12,10 +12,10 @@ interface Props {
 }
 
 export const DeletePostButton: FC<Props> = ({ id }) => {
-    const { isAdminAuthed } = useAdminSession()
+    const { isAdminAuthorized } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
 
-    if (!isAdminAuthed) {
+    if (!isAdminAuthorized) {
         return null
     }
 
@@ -42,7 +42,7 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
     }
 
     return (
-        isAdminAuthed && (
+        isAdminAuthorized && (
             <Button
                 type='button'
                 onClick={handleDelete}>

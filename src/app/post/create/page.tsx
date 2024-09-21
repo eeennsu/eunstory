@@ -6,9 +6,9 @@ import { redirect } from 'next/navigation'
 import type { FC } from 'react'
 
 const CreatePostPage: FC = async () => {
-    const { isAdminAuthed } = await getServerAuth()
+    const { isAdminAuthorized } = await getServerAuth()
 
-    if (!isAdminAuthed) {
+    if (!isAdminAuthorized) {
         return redirect(routePaths.home())
     }
 

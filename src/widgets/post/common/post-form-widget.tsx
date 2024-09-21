@@ -29,7 +29,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const pathname = usePathname()
     const temporarySavedPostId = params.get('id')
 
-    const { adminId: authorId, isAdminAuthed } = useAdminSession()
+    const { adminId: authorId, isAdminAuthorized } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
     const editorRef = useRef<TiptapRefType>(null)
     const tagInputRef = useRef<TagInputRef>(null)
@@ -41,7 +41,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const debouncedPost = useDebouncedValue({ title, content }, 5000)
 
     const isValidatedForm = () => {
-        if (!authorId || !isAdminAuthed) {
+        if (!authorId || !isAdminAuthorized) {
             callToast({
                 type: 'FORBIDDEN',
                 variant: 'destructive',

@@ -64,7 +64,7 @@ export const Sortable = <T extends Data & CustomSortableItem>({
                     <div className='w-12 h-full flex items-center'>
                         <Button
                             type='button'
-                            size='icon'
+                            size='icon-sm'
                             variant='outline'
                             onClick={() => removeItem?.(item.id)}>
                             <XIcon className='text-red-500' />
