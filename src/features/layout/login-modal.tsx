@@ -113,8 +113,6 @@ export const LoginModal: FC = () => {
                     redirect: false,
                 })
 
-                console.log('zzzzz', response)
-
                 if (response?.ok && response?.status === 200) {
                     callToast({
                         title: '로그인에 성공했습니다.',

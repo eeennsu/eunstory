@@ -10,6 +10,7 @@ import { Textarea } from '@/lib/ui/textarea'
 import { formatBeforeTime } from '@/lib/utils'
 import { defaultUserIcon } from '@/shared/constants'
 import { CornerDownRight, FilePenLine, LoaderCircle, Pencil, Trash, Undo2 } from 'lucide-react'
+import Link from 'next/link'
 import { useState, type FC } from 'react'
 
 interface Props {
@@ -97,7 +98,10 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                 {reply?.isActive ? (
                     <>
                         <section className='flex w-full justify-between'>
-                            <figure className='flex gap-3 items-center'>
+                            <Link
+                                href={reply.author.url || '#'}
+                                target='_blank'
+                                className='inline-flex gap-3 items-center cursor-pointer hover:bg-slate-50 p-1 rounded-lg'>
                                 <Avatar>
                                     <AvatarImage
                                         src={reply?.author?.image || defaultUserIcon}
@@ -105,13 +109,13 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                                     />
                                 </Avatar>
                                 <div className='flex flex-col gap-1'>
-                                    <figcaption>{reply?.author?.name}</figcaption>
+                                    <span>{reply?.author?.name}</span>
                                     <div className='flex gap-2'>
                                         <time>{formatBeforeTime(reply?.createdAt)}</time>
                                         {reply?.updatedAt && <span>(수정됨)</span>}
                                     </div>
                                 </div>
-                            </figure>
+                            </Link>
                             {isOwner && (
                                 <div className='flex items-center gap-3'>
                                     {editMode === 'view' ? (

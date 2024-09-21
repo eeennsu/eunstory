@@ -1,6 +1,6 @@
 import { ERROR_CODES } from '@/lib/fetch'
 import { User } from '@prisma/client'
-import { AuthOptions } from 'next-auth'
+import { AdapterUser, AuthOptions } from 'next-auth'
 import CredentialsProvider, { CredentialInput } from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
@@ -37,7 +37,7 @@ export const authOptions: AuthOptions = {
                     throw new Error(ERROR_CODES.USER_NOT_FOUND.code)
                 }
 
-                const isPasswordMatch = bcrypt.compareSync(password, admin.password)
+                const isPasswordMatch = bcrypt.compare(password, admin.password)
 
                 if (!isPasswordMatch) {
                     throw new Error(ERROR_CODES.INCORRECT_ID_OR_PASSWORD.code)
@@ -52,6 +52,7 @@ export const authOptions: AuthOptions = {
             authorization: {
                 params: {
                     scope: 'read:user user:email',
+                    prompt: 'select_account',
                 },
             },
         }),
@@ -69,13 +70,31 @@ export const authOptions: AuthOptions = {
                 token.isAdmin = user.isAdmin
                 token['@id'] = user['@id']
                 token['url'] = profile?.html_url || undefined // TODO: add google url
+
+                if (user.isAdmin === false) {
+                    try {
+                        const curUser = await prisma.user.findFirst({
+                            where: { id: token.sub },
+                            select: { url: true },
+                        })
+
+                        if (!curUser?.url) {
+                            await prisma.user.update({
+                                where: { id: token.sub },
+                                data: { url: token.url as string },
+                            })
+                        }
+                    } catch (error) {
+                        console.error(error)
+                    }
+                }
             }
 
             return Promise.resolve(token)
         },
         session: async ({ session, token }) => {
             session.user.isAdmin = token.isAdmin as boolean | undefined
-            session.user['@id'] = (token['@id'] || token?.sub) as string | undefined
+            session.user['@id'] = (token.isAdmin ? token['@id'] : token.sub) as string | undefined
             session.user.url = token.url as string | undefined
 
             return Promise.resolve(session)

@@ -5,6 +5,7 @@ type CustomUserProps = {
     isAdmin?: boolean
     '@id'?: string
     url?: string
+    provider?: string
 }
 
 declare module 'next-auth' {
@@ -16,5 +17,9 @@ declare module 'next-auth' {
 
     interface Profile {
         html_url: string
+    }
+
+    interface AdapterUser extends DefaultUser {
+        provider: string
     }
 }

@@ -18,6 +18,7 @@ import { formatBeforeTime } from '@/lib/utils'
 import { PostComment } from '@/entities/post-comment/post-comment.types'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { triggerUserLoginModal } from '@/entities/user'
+import Link from 'next/link'
 
 interface Props {
     comment: PostComment
@@ -167,7 +168,10 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                     <div className='flex flex-col gap-3'>
                         <div className='flex w-full justify-between gap-4'>
                             <section className='flex flex-col gap-4 flex-grow max-w-[788px] break-words'>
-                                <figure className='flex gap-3 items-center'>
+                                <Link
+                                    href={comment.author.url || '#'}
+                                    target='_blank'
+                                    className='inline-flex gap-3 w-fit items-center cursor-pointer hover:bg-slate-50 p-1 rounded-lg'>
                                     <Avatar>
                                         <AvatarImage
                                             src={comment?.author?.image || defaultUserIcon}
@@ -175,13 +179,13 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                         />
                                     </Avatar>
                                     <div className='flex flex-col gap-1'>
-                                        <figcaption>{comment?.author?.name}</figcaption>
+                                        <span>{comment?.author?.name}</span>
                                         <div className='flex gap-2'>
                                             <time>{formatBeforeTime(comment?.createdAt)}</time>
                                             {comment?.updatedAt && <span>(수정됨)</span>}
                                         </div>
                                     </div>
-                                </figure>
+                                </Link>
                                 {comment.isActive && editMode === 'view' && (
                                     <p className='break-words w-full'>{comment.content}</p>
                                 )}

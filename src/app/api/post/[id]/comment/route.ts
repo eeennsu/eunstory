@@ -36,6 +36,7 @@ export const GET = async (_: NextRequest, { params }: Params) => {
                         email: true,
                         image: true,
                         isAdmin: true,
+                        url: true,
                     },
                 },
                 parent: true,
