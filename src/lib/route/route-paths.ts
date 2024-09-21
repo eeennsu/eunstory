@@ -11,6 +11,10 @@ const post = {
         return post.root().concat('/create')
     },
 
+    temporarySaved() {
+        return post.root().concat('/temporary-saved')
+    },
+
     detail(id: string) {
         return post.root().concat(`/${id}`)
     },

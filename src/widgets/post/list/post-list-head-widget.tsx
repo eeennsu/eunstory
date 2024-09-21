@@ -7,7 +7,6 @@ import Link from 'next/link'
 import type { FC } from 'react'
 
 export const PostListHeadWidget: FC = () => {
-    // 고정
     const { isAdminAuthorized } = useAdminSession()
 
     return (
@@ -16,10 +15,13 @@ export const PostListHeadWidget: FC = () => {
             {isAdminAuthorized && (
                 <div className='flex gap-3'>
                     <Button asChild>
-                        <Link href={routePaths.post.edit()}>Edit Post List</Link>
+                        <Link href={routePaths.post.create()}>Create Post</Link>
                     </Button>
                     <Button asChild>
-                        <Link href={routePaths.post.create()}>Create Post</Link>
+                        <Link href={routePaths.post.temporarySaved()}>Temporary Saved Posts</Link>
+                    </Button>
+                    <Button asChild>
+                        <Link href={routePaths.post.edit()}>Edit Post Order</Link>
                     </Button>
                 </div>
             )}

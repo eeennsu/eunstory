@@ -6,7 +6,7 @@ import { routePaths } from '@/lib/route'
 import { Post } from '@prisma/client'
 import { Ellipsis } from 'lucide-react'
 import Link from 'next/link'
-import { FC, useEffect, useState, useTransition } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 interface Props {
     initialPosts: Post[]
@@ -33,6 +33,7 @@ export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
             const response = await requestGetPostList({
                 curPage,
                 perPage,
+                isPublished: true,
             })
 
             if ('totalCount' in response && 'posts' in response) {
