@@ -45,8 +45,6 @@ export const GET = async (_: NextRequest, { params }: Params) => {
 
         const commentCount = await prisma.comment.count({
             where: {
-                postId,
-                isActive: true,
                 parentId: null,
             },
         })
@@ -55,11 +53,27 @@ export const GET = async (_: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Comments not found' }, { status: 404 })
         }
 
+        const filteredComments = comments.map((comment) => {
+            if (!comment.isActive && comment.deletedAt) {
+                return {
+                    id: comment.id,
+                    isActive: comment.isActive,
+                    deletedAt: comment.deletedAt,
+                    parent: comment.parent,
+                    parentId: comment.parentId,
+                    author: null,
+                    content: null,
+                }
+            }
+
+            return comment
+        })
+
         if (!comments.length) {
             return NextResponse.json({ comments: [], commentCount: 0 })
         }
 
-        return NextResponse.json({ comments, commentCount })
+        return NextResponse.json({ comments: filteredComments, commentCount })
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 })
     }

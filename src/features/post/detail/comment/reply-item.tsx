@@ -91,6 +91,8 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
         })
     }
 
+    console.log('reply', reply)
+
     return (
         <li className='flex w-full gap-5'>
             <CornerDownRight className='mt-4' />

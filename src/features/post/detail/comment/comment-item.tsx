@@ -9,7 +9,7 @@ import { useProgressBar } from '@/lib/hooks'
 import { Avatar, AvatarImage } from '@/lib/ui/avatar'
 import { Button } from '@/lib/ui/button'
 import { Textarea } from '@/lib/ui/textarea'
-import { FilePenLine, LoaderCircle, MessageCircleReply, Pencil, Trash, Undo2 } from 'lucide-react'
+import { FilePenLine, LoaderCircle, Pencil, Trash } from 'lucide-react'
 import { useState, type FC } from 'react'
 import { ReplyItem } from './reply-item'
 import { defaultUserIcon } from '@/shared/constants'
@@ -35,7 +35,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     const [editedContent, setEditedContent] = useState<string>(comment.content)
     const [replyContent, setReplyContent] = useState<string>('')
 
-    const isOwner = currentUserId === comment.author.id
+    const isOwner = currentUserId === comment?.author?.id
 
     const isDisabled = isDeleting || isReplying
 
