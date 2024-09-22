@@ -14,7 +14,6 @@ import {
     CodeBlockLowlight,
     ListItem,
     Indent,
-    Markdown,
 } from '@/features/common/tiptap-editor'
 
 import { cn } from '@/lib/shadcn/shadcn-utils'
@@ -104,18 +103,17 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
                 }),
                 Indent,
 
-                Markdown.configure({
-                    html: true, // Allow HTML input/output
-                    tightLists: true, // No <p> inside <li> in markdown output
-                    tightListClass: 'tight', // Add class to <ul> allowing you to remove <p> margins when tight
-                    bulletListMarker: '-', // <li> prefix in markdown output
-                    linkify: false, // Create links from "https://..." text
-                    breaks: false, // New lines (\n) in markdown input are converted to <br>
-                    transformPastedText: false, // Allow to paste markdown text in the editor
-                    transformCopiedText: false, // Copied text is transformed to markdown
-                }),
+                // Markdown.configure({
+                //     html: true, // Allow HTML input/output
+                //     tightLists: true, // No <p> inside <li> in markdown output
+                //     tightListClass: 'tight', // Add class to <ul> allowing you to remove <p> margins when tight
+                //     bulletListMarker: '-', // <li> prefix in markdown output
+                //     linkify: false, // Create links from "https://..." text
+                //     breaks: false, // New lines (\n) in markdown input are converted to <br>
+                //     transformPastedText: false, // Allow to paste markdown text in the editor
+                //     transformCopiedText: false, // Copied text is transformed to markdown
+                // }),
             ],
-
             content: previousContent,
         })
 
@@ -123,7 +121,8 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
             ref,
             () => ({
                 getText: () => {
-                    return editor?.getText() || ''
+                    console.log(editor?.getText().trim())
+                    return editor?.getText().trim() || ''
                 },
                 getHtml: () => {
                     return editor?.getHTML() || ''

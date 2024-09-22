@@ -15,7 +15,7 @@ export const PostItem: FC<Props> = ({ id, thumbnail, title, summary }) => {
         <Link
             key={id}
             href={routePaths.post.detail(id)}
-            className='flex justify-between items-center gap-4 h-40 border-2 border-black p-2 shadow-md'
+            className='flex justify-between items-center gap-4 h-40 border-2 hover:shadow-xl border-black p-2 shadow-md'
             prefetch={false}>
             <figure className='relative h-[140px] max-w-[140px] w-full'>
                 <img

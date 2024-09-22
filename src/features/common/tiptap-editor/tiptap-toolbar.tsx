@@ -11,6 +11,10 @@ import {
     Heading3Button,
     ItalicButton,
     StrikeButton,
+    AlignLeftButton,
+    AlignCenterButton,
+    AlignRightButton,
+    AlignJustifyButton,
 } from '@/features/common/tiptap-editor/tiptap-toolbar-buttons'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 
@@ -21,6 +25,10 @@ export type ToolbarButtonType =
     | 'bold'
     | 'italic'
     | 'strike'
+    | 'alignLeft'
+    | 'alignCenter'
+    | 'alignRight'
+    | 'alignJustify'
     | 'bulletList'
     | 'orderedList'
     | 'image'
@@ -40,6 +48,10 @@ const buttonComponents: { [key in ToolbarButtonType]: FC<{ editor: Editor | null
     bold: BoldButton,
     italic: ItalicButton,
     strike: StrikeButton,
+    alignLeft: AlignLeftButton,
+    alignCenter: AlignCenterButton,
+    alignRight: AlignRightButton,
+    alignJustify: AlignJustifyButton,
     bulletList: BulletListButton,
     orderedList: OrderedListButton,
     code: CodeButton,
