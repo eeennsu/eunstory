@@ -7,8 +7,11 @@ const post = {
         return post.root()
     },
 
-    create() {
-        return post.root().concat('/create')
+    create(params?: string) {
+        return post
+            .root()
+            .concat('/create')
+            .concat(params ? `?${params}` : '')
     },
 
     temporarySaved() {

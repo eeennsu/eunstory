@@ -117,14 +117,14 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                             postId: temporarySavedPostId,
                             editedPost: {
                                 title,
-                                content,
+                                content: content !== '' ? content : editorRef.current?.getHtml(), // '' 일때는, 임시저장 리스트에서 작성 폼에 작성한 경우임.
                                 tags: tags || null,
                                 authorId: authorId!,
                                 order: -1,
                             },
                         })
 
-                        // 임시 저장된 포스트가 없으면? 새로운 포스트 생성
+                        // 임시 저장된 포스트가 아니라면? 새로운 포스트 생성
                     } else {
                         const createdPost: RequestCreatePostType = {
                             title,
@@ -232,9 +232,9 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     }
 
     const isPreviewReady = () => {
-        if (!title.length || !editorRef.current?.getHtml().length) {
+        if (!title.length || editorRef.current?.isEmpty()) {
             callToast({
-                title: '제목과 내용을 입력해주세요.',
+                title: '제목과 내용을 모두 입력해주세요.',
             })
             return false
         }

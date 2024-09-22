@@ -1,4 +1,5 @@
 import { serverRequestGetAllPostList } from '@/entities/post'
+import { TemporarySavedPostItem } from '@/features/post/temporary-saved'
 import { getServerAuth } from '@/lib/auth'
 import { routePaths } from '@/lib/route'
 import { redirect } from 'next/navigation'
@@ -19,9 +20,21 @@ const TemporarySavedPostList: FC = async () => {
 
     const temporarySavedPostList = response.posts
 
-    console.log('temporarySavedPostList', temporarySavedPostList)
-
-    return <main className='flex flex-col'>TemporarySavedPostList</main>
+    return (
+        <main className='mx-auto  w-full max-w-4xl bg-black'>
+            <section className='flex flex-col gap-4 py-10 items-center'>
+                {temporarySavedPostList.map((post) => (
+                    <TemporarySavedPostItem
+                        key={post.id}
+                        id={post.id}
+                        title={post.title}
+                        summary={post.summary}
+                        createdAt={post.createdAt.toString()}
+                    />
+                ))}
+            </section>
+        </main>
+    )
 }
 
 export default TemporarySavedPostList

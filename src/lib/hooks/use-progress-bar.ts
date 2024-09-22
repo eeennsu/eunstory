@@ -7,7 +7,7 @@ export const useProgressBar = () => {
     const stopBar = () => stopProgress()
     const barRouter = useRouter()
 
-    const executeWithProgress = (callback: () => Promise<void>) => {
+    const executeWithProgress = (callback: Function) => {
         startBar()
         callback().finally(() => stopBar())
     }

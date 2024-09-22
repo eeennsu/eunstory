@@ -2,7 +2,6 @@ import { DeletePostButton, EditPostButton } from '@/features/post/detail/post'
 import { Badge } from '@/lib/ui/badge'
 import { getDateWithTime, textSanitizing } from '@/lib/utils'
 import { Post } from '@prisma/client'
-import Image from 'next/image'
 import type { FC } from 'react'
 
 interface Props {
