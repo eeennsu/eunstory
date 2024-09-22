@@ -24,7 +24,7 @@ export const DetailPostWidget: FC<Props> = ({ post }) => {
             )}
             {post?.content && (
                 <section
-                    className='mt-4'
+                    className='tiptap-editor-content'
                     dangerouslySetInnerHTML={{ __html: textSanitizing(post.content) }}
                 />
             )}

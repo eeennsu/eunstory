@@ -17,6 +17,7 @@ import {
 } from '@/features/common/tiptap-editor'
 
 import { cn } from '@/lib/shadcn/shadcn-utils'
+import { getProcessedText } from '@/lib/utils'
 
 interface TiptapEditorProps {
     placeholder?: string
@@ -89,7 +90,7 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
                     },
                 }).extend({ inclusive: false }),
                 TextAlign.configure({
-                    types: ['paragraph'],
+                    types: ['paragraph', 'heading1', 'heading2', 'heading3', 'ul', 'ol', 'li'],
                 }),
                 Image.configure({
                     allowBase64: true,
@@ -121,8 +122,7 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
             ref,
             () => ({
                 getText: () => {
-                    console.log(editor?.getText().trim())
-                    return editor?.getText().trim() || ''
+                    return getProcessedText(editor?.getHTML() || '')
                 },
                 getHtml: () => {
                     return editor?.getHTML() || ''

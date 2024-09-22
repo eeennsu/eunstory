@@ -61,6 +61,11 @@
     @apply inline;
 }
 
+.tiptap-editor-content ul,
+.tiptap-editor-content ol {
+    @apply marker:text-black my-2;
+}
+
 .tiptap-editor-content h1 {
     @apply text-4xl font-bold mt-[26.8px] mb-4;
 }
