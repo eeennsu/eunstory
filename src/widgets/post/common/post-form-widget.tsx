@@ -18,7 +18,7 @@ import { Ellipsis } from 'lucide-react'
 import { RequestCreatePostType } from '@/app/api/post/route'
 import { callToast } from '@/lib/fetch'
 import { PostPreviewDrawer } from '@/features/post/create'
-import { usePostThumbnailStore } from '@/entities/post/post.model'
+import { usePostThumbnailStore } from '@/entities/post'
 
 interface Props {
     prevPost?: Post // prevPost 가 있으면 수정 폼, 없으면 생성 폼
@@ -43,6 +43,8 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const [isSelfTemporarySaved, setIsSelfTemporarySaved] = useState<boolean>(false)
     const summary = useMemo<string>(
         () => editorRef.current?.getText().slice(0, 100) || '',
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [editorRef.current?.getText()]
     )
 
@@ -229,6 +231,18 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         }
     }
 
+    const isPreviewReady = () => {
+        if (!title.length || !editorRef.current?.getHtml().length) {
+            callToast({
+                title: '제목과 내용을 입력해주세요.',
+            })
+            return false
+        }
+
+        setPreviewTags(tagInputRef.current?.getTags() || [])
+        return true
+    }
+
     // 제목 또는 내용이 변경되면 임시저장
     useEffect(() => {
         if (prevPost || !title.length || !content.length) return
@@ -343,13 +357,8 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                         )}
                         <PostPreviewDrawer
                             key={editorRef.current?.getText()}
-                            trigger={
-                                <Button
-                                    type='button'
-                                    onClick={() => setPreviewTags(tagInputRef.current?.getTags() || [])}>
-                                    {prevPost ? '수정하기' : '작성하기'}
-                                </Button>
-                            }
+                            triggerCheck={isPreviewReady}
+                            trigger={<Button type='button'>{prevPost ? '수정하기' : '작성하기'}</Button>}
                             postTitle={title}
                             postSummary={summary}
                             handleCreatePost={handleCreatePost}

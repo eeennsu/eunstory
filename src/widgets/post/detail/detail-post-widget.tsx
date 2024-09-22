@@ -2,6 +2,7 @@ import { DeletePostButton, EditPostButton } from '@/features/post/detail/post'
 import { Badge } from '@/lib/ui/badge'
 import { getDateWithTime, textSanitizing } from '@/lib/utils'
 import { Post } from '@prisma/client'
+import Image from 'next/image'
 import type { FC } from 'react'
 
 interface Props {
@@ -16,6 +17,7 @@ export const DetailPostWidget: FC<Props> = ({ post }) => {
                 <div className='flex gap-2'>{post?.tags.split(',').map((tag) => <Badge key={tag}>{tag}</Badge>)}</div>
             )}
             {post.thumbnail && (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                     src={post.thumbnail}
                     alt={post.title}

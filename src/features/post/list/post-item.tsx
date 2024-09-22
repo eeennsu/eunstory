@@ -18,6 +18,7 @@ export const PostItem: FC<Props> = ({ id, thumbnail, title, summary }) => {
             className='flex justify-between items-center gap-4 h-40 border-2 hover:shadow-xl border-black p-2 shadow-md'
             prefetch={false}>
             <figure className='relative h-[140px] max-w-[140px] w-full'>
+                {/*  eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src={thumbnail || '/images/eunstory-logo.png'}
                     alt={title}

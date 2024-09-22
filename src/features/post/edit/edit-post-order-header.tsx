@@ -25,7 +25,7 @@ export const EditPostOrderHeader: FC<Props> = ({ totalCount, mode, setMode, sort
                     sequence: post.sequence,
                 }))
 
-        await requestEditPostListOrder({ updatedSequences })
+            await requestEditPostListOrder({ updatedSequences })
         })
 
         setMode('view')

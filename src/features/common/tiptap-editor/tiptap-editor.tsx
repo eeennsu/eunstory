@@ -18,6 +18,8 @@ import {
 
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { getProcessedText } from '@/lib/utils'
+import { useImageUploadStore } from '@/entities/post'
+import { UploadingImage } from '@/shared/common'
 
 interface TiptapEditorProps {
     placeholder?: string
@@ -52,6 +54,8 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
         },
         ref
     ) => {
+        const isUploading = useImageUploadStore((state) => state.isUploading)
+
         const editor = useEditor({
             editorProps: {
                 attributes: {
@@ -146,7 +150,7 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
         )
 
         return (
-            <section className={cn('flex flex-col flex-1', wrapperClassName)}>
+            <section className={cn('flex flex-col flex-1 relative', wrapperClassName)}>
                 <TiptapToolbar
                     editor={editor}
                     toolbarClassName={toolbarClassName}
@@ -158,6 +162,7 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
                     className='flex flex-col flex-1'
                     style={{ flexBasis: 0, minHeight: 0 }}
                 />
+                {isUploading && <UploadingImage />}
             </section>
         )
     }

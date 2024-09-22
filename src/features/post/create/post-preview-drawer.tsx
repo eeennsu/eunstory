@@ -16,10 +16,11 @@ import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import { Input } from '@/lib/ui/input'
 import { Textarea } from '@/lib/ui/textarea'
 import { callToast } from '@/lib/fetch'
-import { usePostThumbnailStore } from '@/entities/post/post.model'
+import { usePostThumbnailStore } from '@/entities/post'
 import { Badge } from '@/lib/ui/badge'
 
 interface Props {
+    triggerCheck: () => boolean
     trigger: ReactNode
     postTitle: string
     postSummary: string
@@ -29,6 +30,7 @@ interface Props {
 }
 
 export const PostPreviewDrawer: FC<Props> = ({
+    triggerCheck,
     trigger,
     postTitle,
     postSummary,
@@ -36,6 +38,7 @@ export const PostPreviewDrawer: FC<Props> = ({
     previewTags,
     prevThumbnail,
 }) => {
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [thumbnail, setThumbnail] = usePostThumbnailStore((state) => [state.thumbnail, state.setThumbnail])
 
     const fileRef = useRef<HTMLInputElement>(null)
@@ -77,20 +80,24 @@ export const PostPreviewDrawer: FC<Props> = ({
     }, [prevThumbnail])
 
     return (
-        <Drawer>
+        <Drawer
+            open={isDrawerOpen}
+            onOpenChange={(open) => {
+                triggerCheck() && setIsDrawerOpen(open)
+            }}>
             <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-            <DrawerContent className='px-8 pt-4'>
+            <DrawerContent className='px-8 py-8'>
                 <div className='mx-auto w-full max-w-4xl'>
                     <DrawerHeader>
                         <DrawerTitle>포스트 미리보기</DrawerTitle>
                         <DrawerDescription>작성될 포스트의 요약과 썸네일을 지정해주세요.</DrawerDescription>
                     </DrawerHeader>
                     <section className='flex gap-6 justify-between p-4'>
-                        <figure className='flex flex-col gap-2 flex-1 h-[260px]'>
+                        <figure className='flex flex-col gap-2 flex-1 h-[400px]'>
                             <figcaption className='text-sm text-slate-600'>썸네일 미리보기</figcaption>
-                            <div className='bg-slate-100 flex-grow rounded-md flex flex-col justify-between items-center py-2.5 gap-1'>
+                            <div className='bg-slate-100 flex-grow rounded-md flex flex-col justify-center items-center gap-5'>
                                 {thumbnail ? (
-                                    <div className='relative max-w-[276px] max-h-[154px] w-full flex-grow flex items-center'>
+                                    <div className='relative max-w-[390px] max-h-[280px] w-full flex-grow flex items-center'>
                                         <Button
                                             type='button'
                                             variant='link'
@@ -106,7 +113,7 @@ export const PostPreviewDrawer: FC<Props> = ({
                                         />
                                     </div>
                                 ) : (
-                                    <ImagePlus className='size-24 flex-grow text-slate-200' />
+                                    <ImagePlus className='size-24 text-slate-200' />
                                 )}
                                 <Button
                                     variant='outline'
@@ -125,7 +132,7 @@ export const PostPreviewDrawer: FC<Props> = ({
                                 />
                             </div>
                         </figure>
-                        <div className='flex flex-1 flex-col gap-5'>
+                        <div className='flex flex-1 flex-col gap-10'>
                             <div className='max-w-full flex flex-col gap-2'>
                                 <h2 className='text-slate-600 text-sm'>제목</h2>
                                 <p className='text-2xl font-bold text-ellipsis line-clamp-1'>{postTitle}</p>

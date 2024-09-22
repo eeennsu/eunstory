@@ -1,17 +1,30 @@
-import { useEffect, type FC } from 'react'
+import { type FC } from 'react'
 import type { Editor } from '@tiptap/react'
 import { TiptapCommonButton } from './tiptap-common-button'
 import { ImageIcon } from 'lucide-react'
 import { callToast } from '@/lib/fetch'
-
+import { useS3Upload } from 'next-s3-upload'
+import { useImageUploadStore } from '@/entities/post'
 interface Props {
     editor: Editor | null
 }
 
 const ACCEPTED_MEME_TYPE = `image/jpeg,image/png,image/gif,image/webp,image/bmp,image/tiff,image/vnd.microsoft.icon,image/x-icon,image/heif,image/heic,image/vnd.adobe.photoshop,image/jp2,image/jpx,image/jpm,image/jxr,image/heif-sequence,image/heic-sequence,image/dicom-rle,image/jbig,image/jbig2,image/x-rle,image/vnd.zbrush.pcx`
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
 export const ImageButton: FC<Props> = ({ editor }) => {
+    const setIsUploading = useImageUploadStore((state) => state.setIsUploading)
+    const { uploadToS3 } = useS3Upload()
+
+    const doNotUpload = () => {
+        callToast({
+            variant: 'warning',
+            position: 'top',
+            title: '이미지 파일을 불러올 수 없습니다.',
+            description: '다시 시도해주세요.',
+        })
+    }
+
     const setImage = async (files: FileList | null) => {
         if (!editor) return
 
@@ -48,23 +61,41 @@ export const ImageButton: FC<Props> = ({ editor }) => {
             return
         }
 
-        const url = URL.createObjectURL(file)
+        setIsUploading(true)
 
-        if (url) {
-            editor.chain().focus().setImage({ src: url }).createParagraphNear().run()
-        } else {
-            callToast({
-                variant: 'warning',
-                position: 'top',
-                title: '이미지 파일을 불러올 수 없습니다.',
-                description: '다시 시도해주세요.',
-            })
+        try {
+            const { url } = await uploadToS3(file)
+
+            if (url) {
+                editor.chain().focus().setImage({ src: url }).createParagraphNear().run()
+            } else {
+                doNotUpload()
+            }
+        } catch (error) {
+            console.error(error)
+            doNotUpload()
+        } finally {
+            setIsUploading(false)
         }
     }
 
+    // aws s3 free tier 해제 후 이 코드 사용 (2025년 9월 22일? 까지 무료인듯)
+    // const addImageWithLink = () => {
+    //     const url = window.prompt('URL')
+
+    //     if (url) {
+    //         editor?.chain().focus().setImage({ src: url }).createParagraphNear().run()
+    //     }
+    // }
+
     return (
         <TiptapCommonButton
-            icon={<ImageIcon className='size-5' />}
+            icon={
+                <ImageIcon
+                    className='size-5'
+                    // onClick={addImageWithLink}
+                />
+            }
             className='relative'>
             <input
                 type='file'
