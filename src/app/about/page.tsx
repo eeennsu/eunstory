@@ -1,7 +1,14 @@
+import { MySkillsWidget, MyCareerWidget, MyCertificationsWidget } from '@/widgets/about'
 import type { FC } from 'react'
 
 const AboutPage: FC = () => {
-    return <div>AboutPage</div>
+    return (
+        <main className='flex flex-col gap-28 w-full max-w-[85%] lg:max-w-[80%] mx-auto py-10'>
+            <MySkillsWidget />
+            <MyCareerWidget />
+            <MyCertificationsWidget />
+        </main>
+    )
 }
 
 export default AboutPage

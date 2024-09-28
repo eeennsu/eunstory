@@ -1,10 +1,11 @@
 import { ERROR_CODES } from '@/lib/fetch'
 import { User } from '@prisma/client'
-import { AdapterUser, AuthOptions } from 'next-auth'
+import { AuthOptions } from 'next-auth'
 import CredentialsProvider, { CredentialInput } from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import GitHubProvider from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
 import prisma from '@/lib/prisma/prisma-client'
 import { assertValue } from '@/lib//utils'
 
@@ -55,6 +56,10 @@ export const authOptions: AuthOptions = {
                     prompt: 'select_account',
                 },
             },
+        }),
+        GoogleProvider({
+            clientId: assertValue(process.env.GOOGLE_CLIENT_ID),
+            clientSecret: assertValue(process.env.GOOGLE_CLIENT_SECRET),
         }),
     ],
     session: {

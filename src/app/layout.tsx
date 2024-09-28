@@ -3,8 +3,9 @@ import { Inter } from 'next/font/google'
 import { RootProvider } from '@/lib/providers'
 import { TopLoadingBar } from '@/features/common/top-loading-bar'
 import { Footer, Header } from '@/features/layout'
+
+import 'react-vertical-timeline-component/style.min.css'
 import '@/lib/css/globals.css'
-import '@/lib/css/tiptap.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
