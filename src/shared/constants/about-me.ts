@@ -67,6 +67,7 @@ export const MY_HISTORY: MyHistory[] = [
         sub: '前 코딩허브, 인수 합병 (2024.06)',
         icon: 'id-card',
         date: '2024.03.11 ~',
+        description: ['IT 교육 사이트의 기능 및 컨텐츠를 자체 개발', '매일 아침 스크럼을 진행하는 애자일 방식으로 운영'],
     },
     {
         title: '명지전문대 졸업',
@@ -113,10 +114,6 @@ export const MY_SKILLS: MySkill = {
             color: '#38B2AC', // 청록색 (Tailwind CSS 공식 색상)
         },
         {
-            name: 'Zustand',
-            color: '#000000', // 검정색 (Zustand 공식 색상)
-        },
-        {
             name: 'Express',
             color: '#000000', // 검정색 (Express 공식 색상)
         },
@@ -147,10 +144,6 @@ export const MY_SKILLS: MySkill = {
             color: '#DB7093', // 핑크색 (Styled Components 공식 색상)
         },
         {
-            name: 'Redux Toolkit',
-            color: '#764ABC', // 보라색 (Redux 공식 색상)
-        },
-        {
             name: 'MongoDB',
             color: '#47A248', // 녹색 (MongoDB 공식 색상)
         },
@@ -163,7 +156,7 @@ export const MY_SKILLS: MySkill = {
             color: '#FF9900', // 주황색 (AWS 공식 색상)
         },
         {
-            name: 'vercel',
+            name: 'Vercel',
             color: '#000000', // 검정색 (Vercel 공식 색상)
         },
     ],
@@ -187,6 +180,10 @@ export const MY_SKILLS: MySkill = {
         {
             name: 'JSP',
             color: '#F44336', // 빨간색 (JSP 색상)
+        },
+        {
+            name: 'Spring Boot',
+            color: '#6DB33F', // 녹색 (Spring 공식 색상)
         },
         {
             name: 'GraphQL',

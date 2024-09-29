@@ -12,7 +12,7 @@ const TemporaryListPage: FC = async () => {
     const temporarySavedPosts = response.posts
 
     return (
-        <main className='mx-auto  w-full max-w-4xl bg-black'>
+        <main className='mx-auto  w-full max-w-4xl'>
             <section className='flex flex-col gap-4 py-10 items-center'>
                 {temporarySavedPosts.map((post) => (
                     <TemporarySavedPostItem

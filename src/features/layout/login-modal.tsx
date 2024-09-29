@@ -15,11 +15,13 @@ import {
 } from '@/lib/ui/dialog'
 import { Input } from '@/lib/ui/input'
 import { Label } from '@/lib/ui/label'
+import { Separator } from '@/lib/ui/separator'
+import { Google } from '@/shared/icons/google'
 import { Github, X } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { Fragment, useState, type FC } from 'react'
+import { PropsWithChildren, useState, type FC } from 'react'
 
-export const LoginModal: FC = () => {
+export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
     const [isOpen, setIsOpen] = useLoginModalStore((state) => [state.isOpen, state.setIsOpen])
     const { executeWithProgress } = useProgressBar()
     const [id, setId] = useState<string>('')
@@ -130,49 +132,48 @@ export const LoginModal: FC = () => {
             modal
             open={isOpen}
             onOpenChange={(trigger) => setIsOpen(trigger)}>
-            <DialogTrigger asChild>
-                <Button variant='secondary'>Login</Button>
-            </DialogTrigger>
+            <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent
-                className='sm:max-w-[425px]'
-                isCloseHidden>
+                className='sm:max-w-[425px] bg-gray-800 text-gray-100 border border-gray-700'
+                isCloseHidden
+                overlayClassName='bg-black/90'>
                 <DialogHeader>
                     <div className='flex justify-between items-center'>
-                        <DialogTitle>Hello Eunsu!</DialogTitle>
+                        <DialogTitle>Sign in</DialogTitle>
                         <DialogClose asChild>
                             <Button
                                 variant='ghost'
-                                className='p-3'>
+                                className='p-3 hover:bg-gray-700'>
                                 <X className='size-4' />
                             </Button>
                         </DialogClose>
                     </div>
                 </DialogHeader>
                 {status === 'unauthenticated' ? (
-                    <Fragment>
-                        <div className='grid gap-4 py-4'>
-                            <div className='grid grid-cols-4 items-center gap-4'>
+                    <section className='flex flex-col gap-7'>
+                        <div className='grid gap-4'>
+                            <div className='grid gap-2'>
                                 <Label
                                     htmlFor='id'
-                                    className='text-right'>
+                                    className='text-gray-300'>
                                     ID
                                 </Label>
                                 <Input
                                     id='id'
-                                    className='col-span-3'
+                                    className='col-span-3 border-gray-600 text-gray-200 focus:ring-gray-600 bg-gray-700'
                                     value={id}
                                     onChange={(e) => setId(e.target.value)}
                                 />
                             </div>
-                            <div className='grid grid-cols-4 items-center gap-4'>
+                            <div className='grid gap-2'>
                                 <Label
                                     htmlFor='password'
-                                    className='text-right'>
+                                    className='text-gray-300'>
                                     Password
                                 </Label>
                                 <Input
                                     id='password'
-                                    className='col-span-3'
+                                    className='col-span-3 border-gray-600 text-gray-200 focus:ring-gray-600 bg-gray-700'
                                     type='password'
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -181,19 +182,28 @@ export const LoginModal: FC = () => {
                         </div>
                         <DialogFooter className='flex flex-col gap-2'>
                             <Button
-                                className='w-full'
+                                variant='outline'
+                                className='w-full bg-blue-600 text-white hover:bg-blue-700 border-none'
                                 type='button'
                                 onClick={handleSignIn}>
                                 Sign In
                             </Button>
+                            <Separator className='bg-gray-700 my-3' />
                             <Button
-                                className='w-full !ml-0 gap-3 bg-[#24292E]'
+                                className='w-full'
+                                variant='signature'
                                 onClick={handleGithubSignIn}>
-                                <Github size={20} />
+                                <Github className='mr-2 h-4 w-4' />
                                 Sign in with Git Hub
                             </Button>
+                            <Button
+                                className='w-full'
+                                variant='signature'>
+                                <Google />
+                                Sign in with Google
+                            </Button>
                         </DialogFooter>
-                    </Fragment>
+                    </section>
                 ) : (
                     status === 'authenticated' && <Button onClick={() => signOut()}>Logout</Button>
                 )}

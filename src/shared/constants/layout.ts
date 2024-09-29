@@ -7,7 +7,7 @@ export const NAV_LINKS = [
     },
     {
         title: 'About me',
-        url: mainPath.about(),
+    url: mainPath.about(),
     },
     {
         title: 'Posts',

@@ -6,7 +6,7 @@ import { AboutSectionTitle } from '@/shared/about/about-section-title'
 export const MySkillsWidget: FC = () => {
     return (
         <section className='flex flex-col gap-6 w-full'>
-            <AboutSectionTitle title='My Skills' />
+            <AboutSectionTitle title='Skills' />
 
             <ul className='flex gap-9 justify-around'>
                 {Object.entries(MY_SKILLS).map(([key, value]) => (

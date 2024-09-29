@@ -24,9 +24,9 @@ export default function RootLayout({
             <body className={inter.className}>
                 <RootProvider>
                     <TopLoadingBar />
-                    <div className='flex w-full min-h-dvh flex-col items-center justify-center'>
+                    <div className='flex w-full min-h-dvh flex-col items-center justify-center text-foreground'>
                         <Header />
-                        <div className='flex flex-col w-full flex-1 bg-orange-100'>{children}</div>
+                        <div className='flex flex-col w-full flex-1 bg-slate-800'>{children}</div>
                         <Footer />
                     </div>
                 </RootProvider>
