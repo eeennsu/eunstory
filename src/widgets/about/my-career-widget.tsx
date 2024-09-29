@@ -8,7 +8,7 @@ import { VerticalTimelineItem } from '@/features/about'
 
 export const MyCareerWidget: FC = () => {
     return (
-        <section className='flex flex-col gap-6 w-full'>
+        <section className='flex flex-col gap-6 w-full pt-24'>
             <AboutSectionTitle title='Career' />
             <VerticalTimeline>
                 {MY_HISTORY.map((history, idx) => (

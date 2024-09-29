@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-export const getDateWithTime = (date: Date) => {
+export const getDateWithTime = (date: Date): string => {
     return dayjs(date).format('YY-MM-DD / HH:mm')
 }
 

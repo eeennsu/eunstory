@@ -9,7 +9,7 @@ export const textSanitizing = (rawHTML: string): string => {
     })
 }
 
-export const getProcessedText = (html: string) => {
+export const getProcessedText = (html: string): string => {
     // 1. <p> 태그나 <br> 태그를 처리하여 한 줄 띄움으로 변환
     const processedText = html
         .replace(/<\/?(p|h[1-6])(\s[^>]*)?>/g, '') // p, h1-h6 태그 제거 (속성 포함)

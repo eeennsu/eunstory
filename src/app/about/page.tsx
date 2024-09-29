@@ -4,8 +4,8 @@ import type { FC } from 'react'
 const AboutPage: FC = () => {
     return (
         <main className='flex flex-col gap-28 w-full max-w-[85%] lg:max-w-[80%] mx-auto py-10'>
-            <MySkillsWidget />
             <MyCareerWidget />
+            <MySkillsWidget />
             <MyCertificationsWidget />
         </main>
     )
