@@ -1,6 +1,6 @@
 'use client'
 
-import { routePaths } from '@/lib/route'
+import { adminPath, mainPath } from '@/lib/route'
 import { NAV_LINKS } from '@/shared/constants'
 import { Button } from '@/lib/ui/button'
 import { signOut } from 'next-auth/react'
@@ -16,7 +16,7 @@ export const Header: FC = () => {
     return (
         <header className='bg-sky-200 w-full flex items-center justify-center'>
             <section className='relative flex w-full max-w-[900px] justify-between items-center'>
-                <Link href={isAdminAuthorized ? routePaths.admin() : routePaths.home()}>
+                <Link href={isAdminAuthorized ? adminPath.admin() : mainPath.home()}>
                     <Image
                         src={'/images/eunstory-logo.png'}
                         width={200}
@@ -40,7 +40,7 @@ export const Header: FC = () => {
                         <Button
                             asChild
                             variant='secondary'>
-                            <Link href={routePaths.admin()}>Admin</Link>
+                            <Link href={adminPath.admin()}>Admin</Link>
                         </Button>
                     )}
                 </nav>

@@ -1,1 +1,2 @@
-export * from './route-paths'
+export * from './main-paths'
+export * from './admin-path'

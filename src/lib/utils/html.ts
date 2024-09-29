@@ -1,6 +1,12 @@
-import { sanitize } from 'isomorphic-dompurify'
+import { sanitize } from '@jill64/universal-sanitizer'
 export const textSanitizing = (rawHTML: string): string => {
-    return sanitize(rawHTML, { ADD_ATTR: ['target'] })
+    return sanitize(rawHTML, {
+        sanitizeHtml: {
+            allowedAttributes: {
+                target: ['_blank'],
+            },
+        },
+    })
 }
 
 export const getProcessedText = (html: string) => {

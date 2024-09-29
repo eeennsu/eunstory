@@ -1,6 +1,6 @@
 const post = {
     root() {
-        return routePaths.root.concat('post')
+        return mainPath.root.concat('post')
     },
 
     list() {
@@ -14,8 +14,8 @@ const post = {
             .concat(params ? `?${params}` : '')
     },
 
-    temporarySaved() {
-        return post.root().concat('/temporary-saved')
+    temporaryList() {
+        return post.root().concat('/temporary-list')
     },
 
     detail(id: string) {
@@ -27,19 +27,15 @@ const post = {
     },
 }
 
-export const routePaths = {
+export const mainPath = {
     root: '/',
 
     home() {
-        return routePaths.root
+        return mainPath.root
     },
 
     about() {
-        return routePaths.root.concat('about')
-    },
-
-    admin() {
-        return routePaths.root.concat('admin')
+        return mainPath.root.concat('about')
     },
 
     post,

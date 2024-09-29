@@ -1,19 +1,10 @@
 // post list edit page
 
 import { serverRequestGetAllPostList } from '@/entities/post'
-import { getServerAuth } from '@/lib/auth'
-import { routePaths } from '@/lib/route'
 import { EditPostOrderWidget } from '@/widgets/post/edit'
-import { redirect } from 'next/navigation'
 import { FC } from 'react'
 
 const EditPostListPage: FC = async () => {
-    const { isAdminAuthorized } = await getServerAuth()
-
-    if (!isAdminAuthorized) {
-        return redirect(routePaths.home())
-    }
-
     const postListResponse = await serverRequestGetAllPostList({ isPublished: true })
 
     if ('error' in postListResponse) {

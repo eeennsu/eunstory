@@ -5,7 +5,7 @@ import { TagInput, TagInputRef } from '@/features/common/tag-input'
 import { TiptapEditor, TiptapRefType } from '@/features/common/tiptap-editor'
 import { useAdminSession, useAsync, useProgressBar } from '@/lib/hooks'
 import { useDebouncedValue } from '@/lib/hooks/use-debounced-value'
-import { routePaths } from '@/lib/route'
+import { mainPath } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import { Input } from '@/shared/common'
 import { Post } from '@prisma/client'
@@ -159,7 +159,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                 })
                 console.error(error)
             } finally {
-                barRouter.replace(routePaths.post.list())
+                barRouter.replace(mainPath.post.list())
                 barRouter.refresh()
             }
         })
@@ -338,7 +338,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                                 type='button'
                                 variant={'secondary'}
                                 onClick={() => {
-                                    router.replace(routePaths.post.detail(prevPost.id))
+                                    router.replace(mainPath.post.detail(prevPost.id))
                                 }}>
                                 뒤로 가기
                             </Button>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useAdminSession } from '@/lib/hooks'
-import { routePaths } from '@/lib/route'
+import { mainPath } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import Link from 'next/link'
 import type { FC } from 'react'
@@ -15,13 +15,13 @@ export const PostListHeadWidget: FC = () => {
             {isAdminAuthorized && (
                 <div className='flex gap-3'>
                     <Button asChild>
-                        <Link href={routePaths.post.create()}>Create Post</Link>
+                        <Link href={mainPath.post.create()}>Create Post</Link>
                     </Button>
                     <Button asChild>
-                        <Link href={routePaths.post.temporarySaved()}>Temporary Saved Posts</Link>
+                        <Link href={mainPath.post.temporaryList()}>Temporary Saved Posts</Link>
                     </Button>
                     <Button asChild>
-                        <Link href={routePaths.post.edit()}>Edit Post Order</Link>
+                        <Link href={mainPath.post.edit()}>Edit Post Order</Link>
                     </Button>
                 </div>
             )}

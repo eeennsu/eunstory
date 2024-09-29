@@ -1,4 +1,4 @@
-import { routePaths } from '@/lib/route'
+import { mainPath } from '@/lib/route'
 import { Post } from '@prisma/client'
 import Link from 'next/link'
 import type { FC } from 'react'
@@ -14,7 +14,7 @@ export const PostItem: FC<Props> = ({ id, thumbnail, title, summary }) => {
     return (
         <Link
             key={id}
-            href={routePaths.post.detail(id)}
+            href={mainPath.post.detail(id)}
             className='flex justify-between items-center gap-4 h-40 border-2 hover:shadow-xl border-black p-2 shadow-md'
             prefetch={false}>
             <figure className='relative h-[140px] max-w-[140px] w-full'>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useAdminSession, useProgressBar } from '@/lib/hooks'
-import { routePaths } from '@/lib/route'
+import { mainPath } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import type { FC } from 'react'
 
@@ -18,7 +18,7 @@ export const EditPostButton: FC<Props> = ({ id }) => {
     }
 
     const handleEditLink = () => {
-        barRouter.replace(routePaths.post.edit(id))
+        barRouter.replace(mainPath.post.edit(id))
     }
 
     return (

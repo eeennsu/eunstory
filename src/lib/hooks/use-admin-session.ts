@@ -2,7 +2,7 @@
 
 import { useSession, UseSessionOptions } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { routePaths } from '@/lib/route'
+import { mainPath } from '@/lib/route'
 import { callToast, ERROR_CODES } from '@/lib/fetch'
 
 type Params = {
@@ -16,7 +16,7 @@ export const useAdminSession = ({ isProtectedRoute = false, options = { required
         ...options,
         onUnauthenticated: () => {
             if (isProtectedRoute) {
-                router.replace(routePaths.home())
+                router.replace(mainPath.home())
                 setTimeout(
                     () =>
                         callToast({

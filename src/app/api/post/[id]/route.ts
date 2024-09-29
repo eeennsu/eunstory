@@ -1,7 +1,7 @@
 import { getServerAuth } from '@/lib/auth'
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
-import { routePaths } from '@/lib/route'
+import { mainPath } from '@/lib/route'
 import { Post } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
@@ -101,8 +101,8 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to edit post' }, { status: 500 })
         }
 
-        revalidatePath(routePaths.post.list())
-        revalidatePath(routePaths.post.detail(editedPost.id))
+        revalidatePath(mainPath.post.list())
+        revalidatePath(mainPath.post.detail(editedPost.id))
 
         return NextResponse.json({ post: editedPost })
     } catch (error) {
@@ -171,7 +171,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
             })
         }
 
-        revalidatePath(routePaths.post.list())
+        revalidatePath(mainPath.post.list())
 
         return new NextResponse(null, { status: 204 })
     } catch (error) {

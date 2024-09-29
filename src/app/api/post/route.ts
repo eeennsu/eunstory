@@ -2,7 +2,7 @@ import type { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
-import { routePaths } from '@/lib/route'
+import { mainPath } from '@/lib/route'
 import { revalidatePath } from 'next/cache'
 
 // get post list
@@ -114,7 +114,7 @@ export const POST = async (request: NextRequest) => {
         }
 
         if (!isTemporarySave) {
-            revalidatePath(routePaths.post.list())
+            revalidatePath(mainPath.post.list())
         }
 
         return NextResponse.json({ postId: createdPost.id }, { status: 201 })
@@ -147,7 +147,7 @@ export const PATCH = async (request: NextRequest) => {
             )
         )
 
-        revalidatePath(routePaths.post.list())
+        revalidatePath(mainPath.post.list())
 
         return NextResponse.json({}, { status: 200 })
     } catch (error) {

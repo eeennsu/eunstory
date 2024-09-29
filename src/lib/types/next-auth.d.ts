@@ -22,4 +22,15 @@ declare module 'next-auth' {
     interface AdapterUser extends DefaultUser {
         provider: string
     }
+
+    interface JWT extends Partial<Pick<CustomUserProps, '@id' | 'isAdmin'>> {
+        name?: string
+        email?: string
+        picture?: string
+        sub?: string
+        url?: string
+        iat: number
+        exp: number
+        jtl: number
+    }
 }

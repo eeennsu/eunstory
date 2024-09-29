@@ -1,16 +1,16 @@
-import { routePaths } from '@/lib/route'
+import { mainPath } from '@/lib/route'
 
 export const NAV_LINKS = [
     {
         title: 'Home',
-        url: routePaths.home(),
+        url: mainPath.home(),
     },
     {
         title: 'About me',
-        url: routePaths.about(),
+        url: mainPath.about(),
     },
     {
         title: 'Posts',
-        url: routePaths.post.list(),
+        url: mainPath.post.list(),
     },
 ]

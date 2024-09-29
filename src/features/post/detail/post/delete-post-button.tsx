@@ -3,7 +3,7 @@
 import { requestDeletePost } from '@/entities/post'
 import { callToast } from '@/lib/fetch'
 import { useAdminSession, useProgressBar } from '@/lib/hooks'
-import { routePaths } from '@/lib/route'
+import { mainPath } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import type { FC } from 'react'
 
@@ -35,7 +35,7 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
                 })
                 console.error(error)
             } finally {
-                barRouter.replace(routePaths.post.list())
+                barRouter.replace(mainPath.post.list())
                 barRouter.refresh()
             }
         })

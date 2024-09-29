@@ -1,7 +1,7 @@
 import { getServerAuth } from '@/lib/auth'
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
-import { routePaths } from '@/lib/route'
+import { mainPath } from '@/lib/route'
 import { Comment } from '@prisma/client'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
@@ -118,7 +118,7 @@ export const POST = async (request: NextRequest, { params }: Params) => {
         }
 
         revalidateTag('post-comment')
-        revalidatePath(routePaths.post.detail(postId))
+        revalidatePath(mainPath.post.detail(postId))
 
         return NextResponse.json({ comment: createdComment }, { status: 201 })
     } catch (error) {
@@ -170,7 +170,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
         }
 
         revalidateTag('post-comment')
-        revalidatePath(routePaths.post.detail(postId))
+        revalidatePath(mainPath.post.detail(postId))
 
         return NextResponse.json({ comment: editedComment })
     } catch (error) {
@@ -221,7 +221,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
         }
 
         revalidateTag('post-comment')
-        revalidatePath(routePaths.post.detail(postId))
+        revalidatePath(mainPath.post.detail(postId))
 
         return new NextResponse(null, { status: 204 })
     } catch (error) {

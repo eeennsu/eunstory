@@ -67,7 +67,7 @@ export const authOptions: AuthOptions = {
         maxAge: 60 * 60 * 24, // 24 hours
     },
 
-    secret: assertValue(process.env.JWT_SECRET),
+    secret: assertValue(process.env.NEXTAUTH_SECRET),
 
     callbacks: {
         jwt: async ({ token, user, profile }) => {
