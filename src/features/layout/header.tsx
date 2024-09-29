@@ -10,6 +10,7 @@ import { type FC } from 'react'
 import { LoginModal } from '@/features/layout'
 import { useAdminSession } from '@/lib/hooks'
 import WordFadeIn from '@/lib/ui/word-fade-in'
+import { LogOut } from 'lucide-react'
 
 export const Header: FC = () => {
     const { isAdminAuthorized, status } = useAdminSession({ options: { required: false } })
@@ -44,23 +45,22 @@ export const Header: FC = () => {
                             {link.title}
                         </Link>
                     ))}
-                    {status === 'authenticated' && <Button onClick={() => signOut()}>SignOut</Button>}
+                    {status === 'authenticated' && (
+                        <Button
+                            onClick={() => signOut()}
+                            className='bg-gray-900/60 text-gray-200 hover:bg-gray-900/90 gap-2.5 hover:text-white border border-gray-400/20'>
+                            <LogOut size={16} />
+                            Sign Out
+                        </Button>
+                    )}
                     {status === 'unauthenticated' && (
                         <LoginModal>
                             <Button
                                 variant='outline'
-                                size='sm'
-                                className='px-4 py-2 h-9 bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700'>
+                                className='bg-slate-600 hover:bg-slate-700 border-none '>
                                 Sign In
                             </Button>
                         </LoginModal>
-                    )}
-                    {isAdminAuthorized && (
-                        <Button
-                            asChild
-                            variant='secondary'>
-                            <Link href={adminPath.admin()}>Admin</Link>
-                        </Button>
                     )}
                 </nav>
             </section>

@@ -4,16 +4,16 @@ import { FC } from 'react'
 
 export const MyCertificationsWidget: FC = () => {
     return (
-        <section className='flex flex-col gap-6 w-full'>
-            <AboutSectionTitle title='Certification' />
-            <ul className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+        <section className='flex flex-col gap-8 w-full'>
+            <AboutSectionTitle title='Certifications' />
+            <ul className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
                 {MY_CERTIFICATIONS.map((cert, index) => (
                     <li
                         key={index}
-                        className='bg-white p-6 rounded-lg shadow-lg flex flex-col'>
-                        <h3 className='text-xl font-semibold text-gray-800'>{cert.name}</h3>
-                        {cert.date && <p className='mt-2 text-sm text-gray-500'>취득일: {cert.date}</p>}
-                        {cert.sub && <p className='mt-2 text-sm text-blue-600'>{cert.sub}</p>}
+                        className='bg-slate-900/90 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 flex flex-col'>
+                        <h3 className='text-2xl font-bold text-white'>{cert.name}</h3>
+                        {cert.date && <p className='mt-2 text-sm text-gray-400'>취득일: {cert.date}</p>}
+                        {cert.sub && <p className='mt-2 text-sm text-blue-400'>{cert.sub}</p>}
                     </li>
                 ))}
             </ul>

@@ -26,7 +26,7 @@ export default function RootLayout({
                     <TopLoadingBar />
                     <div className='flex w-full min-h-dvh flex-col items-center justify-center text-foreground'>
                         <Header />
-                        <div className='flex flex-col w-full flex-1 bg-slate-800'>{children}</div>
+                        <div className='flex flex-col w-full flex-1 bg-slate-800/85'>{children}</div>
                         <Footer />
                     </div>
                 </RootProvider>
