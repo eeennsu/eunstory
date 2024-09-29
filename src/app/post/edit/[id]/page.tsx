@@ -1,6 +1,6 @@
 import { serverRequestGetDetailPost } from '@/entities/post'
 import { PostFormWidget } from '@/widgets/post/common'
-import type { FC } from 'react'
+import { Suspense, type FC } from 'react'
 
 interface Props {
     params: {
@@ -19,7 +19,9 @@ const EditDetailPostPage: FC<Props> = async ({ params: { id } }) => {
 
     return (
         <main className='page-container'>
-            <PostFormWidget prevPost={post} />
+            <Suspense>
+                <PostFormWidget prevPost={post} />
+            </Suspense>
         </main>
     )
 }

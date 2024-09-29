@@ -77,6 +77,8 @@ export const PostPreviewDrawer: FC<Props> = ({
 
     useEffect(() => {
         prevThumbnail && setThumbnail(prevThumbnail)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [prevThumbnail])
 
     return (
@@ -105,7 +107,7 @@ export const PostPreviewDrawer: FC<Props> = ({
                                             onClick={initialThumbnail}>
                                             <X className='size-4' />
                                         </Button>
-
+                                         {/*  eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={thumbnail as string}
                                             alt='thumbnail'
