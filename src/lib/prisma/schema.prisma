@@ -38,7 +38,7 @@ model Post {
     thumbnail String?
     summary   String
 
-    @@index([isActive, title, tags, order])
+    @@index([isActive, title, tags])
 }
 
 model Comment {

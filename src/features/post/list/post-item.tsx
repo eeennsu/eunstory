@@ -20,7 +20,7 @@ export const PostItem: FC<Props> = ({ id, title, thumbnail, date, summary, tags 
         <Link
             key={id}
             href={mainPath.post.detail(id)}
-            className='group grid grid-cols-4 p-6 bg-gray-800 hover:brightness-110 transition-all duration-300 rounded-xl shadow-lg hover:shadow-2xl'>
+            className='group grid grid-cols-4 p-6 bg-gray-800 brightness-110 hover:brightness-125 transition-all duration-300 rounded-xl shadow-lg hover:shadow-2xl'>
             <section className='flex flex-col gap-5 col-span-3 justify-between'>
                 <div className='flex flex-col gap-2.5 flex-grow'>
                     <h2 className='text-2xl font-bold text-white line-clamp-1'>{title}</h2>

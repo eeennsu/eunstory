@@ -20,11 +20,11 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
     const post = response?.post
 
     return (
-        <main className='page-container mx-auto max-w-screen-lg w-full'>
-            <article className='flex flex-col gap-3 p-6'>
+        <main className='page-container mx-auto max-w-screen-lg w-full pt-[120px] pb-6'>
+            <div className='flex flex-col gap-6'>
                 <DetailPostWidget post={post} />
                 <UserCommentWidget postId={id} />
-            </article>
+            </div>
         </main>
     )
 }

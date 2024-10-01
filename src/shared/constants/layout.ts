@@ -6,8 +6,8 @@ export const NAV_LINKS = [
         url: mainPath.home(),
     },
     {
-        title: 'About me',
-    url: mainPath.about(),
+        title: 'About',
+        url: mainPath.about(),
     },
     {
         title: 'Posts',

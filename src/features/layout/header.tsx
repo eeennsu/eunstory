@@ -8,12 +8,18 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { type FC } from 'react'
 import { LoginModal } from '@/features/layout'
-import { useAdminSession } from '@/lib/hooks'
+import { useAdminSession, useProgressBar } from '@/lib/hooks'
 import WordFadeIn from '@/lib/ui/word-fade-in'
 import { LogOut } from 'lucide-react'
 
 export const Header: FC = () => {
     const { isAdminAuthorized, status } = useAdminSession({ options: { required: false } })
+    const { barRouter } = useProgressBar()
+
+    const handleSignOut = () => {
+        signOut()
+        barRouter.refresh()
+    }
 
     return (
         <header className='bg-slate-700/50 backdrop-blur-lg w-full py-2 flex items-center justify-center border-b fixed top-0 z-10 h-[90px]'>
@@ -47,7 +53,7 @@ export const Header: FC = () => {
                     ))}
                     {status === 'authenticated' && (
                         <Button
-                            onClick={() => signOut()}
+                            onClick={handleSignOut}
                             className='bg-gray-900/60 text-gray-200 hover:bg-gray-900/90 gap-2.5 hover:text-white border border-gray-400/20'>
                             <LogOut size={16} />
                             Sign Out

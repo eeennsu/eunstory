@@ -1,8 +1,6 @@
 import dayjs from 'dayjs'
-
-export const getDateWithTime = (date: Date): string => {
-    return dayjs(date).format('YY-MM-DD / HH:mm')
-}
+import 'dayjs/locale/ko'
+dayjs.locale('ko')
 
 export const formatBeforeTime = (dateString: string | Date): string => {
     const start = dayjs(dateString)
@@ -35,4 +33,8 @@ export const formatBeforeTime = (dateString: string | Date): string => {
 
 export const formatDateToYMD = (date: Date | string) => {
     return dayjs(date).format('YYYY.MM.DD')
+}
+
+export const formatDateToFull = (date: Date | string) => {
+    return dayjs(date).format('YYYY년 M월 D일 a h시 m분')
 }

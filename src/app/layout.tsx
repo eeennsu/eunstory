@@ -21,7 +21,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={inter.className}>
+            <body
+                className={inter.className}
+                suppressHydrationWarning>
                 <RootProvider>
                     <TopLoadingBar />
                     <div className='flex w-full min-h-dvh flex-col items-center justify-center text-foreground'>

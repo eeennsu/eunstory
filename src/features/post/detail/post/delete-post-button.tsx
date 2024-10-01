@@ -2,9 +2,10 @@
 
 import { requestDeletePost } from '@/entities/post'
 import { callToast } from '@/lib/fetch'
-import { useAdminSession, useProgressBar } from '@/lib/hooks'
+import { useProgressBar } from '@/lib/hooks'
 import { mainPath } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
+import { Trash2 } from 'lucide-react'
 import type { FC } from 'react'
 
 interface Props {
@@ -12,12 +13,7 @@ interface Props {
 }
 
 export const DeletePostButton: FC<Props> = ({ id }) => {
-    const { isAdminAuthorized } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
-
-    if (!isAdminAuthorized) {
-        return null
-    }
 
     const handleDelete = async () => {
         if (!confirm('정말 삭제하시겠습니까?')) {
@@ -42,12 +38,12 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
     }
 
     return (
-        isAdminAuthorized && (
-            <Button
-                type='button'
-                onClick={handleDelete}>
-                DeletePostButton
-            </Button>
-        )
+        <Button
+            type='button'
+            size={'icon-xs'}
+            variant={'destructive'}
+            onClick={handleDelete}>
+            <Trash2 size={18} />
+        </Button>
     )
 }

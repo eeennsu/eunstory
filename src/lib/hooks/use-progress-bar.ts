@@ -9,7 +9,14 @@ export const useProgressBar = () => {
 
     const executeWithProgress = (callback: Function) => {
         startBar()
-        callback().finally(() => stopBar())
+
+        const result = callback()
+
+        if (result instanceof Promise) {
+            result.finally(() => stopBar())
+        } else {
+            stopBar()
+        }
     }
 
     return {

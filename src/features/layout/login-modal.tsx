@@ -23,7 +23,7 @@ import { PropsWithChildren, useState, type FC } from 'react'
 
 export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
     const [isOpen, setIsOpen] = useLoginModalStore((state) => [state.isOpen, state.setIsOpen])
-    const { executeWithProgress } = useProgressBar()
+    const { executeWithProgress, barRouter } = useProgressBar()
     const [id, setId] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const { status } = useSession()
@@ -75,6 +75,8 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
                         title: '로그인에 성공했습니다.',
                         position: 'bottom',
                     })
+
+                    barRouter.refresh()
                 } else {
                     switch (response?.error) {
                         case ERROR_CODES.MISSING_ID_OR_PASSWORD.code:
@@ -161,6 +163,7 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
                                 <Input
                                     id='id'
                                     className='col-span-3 border-gray-600 text-gray-200 focus:ring-gray-600 bg-gray-700'
+                                    variant='clear'
                                     value={id}
                                     onChange={(e) => setId(e.target.value)}
                                 />
@@ -175,6 +178,7 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
                                     id='password'
                                     className='col-span-3 border-gray-600 text-gray-200 focus:ring-gray-600 bg-gray-700'
                                     type='password'
+                                    variant='clear'
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
