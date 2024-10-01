@@ -1,1 +1,1 @@
-export * from './edit-post-order-header'
+export * from './edit-post-order-head'

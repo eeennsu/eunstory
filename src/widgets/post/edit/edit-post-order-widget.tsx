@@ -6,7 +6,7 @@ import { useState, type FC } from 'react'
 import dynamic from 'next/dynamic'
 import { CustomSortableItem, Sortable } from '@/features/common/dnd/sortable'
 import { DragEndEvent } from '@dnd-kit/core'
-import { EditPostOrderHeader } from '@/features/post/edit'
+import { EditPostOrderHead } from '@/features/post/edit'
 
 interface Props {
     allPosts: Post[]
@@ -56,7 +56,7 @@ export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {
 
     return (
         <section className='flex flex-col gap-6 '>
-            <EditPostOrderHeader
+            <EditPostOrderHead
                 mode={mode}
                 setMode={setMode}
                 totalCount={totalCount}

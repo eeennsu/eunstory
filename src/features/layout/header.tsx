@@ -16,15 +16,15 @@ export const Header: FC = () => {
     const { isAdminAuthorized, status } = useAdminSession({ options: { required: false } })
 
     return (
-        <header className='bg-slate-700/50 backdrop-blur-lg w-full py-2 flex items-center justify-center border-b fixed top-0 z-10'>
+        <header className='bg-slate-700/50 backdrop-blur-lg w-full py-2 flex items-center justify-center border-b fixed top-0 z-10 h-[90px]'>
             <section className='relative flex w-full max-w-5xl justify-between items-center'>
                 <Link
                     href={isAdminAuthorized ? adminPath.admin() : mainPath.home()}
                     className='flex items-center'>
                     <Image
                         src={'/images/eunstory-logo.png'}
-                        width={90}
-                        height={90}
+                        width={80}
+                        height={80}
                         alt='EunStory Logo'
                         className='bg-transparent'
                     />

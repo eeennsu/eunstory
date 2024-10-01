@@ -32,3 +32,7 @@ export const formatBeforeTime = (dateString: string | Date): string => {
         return `${diffInYears}년 전`
     }
 }
+
+export const formatDateToYMD = (date: Date | string) => {
+    return dayjs(date).format('YYYY.MM.DD')
+}

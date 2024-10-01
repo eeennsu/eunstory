@@ -80,3 +80,22 @@
 input[type='file']::-webkit-file-upload-button {
     cursor: pointer;
 }
+
+.custom-scrollbar {
+    overflow-y: auto !important; /* Forces scrollbar to always be visible */
+    scrollbar-width: thin;
+    scrollbar-color: #a3b4c4 #333;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #333;
+}

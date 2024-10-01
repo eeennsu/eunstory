@@ -12,3 +12,4 @@ export const CertificationItem: FC<Props> = ({ name, date, sub }) => {
         </li>
     )
 }
+ 

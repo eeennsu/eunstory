@@ -1,7 +1,10 @@
 'use server'
 
 import { ResponseGetDetailPostType } from '@/app/api/post/[id]/route'
+import { ResponseGetActivePostCountType } from '@/app/api/post/active-count/route'
+import { ResponseGetPostIdListType } from '@/app/api/post/id-list/route'
 import { ResponseGetPostListType } from '@/app/api/post/route'
+import { ResponseGetPostTagListType } from '@/app/api/post/tags/route'
 import { getUrlFromServer, generateRequest } from '@/lib/fetch'
 
 export const serverRequestGetAllPostList = async ({ isPublished }: { isPublished: boolean }) => {
@@ -54,7 +57,24 @@ export const serverRequestGetDetailPost = async ({ postId, isPublished }: { post
 }
 
 export const serverRequestGetPostIdList = async () => {
-    return generateRequest<undefined, ResponseGetPostListType>({
+    return generateRequest<undefined, ResponseGetPostIdListType>({
         url: getUrlFromServer(`/api/post/id-list`),
+    })
+}
+
+export const serverRequestGetPostTagList = async () => {
+    return generateRequest<undefined, ResponseGetPostTagListType>({
+        url: getUrlFromServer(`/api/post/tags`),
+    })
+}
+
+export const serverRequestGetActivePostCount = async ({
+    lastThreeMonths = false,
+}: { lastThreeMonths?: boolean } = {}) => {
+    const params = new URLSearchParams()
+    lastThreeMonths && params.append('filter', 'last-three-months')
+
+    return generateRequest<undefined, ResponseGetActivePostCountType>({
+        url: getUrlFromServer(`/api/post/active-count?${params.toString()}`),
     })
 }

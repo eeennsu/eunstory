@@ -47,14 +47,16 @@ export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
     }, [curPage])
 
     return (
-        <section className='flex gap-10 flex-col'>
+        <section className='flex gap-10 flex-col w-full'>
             {postList.map((post) => (
                 <PostItem
                     key={post.id}
                     id={post.id}
                     thumbnail={post.thumbnail}
                     title={post.title}
+                    date={post.createdAt}
                     summary={post.summary}
+                    tags={post.tags}
                 />
             ))}
             {isLoading && (

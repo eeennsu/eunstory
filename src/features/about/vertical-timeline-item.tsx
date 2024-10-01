@@ -28,8 +28,7 @@ export const VerticalTimelineItem: FC<Props> = ({ isRecent = false, title, sub, 
                 background: isRecent ? 'rgba(29, 78, 216, 0.9)' : 'rgba(51, 65, 85, 0.9)', // 어두운 블루와 slate 계열
                 color: '#e5e7eb', // 텍스트는 밝은 그레이
                 borderRadius: '12px',
-                paddingInline: '26px',
-                paddingBlock: '22px',
+                padding: '30px',
                 boxShadow: isRecent ? '0 8px 16px rgba(29, 78, 216, 0.4)' : '0 8px 16px rgba(0, 0, 0, 0.2)',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 transform: isRecent ? 'scale(1.05)' : 'scale(1)',
