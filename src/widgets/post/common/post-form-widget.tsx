@@ -32,7 +32,11 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const { adminId: authorId, isAdminAuthorized } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
 
-    const [thumbnail, isPreviewOpen] = usePostPreviewStore((state) => [state.thumbnail, state.isPreviewOpen])
+    const [thumbnail, isPreviewOpen, setIsPreviewOpen] = usePostPreviewStore((state) => [
+        state.thumbnail,
+        state.isPreviewOpen,
+        state.setIsPreviewOpen,
+    ])
 
     const editorRef = useRef<TiptapRefType>(null)
     const tagInputRef = useRef<TagInputRef>(null)
@@ -154,6 +158,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                 })
                 console.error(error)
             } finally {
+                setIsPreviewOpen(false)
                 barRouter.replace(mainPath.post.list())
                 barRouter.refresh()
             }

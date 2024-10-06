@@ -162,8 +162,8 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     }
 
     return (
-        <li className='flex flex-col gap-4 p-2'>
-            <section className='rounded-lg bg-red-200 p-5'>
+        <li className={'flex flex-col gap-4 px-5'}>
+            <section className={cn('border-b border-gray-600', comment.isActive ? 'py-8' : 'py-6')}>
                 {comment.isActive ? (
                     <div className='flex flex-col gap-3'>
                         <div className='flex w-full justify-between gap-4'>
@@ -200,18 +200,18 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                         {editMode === 'view' ? (
                                             <Button
                                                 size='icon-sm'
-                                                variant='outline'
+                                                variant='signature'
                                                 onClick={() => {
                                                     replyMode === 'reply' && setReplyMode('view')
                                                     setEditMode('edit')
                                                 }}>
-                                                <FilePenLine className='size-5' />
+                                                <Pencil className='size-5' />
                                             </Button>
                                         ) : (
                                             <>
                                                 <Button
                                                     size='icon-sm'
-                                                    variant='outline'
+                                                    variant='signature'
                                                     className='text-xs'
                                                     onClick={() => setEditMode('view')}>
                                                     취소
@@ -220,14 +220,14 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                                     size='icon-sm'
                                                     variant='default'
                                                     onClick={handleEditComment}>
-                                                    <Pencil className='size-5' />
+                                                    <FilePenLine className='size-5' />
                                                 </Button>
                                             </>
                                         )}
                                         <Button
                                             onClick={handleDeleteComment}
                                             disabled={isDisabled}
-                                            variant={isDeleting ? 'loading' : 'default'}
+                                            variant={isDeleting ? 'loading' : 'destructive'}
                                             size='icon-sm'>
                                             {isDeleting ? (
                                                 <LoaderCircle className='animate-spin size-5' />
@@ -241,7 +241,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                     editMode === 'view' && (
                                         <Button
                                             size='sm'
-                                            variant='outline'
+                                            variant='signature'
                                             className='w-full gap-2'
                                             onClick={handleReplyTextareaOpen}>
                                             답글 달기
@@ -250,7 +250,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                 ) : (
                                     <Button
                                         size='sm'
-                                        variant='outline'
+                                        variant='signature'
                                         className='w-full gap-2'
                                         onClick={() => {
                                             setReplyMode('view')
@@ -262,19 +262,43 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                         </div>
                         {comment.isActive && editMode === 'edit' && (
                             <Textarea
-                                className='w-full'
+                                className='flex-1 min-h-[140px] mt-3'
                                 value={editedContent}
+                                placeholder='댓글을 수정해주세요.'
+                                variant={'secondary'}
                                 onChange={(e) => setEditedContent(e.target.value)}
                             />
                         )}
                     </div>
                 ) : (
-                    <p>삭제된 댓글입니다.</p>
+                    <p className='text-gray-500'>삭제된 댓글입니다.</p>
                 )}
             </section>
 
+            {comment?.isActive && replyMode === 'reply' && (
+                <div className='flex gap-3 pl-[30px] py-6'>
+                    <Textarea
+                        className='flex-1 bg-gray-800 min-h-10 text-gray-300 border placeholder:text-gray-500 border-slate-700 rounded-lg px-4 py-3 focus:border focus:border-slate-700'
+                        placeholder='답글을 입력해주세요.'
+                        variant={'clear'}
+                        value={replyContent}
+                        onChange={(e) => setReplyContent(e.target.value)}
+                    />
+                    <div className='flex flex-col'>
+                        <Button
+                            size='sm'
+                            onClick={handleCreateReply}
+                            className='flex-grow'
+                            disabled={isDisabled}
+                            variant={isReplying ? 'loading' : 'signature'}>
+                            {isReplying ? <LoaderCircle className='animate-spin' /> : '답글 작성'}
+                        </Button>
+                    </div>
+                </div>
+            )}
+
             {!!comment?.replies?.length && (
-                <ul className='flex flex-col gap-4 pl-4'>
+                <ul className='flex flex-col gap-5 pl-4'>
                     {comment?.replies?.map((reply) => (
                         <ReplyItem
                             key={reply.id}
@@ -284,24 +308,6 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                         />
                     ))}
                 </ul>
-            )}
-
-            {comment?.isActive && replyMode === 'reply' && (
-                <div className='flex gap-3 pl-[60px]'>
-                    <Textarea
-                        className='w-full flex-1'
-                        placeholder='답글을 입력해주세요.'
-                        value={replyContent}
-                        onChange={(e) => setReplyContent(e.target.value)}
-                    />
-                    <Button
-                        className='h-20'
-                        onClick={handleCreateReply}
-                        disabled={isDisabled}
-                        variant={isReplying ? 'loading' : 'default'}>
-                        {isReplying ? <LoaderCircle className='animate-spin' /> : '등록'}
-                    </Button>
-                </div>
             )}
         </li>
     )

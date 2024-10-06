@@ -31,7 +31,7 @@
 }
 
 .tiptap-editor-content {
-    @apply prose max-w-full;
+    @apply prose max-w-full text-gray-200;
 }
 
 .ProseMirror a,
@@ -54,6 +54,10 @@
 
 .tiptap-editor-content p {
     @apply min-h-7 h-full my-0;
+}
+
+.tiptap-editor-content strong {
+    @apply font-semibold text-gray-200;
 }
 
 .tiptap-editor-content ul p,

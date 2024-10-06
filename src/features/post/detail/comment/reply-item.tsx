@@ -4,6 +4,7 @@ import { requestDeletePostComment, requestEditPostComment } from '@/entities/pos
 import { PostComment } from '@/entities/post-comment/post-comment.types'
 import { callToast } from '@/lib/fetch'
 import { useProgressBar } from '@/lib/hooks'
+import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Avatar, AvatarImage } from '@/lib/ui/avatar'
 import { Button } from '@/lib/ui/button'
 import { Textarea } from '@/lib/ui/textarea'
@@ -92,59 +93,63 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
     }
 
     return (
-        <li className='flex w-full gap-5'>
-            <CornerDownRight className='mt-4' />
-            <section className='flex flex-grow flex-col gap-3 rounded-lg bg-indigo-200 p-5 max-w-[876px]'>
+        <li className='flex w-full gap-3'>
+            <CornerDownRight className='mt-2 text-gray-400 h-5 w-5' />
+            <section
+                className={cn(
+                    'flex flex-grow flex-col gap-3 rounded-lg bg-gray-800 px-7',
+                    reply.isActive ? 'py-6' : 'py-3'
+                )}>
                 {reply?.isActive ? (
                     <>
                         <section className='flex w-full justify-between'>
                             <Link
                                 href={reply.author.url || '#'}
                                 target='_blank'
-                                className='inline-flex gap-3 items-center cursor-pointer hover:bg-slate-50 p-1 rounded-lg'>
+                                className='inline-flex gap-3 items-center cursor-pointer hover:bg-gray-500 p-1 rounded-md'>
                                 <Avatar>
                                     <AvatarImage
                                         src={reply?.author?.image || defaultUserIcon}
                                         alt={reply?.author?.name}
                                     />
                                 </Avatar>
-                                <div className='flex flex-col gap-1'>
-                                    <span>{reply?.author?.name}</span>
-                                    <div className='flex gap-2'>
+                                <div className='flex flex-col'>
+                                    <span className='text-gray-200 font-medium'>{reply?.author?.name}</span>{' '}
+                                    <div className='flex gap-2 text-gray-400 text-sm'>
                                         <time>{formatBeforeTime(reply?.createdAt)}</time>
                                         {reply?.updatedAt && <span>(수정됨)</span>}
                                     </div>
                                 </div>
                             </Link>
                             {isOwner && (
-                                <div className='flex items-center gap-3'>
+                                <div className='flex items-center gap-2'>
                                     {editMode === 'view' ? (
                                         <Button
                                             size='icon-sm'
-                                            variant='outline'
+                                            variant='signature'
                                             onClick={() => setEditMode('edit')}>
-                                            <FilePenLine className='size-5' />
+                                            <Pencil className='size-5' />
                                         </Button>
                                     ) : (
                                         <>
                                             <Button
                                                 size='icon-sm'
-                                                variant='outline'
+                                                variant='signature'
                                                 onClick={() => setEditMode('view')}>
-                                                <Undo2 className='size-5' />
+                                                취소
                                             </Button>
                                             <Button
                                                 size='icon-sm'
                                                 variant='default'
                                                 onClick={handleEditReply}>
-                                                <Pencil className='size-5' />
+                                                <FilePenLine className='size-5' />
                                             </Button>
                                         </>
                                     )}
                                     <Button
                                         onClick={handleDeleteReply}
                                         disabled={isDeleting}
-                                        variant={isDeleting ? 'loading' : 'default'}
+                                        variant={isDeleting ? 'loading' : 'destructive'}
                                         size='icon-sm'>
                                         {isDeleting ? (
                                             <LoaderCircle className='animate-spin size-5' />
@@ -156,17 +161,18 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                             )}
                         </section>
                         {editMode === 'view' ? (
-                            <p className='break-words'>{reply?.content}</p>
+                            <p className='text-gray-300 font-medium break-words'>{reply?.content}</p>
                         ) : (
                             <Textarea
-                                className='w-full'
+                                className='w-full mt-3 bg-gray-900/45'
+                                variant={'secondary'}
                                 value={editedContent}
                                 onChange={(e) => setEditedContent(e.target.value)}
                             />
                         )}
                     </>
                 ) : (
-                    <p>삭제된 답글입니다.</p>
+                    <p className='text-gray-400'>삭제된 답글입니다.</p>
                 )}
             </section>
         </li>

@@ -1,5 +1,6 @@
 import { ResponseGetPostIdListType } from '@/app/api/post/id-list/route'
 import { serverRequestGetDetailPost, serverRequestGetPostIdList } from '@/entities/post'
+import { Separator } from '@/lib/ui/separator'
 import { UserCommentWidget } from '@/widgets/post/detail'
 import { DetailPostWidget } from '@/widgets/post/detail/detail-post-widget'
 import type { FC } from 'react'
@@ -20,11 +21,10 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
     const post = response?.post
 
     return (
-        <main className='page-container mx-auto max-w-screen-lg w-full pt-[120px] pb-6'>
-            <div className='flex flex-col gap-6'>
-                <DetailPostWidget post={post} />
-                <UserCommentWidget postId={id} />
-            </div>
+        <main className='page-container gap-10 mx-auto max-w-screen-lg w-full pt-[120px] pb-6'>
+            <DetailPostWidget post={post} />
+            <Separator className='bg-slate-500' />
+            <UserCommentWidget postId={id} />
         </main>
     )
 }

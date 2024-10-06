@@ -13,7 +13,7 @@ export const DetailPostWidget: FC<Props> = async ({ post }) => {
     const { isAdminAuthorized } = await getServerAuth()
 
     return (
-        <article className='flex flex-col gap-6 text-white rounded-lg shadow-lg'>
+        <article className='flex flex-col gap-6 text-white rounded-lg'>
             <section className='flex flex-col gap-4 border-b border-b-slate-700 pb-4'>
                 <h1 className='text-5xl font-bold  text-slate-100 leading-tight'>{post?.title}</h1>
 
@@ -54,7 +54,7 @@ export const DetailPostWidget: FC<Props> = async ({ post }) => {
 
             {post?.content && (
                 <section
-                    className='tiptap-editor-content text-gray-300'
+                    className='tiptap-editor-content '
                     dangerouslySetInnerHTML={{ __html: textSanitizing(post.content) }}
                 />
             )}

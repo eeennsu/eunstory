@@ -8,21 +8,21 @@ import { Button } from '@/lib/ui/button'
 import { Textarea } from '@/lib/ui/textarea'
 import { LoaderCircle } from 'lucide-react'
 import { useState, type FC, type FormEvent } from 'react'
+import { CommentsCount } from './comments-count'
 
 interface Props {
     postId: string
+    commentCount: number
 }
 
-export const CommentInput: FC<Props> = ({ postId }) => {
+export const CommentInput: FC<Props> = ({ postId, commentCount }) => {
     const { executeWithProgress, barRouter } = useProgressBar()
     const { isAuthenticated } = useCustomSession()
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
     const [comment, setComment] = useState<string>('')
 
-    const handleComment = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-
+    const authCheck = () => {
         if (!isAuthenticated) {
             callToast({
                 type: 'NEED_AUTHENTICATE',
@@ -30,7 +30,7 @@ export const CommentInput: FC<Props> = ({ postId }) => {
                 variant: 'warning',
             })
 
-            return
+            return false
         }
 
         if (!comment.length) {
@@ -39,6 +39,14 @@ export const CommentInput: FC<Props> = ({ postId }) => {
                 position: 'bottom',
                 variant: 'warning',
             })
+            return false
+        }
+
+        return true
+    }
+
+    const handleComment = async () => {
+        if (!authCheck()) {
             return
         }
 
@@ -69,22 +77,26 @@ export const CommentInput: FC<Props> = ({ postId }) => {
     }
 
     return (
-        <form
-            className='flex gap-3 items-center'
-            onSubmit={handleComment}>
-            <Textarea
-                className='flex-1'
-                placeholder='댓글을 입력해주세요.'
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-            />
-            <Button
-                type='submit'
-                disabled={isSubmitting}
-                className='h-20 w-16'
-                variant={isSubmitting ? 'loading' : 'default'}>
-                {isSubmitting ? <LoaderCircle className='animate-spin' /> : '등록'}
-            </Button>
-        </form>
+        <section className='flex flex-col gap-4'>
+            <CommentsCount commentCount={commentCount} />
+
+            <div className='flex flex-col gap-3 items-end'>
+                <Textarea
+                    className='flex-1 min-h-[140px]'
+                    placeholder='댓글을 입력해주세요.'
+                    variant={'secondary'}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                />
+                <Button
+                    onClick={handleComment}
+                    disabled={isSubmitting}
+                    className='border-none text-white rounded-lg'
+                    size={'lg'}
+                    variant={isSubmitting ? 'loading' : 'signature'}>
+                    {isSubmitting ? <LoaderCircle className='animate-spin' /> : '댓글 작성'}
+                </Button>
+            </div>
+        </section>
     )
 }

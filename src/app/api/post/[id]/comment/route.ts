@@ -70,10 +70,10 @@ export const GET = async (_: NextRequest, { params }: Params) => {
         })
 
         if (!comments.length) {
-            return NextResponse.json({ comments: [], commentCount: 0 })
+            return NextResponse.json({ commentList: [], commentCount: 0 })
         }
 
-        return NextResponse.json({ comments: filteredComments, commentCount })
+        return NextResponse.json({ commentList: filteredComments, commentCount })
     } catch (error) {
         console.log(error)
         return NextResponse.json({ error }, { status: 500 })
