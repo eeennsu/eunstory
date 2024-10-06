@@ -45,7 +45,7 @@
 }
 
 .tiptap-editor-content img {
-    @apply cursor-default !important;
+    @apply !cursor-default;
 }
 
 .tiptap-editor-content {

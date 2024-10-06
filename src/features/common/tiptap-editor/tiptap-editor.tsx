@@ -1,15 +1,13 @@
 import { forwardRef, useImperativeHandle } from 'react'
-import { EditorContent, useEditor, type EditorEvents } from '@tiptap/react'
+import { useEditor, EditorContent, type EditorEvents } from '@tiptap/react'
 import { TiptapToolbar, ToolbarButtonType } from './tiptap-toolbar'
 import { common, createLowlight } from 'lowlight'
 import {
     StarterKit,
-    Image,
     ImageResize,
     Link,
     Placeholder,
     TextAlign,
-    Strike,
     Underline,
     CodeBlockLowlight,
     ListItem,
@@ -57,6 +55,7 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
         const isUploading = useImageUploadStore((state) => state.isUploading)
 
         const editor = useEditor({
+            immediatelyRender: false,
             editorProps: {
                 attributes: {
                     class: cn(
@@ -86,7 +85,7 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
                     codeBlock: false,
                 }),
                 ListItem,
-                Strike,
+
                 Underline,
                 Link.configure({
                     HTMLAttributes: {
@@ -95,9 +94,6 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
                 }).extend({ inclusive: false }),
                 TextAlign.configure({
                     types: ['paragraph', 'heading1', 'heading2', 'heading3', 'ul', 'ol', 'li'],
-                }),
-                Image.configure({
-                    allowBase64: true,
                 }),
                 ImageResize.configure(),
                 Placeholder.configure({

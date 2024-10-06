@@ -16,7 +16,7 @@ import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import { Input } from '@/lib/ui/input'
 import { Textarea } from '@/lib/ui/textarea'
 import { callToast } from '@/lib/fetch'
-import { usePostThumbnailStore } from '@/entities/post'
+import { usePostPreviewStore } from '@/entities/post'
 import { Badge } from '@/lib/ui/badge'
 
 interface Props {
@@ -24,7 +24,7 @@ interface Props {
     trigger: ReactNode
     postTitle: string
     postSummary: string
-    handleCreatePost: () => void
+    handleSubmit: () => void
     previewTags?: string[]
     prevThumbnail?: string | null
 }
@@ -34,12 +34,16 @@ export const PostPreviewDrawer: FC<Props> = ({
     trigger,
     postTitle,
     postSummary,
-    handleCreatePost,
+    handleSubmit,
     previewTags,
     prevThumbnail,
 }) => {
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const [thumbnail, setThumbnail] = usePostThumbnailStore((state) => [state.thumbnail, state.setThumbnail])
+    const [thumbnail, setThumbnail, isPreviewOpen, setIsPreviewOpen] = usePostPreviewStore((state) => [
+        state.thumbnail,
+        state.setThumbnail,
+        state.isPreviewOpen,
+        state.setIsPreviewOpen,
+    ])
 
     const fileRef = useRef<HTMLInputElement>(null)
     const [summary, setSummary] = useState<string | undefined>(postSummary)
@@ -81,11 +85,18 @@ export const PostPreviewDrawer: FC<Props> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [prevThumbnail])
 
+    useEffect(() => {
+        return () => {
+            isPreviewOpen && setIsPreviewOpen(false)
+            initialThumbnail()
+        }
+    }, [])
+
     return (
         <Drawer
-            open={isDrawerOpen}
+            open={isPreviewOpen}
             onOpenChange={(open) => {
-                triggerCheck() && setIsDrawerOpen(open)
+                triggerCheck() && setIsPreviewOpen(open)
             }}>
             <DrawerTrigger asChild>{trigger}</DrawerTrigger>
             <DrawerContent className='px-8 py-8'>
@@ -107,7 +118,7 @@ export const PostPreviewDrawer: FC<Props> = ({
                                             onClick={initialThumbnail}>
                                             <X className='size-4' />
                                         </Button>
-                                         {/*  eslint-disable-next-line @next/next/no-img-element */}
+                                        {/*  eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={thumbnail as string}
                                             alt='thumbnail'
@@ -175,7 +186,7 @@ export const PostPreviewDrawer: FC<Props> = ({
                         <Button
                             type='submit'
                             className='flex-1'
-                            onClick={handleCreatePost}>
+                            onClick={handleSubmit}>
                             작성하기
                         </Button>
                         <DrawerClose

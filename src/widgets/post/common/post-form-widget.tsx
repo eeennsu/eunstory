@@ -15,10 +15,9 @@ import { Tooltip, TooltipContent, TooltipProvider } from '@/lib/ui/tooltip'
 import { TooltipTrigger } from '@radix-ui/react-tooltip'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Ellipsis } from 'lucide-react'
-import { RequestCreatePostType } from '@/app/api/post/route'
 import { callToast } from '@/lib/fetch'
 import { PostPreviewDrawer } from '@/features/post/create'
-import { usePostThumbnailStore } from '@/entities/post'
+import { usePostPreviewStore } from '@/entities/post'
 
 interface Props {
     prevPost?: Post // prevPost 가 있으면 수정 폼, 없으면 생성 폼
@@ -33,7 +32,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const { adminId: authorId, isAdminAuthorized } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
 
-    const thumbnail = usePostThumbnailStore((state) => state.thumbnail)
+    const [thumbnail, isPreviewOpen] = usePostPreviewStore((state) => [state.thumbnail, state.isPreviewOpen])
 
     const editorRef = useRef<TiptapRefType>(null)
     const tagInputRef = useRef<TagInputRef>(null)
@@ -48,7 +47,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         [editorRef.current?.getText()]
     )
 
-    const debouncedPost = useDebouncedValue({ title, content }, 5000)
+    const debouncedPost = useDebouncedValue({ title, content }, 7000)
     const [previewTags, setPreviewTags] = useState<string[]>([])
 
     const isValidatedForm = () => {
@@ -89,7 +88,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     }
 
     // 제출 함수
-    const handleCreatePost = async () => {
+    const handleSubmit = async () => {
         if (!isValidatedForm()) return
 
         const tags = tagInputRef.current?.getTags().join(',') || ''
@@ -126,7 +125,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
 
                         // 임시 저장된 포스트가 아니라면? 새로운 포스트 생성
                     } else {
-                        const createdPost: RequestCreatePostType = {
+                        response = await requestCreatePost({
                             title,
                             content,
                             authorId: authorId!,
@@ -134,10 +133,6 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                             order: -1,
                             summary,
                             thumbnail,
-                        }
-
-                        response = await requestCreatePost({
-                            createdPost,
                         })
                     }
                 }
@@ -194,15 +189,13 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         // 임시 저장된 포스트가 없으면? 새로운 포스트 생성하며 임시저장
         else {
             const temporarySavedResponse = await requestCreatePost({
-                createdPost: {
-                    title,
-                    content,
-                    tags,
-                    authorId,
-                    order: null,
-                    thumbnail: null,
-                    summary,
-                },
+                title,
+                content,
+                tags,
+                authorId,
+                order: null,
+                thumbnail: null,
+                summary,
             })
 
             if ('postId' in temporarySavedResponse) {
@@ -245,7 +238,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
 
     // 제목 또는 내용이 변경되면 임시저장
     useEffect(() => {
-        if (prevPost || !title.length || !content.length) return
+        if (prevPost || !title.length || !content.length || isPreviewOpen) return
 
         if (!isSelfTemporarySaved) {
             temporarySavePost()
@@ -254,7 +247,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedPost])
+    }, [debouncedPost, isPreviewOpen])
 
     // 만약 수정페이지라면 기존 포스트 정보를 가져와서 렌더링
     useEffect(() => {
@@ -294,11 +287,8 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                 </section>
             )}
             <section
-                className={cn(
-                    'w-full flex-1 flex-col bg-blue-200 items-center justify-center',
-                    isLoading ? 'hidden' : 'flex'
-                )}>
-                <form className='flex flex-col gap-4 flex-1 py-10'>
+                className={cn('w-full flex-1 flex-col items-center justify-center', isLoading ? 'hidden' : 'flex')}>
+                <form className='flex flex-col gap-4 flex-1 py-10 text-black'>
                     <Input
                         className='w-full text-2xl h-16 font-semibold'
                         value={title}
@@ -361,7 +351,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                             trigger={<Button type='button'>{prevPost ? '수정하기' : '작성하기'}</Button>}
                             postTitle={title}
                             postSummary={summary}
-                            handleCreatePost={handleCreatePost}
+                            handleSubmit={handleSubmit}
                             prevThumbnail={prevPost?.thumbnail}
                             previewTags={previewTags}
                         />

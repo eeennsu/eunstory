@@ -31,7 +31,7 @@ export const requestGetPostList = async ({
     })
 }
 
-export const requestCreatePost = async ({ createdPost }: { createdPost: RequestCreatePostType }) => {
+export const requestCreatePost = async (createdPost: RequestCreatePostType) => {
     return generateRequest<RequestCreatePostType, ResponseCreatePostType>({
         url: '/api/post',
         method: 'POST',

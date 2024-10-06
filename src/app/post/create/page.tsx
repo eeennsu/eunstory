@@ -4,7 +4,7 @@ import { Suspense, type FC } from 'react'
 
 const CreatePostPage: FC = async () => {
     return (
-        <main className={cn('page-container')}>
+        <main className={cn('page-container pt-24')}>
             <Suspense>
                 <PostFormWidget />
             </Suspense>

@@ -65,6 +65,8 @@ export const POST = async (request: NextRequest) => {
         const body = (await request.json()) as RequestCreatePostType
         const { title, content, tags, authorId, order, thumbnail, summary } = body
 
+        console.log('썸네일 왔냐?', thumbnail)
+
         // TODO title debounce error
         if (!title || !content || !authorId) {
             return NextResponse.json({ error: 'Title, content, and authorId are required' }, { status: 400 })
@@ -112,6 +114,8 @@ export const POST = async (request: NextRequest) => {
         if (!createdPost || !createdPost?.id) {
             return NextResponse.json({ error: 'Failed to create post' }, { status: 500 })
         }
+
+        console.log('썸네일 떳냐?', createdPost)
 
         if (!isTemporarySave) {
             revalidatePath(mainPath.post.list())

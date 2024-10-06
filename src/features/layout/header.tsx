@@ -26,14 +26,17 @@ export const Header: FC = () => {
             <section className='relative flex w-full max-w-5xl justify-between items-center'>
                 <Link
                     href={isAdminAuthorized ? adminPath.admin() : mainPath.home()}
-                    className='flex items-center'>
-                    <Image
-                        src={'/images/eunstory-logo.png'}
-                        width={80}
-                        height={80}
-                        alt='EunStory Logo'
-                        className='bg-transparent'
-                    />
+                    className='flex items-center gap-4'>
+                    <figure className='size-[72px] relative'>
+                        <Image
+                            src={'/images/eunstory-logo.png'}
+                            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                            fill
+                            alt='EunStory Logo'
+                            className='bg-transparent'
+                            priority
+                        />
+                    </figure>
 
                     <WordFadeIn
                         words='Eunstory'

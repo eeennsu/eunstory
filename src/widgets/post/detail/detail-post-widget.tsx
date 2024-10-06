@@ -48,13 +48,13 @@ export const DetailPostWidget: FC<Props> = async ({ post }) => {
                 <img
                     src={post.thumbnail}
                     alt={post.title}
-                    className='w-full max-w-3xl h-[400px] object-cover rounded-lg shadow-md'
+                    className='w-auto h-[360px] object-contain rounded-md mx-auto'
                 />
             )}
 
             {post?.content && (
                 <section
-                    className='tiptap-editor-content text-lg leading-relaxed tracking-wide text-gray-300'
+                    className='tiptap-editor-content text-gray-300'
                     dangerouslySetInnerHTML={{ __html: textSanitizing(post.content) }}
                 />
             )}

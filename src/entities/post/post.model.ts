@@ -1,11 +1,17 @@
 import { create } from 'zustand'
 
-interface PostThumbnailState {
+interface PostPreviewState {
+    isPreviewOpen: boolean
+    setIsPreviewOpen: (isPreviewOpen: boolean) => void
+
     thumbnail: string | null
     setThumbnail: (thumbnail: string | null) => void
 }
 
-export const usePostThumbnailStore = create<PostThumbnailState>((set) => ({
+export const usePostPreviewStore = create<PostPreviewState>((set) => ({
+    isPreviewOpen: false,
+    setIsPreviewOpen: (isPreviewOpen) => set({ isPreviewOpen }),
+
     thumbnail: null,
     setThumbnail: (thumbnail) => set({ thumbnail }),
 }))

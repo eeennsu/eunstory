@@ -6,8 +6,7 @@ interface Props {
 }
 
 export const UserCommentWidget: FC<Props> = ({ postId }) => {
-
-    // TODO: 댓글 디자인
+  
     return (
         <section className='flex flex-col p-5 bg-slate-200 gap-6'>
             <CommentInput postId={postId} />

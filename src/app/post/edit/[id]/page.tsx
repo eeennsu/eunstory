@@ -18,7 +18,7 @@ const EditDetailPostPage: FC<Props> = async ({ params: { id } }) => {
     const { post } = response
 
     return (
-        <main className='page-container'>
+        <main className='page-container pt-24'>
             <Suspense>
                 <PostFormWidget prevPost={post} />
             </Suspense>
