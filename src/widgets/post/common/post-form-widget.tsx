@@ -309,7 +309,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                                 className='relative'>
                                 <TagInput
                                     ref={tagInputRef}
-                                    className='w-full rounded-xl h-[48px] flex-1'
+                                    className='w-full rounded-lg h-[48px] flex-1'
                                     placeholder='태그를 입력해주세요.'
                                     onKeyDown={preventEnterInInput}
                                 />
@@ -335,7 +335,8 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                         {prevPost ? (
                             <Button
                                 type='button'
-                                variant={'secondary'}
+                                variant='signature'
+                                size={'lg'}
                                 onClick={() => {
                                     router.replace(mainPath.post.detail(prevPost.id))
                                 }}>

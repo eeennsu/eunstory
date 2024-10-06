@@ -101,26 +101,27 @@ export const PostPreviewDrawer: FC<Props> = ({
                 triggerCheck() && setIsPreviewOpen(open)
             }}>
             <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-            <DrawerContent className='px-8 py-8'>
+            <DrawerContent className='p-7'>
                 <div className='mx-auto w-full max-w-4xl'>
                     <DrawerHeader>
-                        <DrawerTitle>포스트 미리보기</DrawerTitle>
-                        <DrawerDescription>작성될 포스트의 요약과 썸네일을 지정해주세요.</DrawerDescription>
+                        <DrawerTitle className='text-2xl font-bold text-gray-100'>포스트 미리보기</DrawerTitle>
+                        <DrawerDescription className='text-sm text-gray-400'>
+                            작성될 포스트의 요약과 썸네일을 지정해주세요.
+                        </DrawerDescription>
                     </DrawerHeader>
                     <section className='flex gap-6 justify-between p-4'>
                         <figure className='flex flex-col gap-2 flex-1 h-[400px]'>
-                            <figcaption className='text-sm text-slate-600'>썸네일 미리보기</figcaption>
-                            <div className='bg-slate-100 flex-grow rounded-md flex flex-col justify-center items-center gap-5'>
+                            <figcaption className='text-sm text-gray-400'>썸네일 미리보기</figcaption>
+                            <div className='bg-gray-700 flex-grow rounded-md flex flex-col justify-center items-center gap-5 border border-gray-600'>
                                 {thumbnail ? (
                                     <div className='relative max-w-[390px] max-h-[280px] w-full flex-grow flex items-center'>
                                         <Button
                                             type='button'
                                             variant='link'
-                                            className='size-9 p-0 absolute -right-3 -top-3 rounded-full bg-slate-700 text-slate-200 hover:brightness-150'
+                                            className='size-9 p-0 absolute -right-1 -top-1 rounded-full bg-orange-600 text-gray-200 hover:brightness-150'
                                             onClick={initialThumbnail}>
                                             <X className='size-4' />
                                         </Button>
-                                        {/*  eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={thumbnail as string}
                                             alt='thumbnail'
@@ -128,11 +129,10 @@ export const PostPreviewDrawer: FC<Props> = ({
                                         />
                                     </div>
                                 ) : (
-                                    <ImagePlus className='size-24 text-slate-200' />
+                                    <ImagePlus className='size-24 text-gray-500' />
                                 )}
                                 <Button
-                                    variant='outline'
-                                    className='text-sm px-4 py-0.5 shadow-lg'
+                                    variant='tertiary'
                                     onClick={() => {
                                         fileRef.current?.click()
                                     }}>
@@ -141,7 +141,7 @@ export const PostPreviewDrawer: FC<Props> = ({
                                 <Input
                                     ref={fileRef}
                                     type='file'
-                                    className='size-0 hidden'
+                                    className='hidden'
                                     accept='image/*'
                                     onChange={handleThumbnailChange}
                                 />
@@ -149,12 +149,12 @@ export const PostPreviewDrawer: FC<Props> = ({
                         </figure>
                         <div className='flex flex-1 flex-col gap-10'>
                             <div className='max-w-full flex flex-col gap-2'>
-                                <h2 className='text-slate-600 text-sm'>제목</h2>
+                                <h2 className='text-gray-400 text-sm'>제목</h2>
                                 <p className='text-2xl font-bold text-ellipsis line-clamp-1'>{postTitle}</p>
                             </div>
 
                             <div className='flex flex-col gap-2'>
-                                <h3 className='text-slate-600 text-sm'>태그</h3>
+                                <h3 className='text-gray-400 text-sm'>태그</h3>
                                 <div className='flex gap-2'>
                                     {!previewTags?.length ? (
                                         <p className='text-sm'>등록된 태그가 없습니다.</p>
@@ -172,10 +172,10 @@ export const PostPreviewDrawer: FC<Props> = ({
                             </div>
 
                             <div className='flex flex-col gap-2 flex-grow'>
-                                <h3 className='text-slate-600 text-sm'>요약</h3>
-
+                                <h3 className='text-gray-400 text-sm'>요약</h3>
                                 <Textarea
                                     placeholder='포스트 요약을 작성해주세요.'
+                                    variant={'secondary'}
                                     className='flex-grow'
                                     value={summary}
                                     onChange={(e) => setSummary(e.target.value)}
@@ -184,19 +184,18 @@ export const PostPreviewDrawer: FC<Props> = ({
                         </div>
                     </section>
 
-                    <DrawerFooter className='flex-row justify-between gap-2'>
+                    <DrawerFooter className='flex justify-between gap-4'>
                         <Button
                             type='submit'
-                            className='flex-1'
-                            onClick={handleSubmit}>
+                            size={'lg'}
+                            className='flex-grow'>
                             작성하기
                         </Button>
-                        <DrawerClose
-                            asChild
-                            className='flex-1'>
+                        <DrawerClose asChild>
                             <Button
-                                variant='outline'
-                                type='button'>
+                                variant='signature'
+                                size={'lg'}
+                                className='flex-grow'>
                                 취소
                             </Button>
                         </DrawerClose>

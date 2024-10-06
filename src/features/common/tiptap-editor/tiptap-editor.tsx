@@ -59,7 +59,7 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
             editorProps: {
                 attributes: {
                     class: cn(
-                        'outline-none p-3 border border-gray-100 bg-white rounded-b-xl flex-1 h-full overflow-y-auto w-[840px] prose prose-p:m-0 list-inside prose-headings:m-0 prose-hr:my-1 outline-none max-w-none [&_ol]:list-decimal [&_ul]:list-disc',
+                        'outline-none p-3 border border-gray-100 bg-white rounded-b-xl flex-1 h-full overflow-y-auto w-[840px] prose prose-p:m-0 list-inside prose-headings:m-0 prose-hr:my-1 outline-none max-w-none prose-strong:text-white [&_ol]:list-decimal [&_ul]:list-disc',
                         editorClassName
                     ),
                 },
@@ -81,6 +81,7 @@ export const TiptapEditor = forwardRef<TiptapRefType, TiptapEditorProps>(
                             class: 'marker:text-black',
                         },
                     },
+
                     listItem: false,
                     codeBlock: false,
                 }),
