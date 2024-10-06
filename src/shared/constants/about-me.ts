@@ -67,7 +67,10 @@ export const MY_HISTORY: MyHistory[] = [
         sub: '前 코딩허브, 인수 합병 (2024.06)',
         icon: 'id-card',
         date: '2024.03.11 ~',
-        description: ['IT 교육 사이트의 기능 및 컨텐츠를 자체 개발', '매일 아침 스크럼을 진행하는 애자일 방식으로 운영'],
+        description: [
+            'IT 교육 사이트의 기능 및 컨텐츠를 자체 개발',
+            '매일 아침 스크럼을 진행하는 애자일 방식으로 운영',
+        ],
     },
     {
         title: '명지전문대 졸업',

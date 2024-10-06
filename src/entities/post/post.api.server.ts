@@ -84,8 +84,6 @@ export const serverRequestGetPostNavigation = async ({ id, order }: { id: string
     const params = new URLSearchParams()
     params.append('order', order.toString())
 
-
-
     return generateRequest<undefined, ResponseGetPostNavigationType>({
         url: getUrlFromServer(`/api/post/${id}/navigation?${params.toString()}`),
     })

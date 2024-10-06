@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const GET = async (request: NextRequest) => {
     const params = request.nextUrl.searchParams
-    const order = params.get('order')
+    const order = params.get('order')?.toString()
 
     if (!order) {
         return NextResponse.json({ error: 'Invalid params' }, { status: 400 })

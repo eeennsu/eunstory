@@ -90,6 +90,8 @@ export const PostPreviewDrawer: FC<Props> = ({
             isPreviewOpen && setIsPreviewOpen(false)
             initialThumbnail()
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

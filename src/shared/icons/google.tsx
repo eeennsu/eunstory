@@ -22,5 +22,5 @@ export const Google = () => (
             fill='none'
             d='M1 1h22v22H1z'
         />
-    </svg> 
+    </svg>
 )

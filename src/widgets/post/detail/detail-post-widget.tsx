@@ -45,6 +45,7 @@ export const DetailPostWidget: FC<Props> = async ({ post }) => {
             </section>
 
             {post.thumbnail && (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                     src={post.thumbnail}
                     alt={post.title}
