@@ -94,7 +94,7 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
 
     return (
         <li className='flex w-full gap-3'>
-            <CornerDownRight className='mt-2 text-gray-400 h-5 w-5' />
+            <CornerDownRight className='mt-2.5 text-gray-400 size-6' />
             <section
                 className={cn(
                     'flex flex-grow flex-col gap-3 rounded-lg bg-gray-800 px-7',
@@ -122,7 +122,7 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                                 </div>
                             </Link>
                             {isOwner && (
-                                <div className='flex items-center gap-2'>
+                                <div className='flex items-center gap-3'>
                                     {editMode === 'view' ? (
                                         <Button
                                             size='icon-sm'
@@ -140,7 +140,7 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                                             </Button>
                                             <Button
                                                 size='icon-sm'
-                                                variant='default'
+                                                variant='tertiary'
                                                 onClick={handleEditReply}>
                                                 <FilePenLine className='size-5' />
                                             </Button>

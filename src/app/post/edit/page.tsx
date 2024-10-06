@@ -12,7 +12,7 @@ const EditPostListPage: FC = async () => {
     }
 
     return (
-        <main className='page-container max-w-[1200px] mx-auto'>
+        <main className='page-container max-w-[1200px] mx-auto pt-32'>
             {postListResponse.totalCount === 0 ? (
                 '게시글이 없습니다.'
             ) : (

@@ -218,7 +218,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                                 </Button>
                                                 <Button
                                                     size='icon-sm'
-                                                    variant='default'
+                                                    variant='tertiary'
                                                     onClick={handleEditComment}>
                                                     <FilePenLine className='size-5' />
                                                 </Button>
@@ -252,9 +252,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                                         size='sm'
                                         variant='signature'
                                         className='w-full gap-2'
-                                        onClick={() => {
-                                            setReplyMode('view')
-                                        }}>
+                                        onClick={() => setReplyMode('view')}>
                                         취소
                                     </Button>
                                 )}
@@ -298,7 +296,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
             )}
 
             {!!comment?.replies?.length && (
-                <ul className='flex flex-col gap-5 pl-4'>
+                <ul className='flex flex-col gap-6 pl-4'>
                     {comment?.replies?.map((reply) => (
                         <ReplyItem
                             key={reply.id}
