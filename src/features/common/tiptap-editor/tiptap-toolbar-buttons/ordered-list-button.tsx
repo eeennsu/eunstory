@@ -10,7 +10,7 @@ interface Props {
 export const OrderedListButton: FC<Props> = ({ editor }) => {
     return (
         <TiptapCommonButton
-            icon={<ListOrdered className='size-5' />}
+            icon={<ListOrdered className='size-[18px]' />}
             onClick={() => editor?.chain().focus().toggleOrderedList().run()}
             isActive={editor?.isActive('orderedList')}
         />

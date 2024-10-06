@@ -10,7 +10,7 @@ interface Props {
 export const CodeButton: FC<Props> = ({ editor }) => {
     return (
         <TiptapCommonButton
-            icon={<CodeXml className='size-5' />}
+            icon={<CodeXml className='size-[18px]' />}
             onClick={() => editor?.chain().focus().toggleCodeBlock().run()}
             isActive={editor?.isActive('code')}
         />

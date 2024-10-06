@@ -92,7 +92,7 @@ export const ImageButton: FC<Props> = ({ editor }) => {
         <TiptapCommonButton
             icon={
                 <ImageIcon
-                    className='size-5'
+                    className='size-[18px]'
                     // onClick={addImageWithLink}
                 />
             }

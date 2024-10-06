@@ -5,6 +5,7 @@ import { Button } from '@/lib/ui/button'
 import { requestEditPostListOrder } from '@/entities/post'
 import { useProgressBar } from '@/lib/hooks'
 import { DraggablePost } from '@/widgets/post/edit'
+import { useToast } from '@/lib/ui/use-toast'
 
 interface Props {
     totalCount: number
@@ -14,18 +15,30 @@ interface Props {
 }
 
 export const EditPostOrderHead: FC<Props> = ({ totalCount, mode, setMode, sortablePosts }) => {
-    const { executeWithProgress } = useProgressBar()
+    const { executeWithProgress, barRouter } = useProgressBar()
+    const { toast } = useToast()
 
     const handleUpdatePostOrder = async () => {
         executeWithProgress(async () => {
-            const updatedSequences = sortablePosts
-                .filter((post) => post.sequence !== post.order)
-                .map((post) => ({
-                    id: post.id,
-                    sequence: post.sequence,
-                }))
+            try {
+                const updatedSequences = sortablePosts
+                    .filter((post) => post.sequence !== post.order)
+                    .map((post) => ({
+                        id: post.id,
+                        sequence: post.sequence,
+                    }))
 
-            await requestEditPostListOrder({ updatedSequences })
+                await requestEditPostListOrder({ updatedSequences })
+            } catch (error) {
+                console.error(error)
+                toast({
+                    title: '글 순서 수정에 실패했습니다.',
+                    description: '다시 시도해주세요.',
+                    variant: 'destructive',
+                })
+            } finally {
+                barRouter.refresh()
+            }
         })
 
         setMode('view')

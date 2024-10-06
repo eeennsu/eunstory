@@ -10,7 +10,7 @@ interface Props {
 export const Heading3Button: FC<Props> = ({ editor }) => {
     return (
         <TiptapCommonButton
-            icon={<Heading3 className='size-5' />}
+            icon={<Heading3 className='size-[18px]' />}
             onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
             isActive={editor?.isActive('heading', { level: 3 })}
         />

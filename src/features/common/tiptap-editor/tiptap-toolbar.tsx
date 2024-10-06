@@ -82,12 +82,8 @@ export const TiptapToolbar: FC<TiptapToolbarProps> = ({
     if (!editor) return null
 
     return (
-        <section
-            className={cn(
-                'flex border gap-2 border-b-0 border-gray-100 py-1 px-3 rounded-t-xl bg-white',
-                toolbarClassName
-            )}>
+        <section className={cn('flex border gap-2 border-b-0 border-gray-100 p-2 rounded-t-xl', toolbarClassName)}>
             {renderButtons(editor, toolbarButtons, isAllToolbar)}
         </section>
-    )
+    )  
 }

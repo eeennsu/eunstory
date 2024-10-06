@@ -3,8 +3,8 @@
 import { callToast } from '@/lib/fetch'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Badge } from '@/lib/ui/badge'
+import { Input } from '@/lib/ui/input'
 import { toast } from '@/lib/ui/use-toast'
-import { Input } from '@/shared/common'
 import { forwardRef, InputHTMLAttributes, KeyboardEvent, useImperativeHandle, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 
@@ -94,12 +94,13 @@ export const TagInput = forwardRef<TagInputRef, Props>(({ className, placeholder
     }))
 
     return (
-        <section className='flex bg-white rounded-lg items-center'>
-            {tags.length > 0 && (
-                <ul className='flex gap-1 bg-white rounded-l-md py-1 pl-2 h-10'>
+        <section className='flex rounded-lg items-center bg-gray-800 focus-within:ring-2 focus-within:ring-slate-400'>
+            {!!tags.length && (
+                <ul className='flex gap-2 bg-gray-800 rounded-l-lg border-l border-y pl-3 py-3 border-slate-700 focus:border-slate-400'>
                     {tags.map((tag) => (
                         <Badge
                             key={uuid()}
+                            variant={'outline'}
                             className='cursor-pointer'
                             onClick={() => handleRemoveTag(tag)}>
                             {tag}
@@ -110,10 +111,11 @@ export const TagInput = forwardRef<TagInputRef, Props>(({ className, placeholder
 
             <Input
                 ref={inputRef}
+                variant={'secondary'}
                 type='text'
                 onKeyUp={handleRegisterTag}
                 placeholder={placeholder}
-                className={cn('flex-1', className)}
+                className={cn(!!tags.length && 'border-l-0 !rounded-l-none', className)}
                 {...props}
             />
         </section>

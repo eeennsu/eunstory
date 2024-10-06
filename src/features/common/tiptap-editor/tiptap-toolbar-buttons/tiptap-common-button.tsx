@@ -10,13 +10,13 @@ export const TiptapCommonButton: FC<PropsWithChildren<Props>> = ({ icon, classNa
     return (
         <button
             className={cn(
-                'size-9 rounded-lg p-[6px] flex items-center justify-center transition-all duration-300 ease-out hover:bg-slate-200/60',
+                'size-9 rounded-lg p-[6px] flex items-center justify-center transition-all duration-300 ease-out bg-slate-700/80 hover:bg-slate-600',
                 className,
                 isActive && 'bg-slate-200/hover:bg-slate-200/60'
             )}
             type='button'
             {...props}>
-            <div className='inline-flex items-center justify-center text-gray-800'>
+            <div className='inline-flex items-center justify-center text-gray-200'>
                 {children}
                 {icon}
             </div>

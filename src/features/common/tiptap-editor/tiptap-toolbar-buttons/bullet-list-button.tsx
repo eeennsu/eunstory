@@ -10,7 +10,7 @@ interface Props {
 export const BulletListButton: FC<Props> = ({ editor }) => {
     return (
         <TiptapCommonButton
-            icon={<List className='size-5' />}
+            icon={<List className='size-[18px]' />}
             onClick={() => editor?.chain().focus().toggleBulletList().run()}
             isActive={editor?.isActive('bulletList')}
         />

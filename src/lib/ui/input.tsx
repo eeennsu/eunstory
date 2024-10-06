@@ -13,6 +13,8 @@ const inputVariants = cva(
                 default:
                     'border border-input bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                 clear: 'border-0 bg-background focus:outline-none focus:ring-0 focus:border-0 shadow-none',
+                secondary:
+                    'bg-gray-800 placeholder:text-gray-500 text-gray-300 border border-slate-700 focus:border-slate-700 focus:outline-none',
             },
         },
         defaultVariants: {

@@ -7,7 +7,6 @@ import { useAdminSession, useAsync, useProgressBar } from '@/lib/hooks'
 import { useDebouncedValue } from '@/lib/hooks/use-debounced-value'
 import { mainPath } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
-import { Input } from '@/shared/common'
 import { Post } from '@prisma/client'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { KeyboardEvent, useEffect, useMemo, useRef, useState, type FC } from 'react'
@@ -18,6 +17,7 @@ import { Ellipsis } from 'lucide-react'
 import { callToast } from '@/lib/fetch'
 import { PostPreviewDrawer } from '@/features/post/create'
 import { usePostPreviewStore } from '@/entities/post'
+import { Input } from '@/lib/ui/input'
 
 interface Props {
     prevPost?: Post // prevPost 가 있으면 수정 폼, 없으면 생성 폼
@@ -293,9 +293,10 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
             )}
             <section
                 className={cn('w-full flex-1 flex-col items-center justify-center', isLoading ? 'hidden' : 'flex')}>
-                <form className='flex flex-col gap-4 flex-1 py-10 text-black'>
+                <form className='flex flex-col gap-5 flex-1 py-10 text-black'>
                     <Input
-                        className='w-full text-2xl h-16 font-semibold'
+                        variant={'secondary'}
+                        className='w-full px-4 text-2xl h-16 font-semibold placeholder:font-normal rounded-lg focus-within:ring-2 focus-within:ring-slate-400'
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder='제목을 입력해주세요.'
@@ -308,7 +309,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                                 className='relative'>
                                 <TagInput
                                     ref={tagInputRef}
-                                    className='w-full h-12'
+                                    className='w-full rounded-xl h-[48px] flex-1'
                                     placeholder='태그를 입력해주세요.'
                                     onKeyDown={preventEnterInInput}
                                 />
@@ -322,12 +323,15 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                     <TiptapEditor
                         ref={editorRef}
                         isAllToolbar
+                        toolbarClassName='border-slate-700'
                         placeholder='내용을 입력해주세요.'
+                        editorClassName='border-slate-700 bg-slate-800 text-slate-100'
+                        wrapperClassName='focus-within:ring-2 focus-within:ring-slate-400 rounded-xl'
                         onUpdate={({ editor }) => setContent(editor.getHTML())}
                         previousContent={prevPost?.content}
                     />
 
-                    <div className='flex gap-4 justify-end'>
+                    <div className='flex gap-5 justify-end'>
                         {prevPost ? (
                             <Button
                                 type='button'
@@ -340,7 +344,8 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                         ) : (
                             <Button
                                 type='button'
-                                variant='secondary'
+                                variant='signature'
+                                size={'lg'}
                                 onClick={() => {
                                     if (prevPost || !title.length || !content.length) return
 
@@ -353,7 +358,14 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                         <PostPreviewDrawer
                             key={editorRef.current?.getText()}
                             triggerCheck={isPreviewReady}
-                            trigger={<Button type='button'>{prevPost ? '수정하기' : '작성하기'}</Button>}
+                            trigger={
+                                <Button
+                                    type='button'
+                                    size={'lg'}
+                                    variant={'default'}>
+                                    {prevPost ? '수정하기' : '작성하기'}
+                                </Button>
+                            }
                             postTitle={title}
                             postSummary={summary}
                             handleSubmit={handleSubmit}
