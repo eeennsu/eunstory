@@ -1,5 +1,6 @@
 'use server'
 
+import { ResponseGetPostNavigationType } from '@/app/api/post/[id]/navigation/route'
 import { ResponseGetDetailPostType } from '@/app/api/post/[id]/route'
 import { ResponseGetActivePostCountType } from '@/app/api/post/active-count/route'
 import { ResponseGetPostIdListType } from '@/app/api/post/id-list/route'
@@ -76,5 +77,16 @@ export const serverRequestGetActivePostCount = async ({
 
     return generateRequest<undefined, ResponseGetActivePostCountType>({
         url: getUrlFromServer(`/api/post/active-count?${params.toString()}`),
+    })
+}
+
+export const serverRequestGetPostNavigation = async ({ id, order }: { id: string; order: number }) => {
+    const params = new URLSearchParams()
+    params.append('order', order.toString())
+
+
+
+    return generateRequest<undefined, ResponseGetPostNavigationType>({
+        url: getUrlFromServer(`/api/post/${id}/navigation?${params.toString()}`),
     })
 }

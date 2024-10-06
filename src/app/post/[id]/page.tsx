@@ -1,8 +1,7 @@
 import { ResponseGetPostIdListType } from '@/app/api/post/id-list/route'
 import { serverRequestGetDetailPost, serverRequestGetPostIdList } from '@/entities/post'
 import { Separator } from '@/lib/ui/separator'
-import { UserCommentWidget } from '@/widgets/post/detail'
-import { DetailPostWidget } from '@/widgets/post/detail/detail-post-widget'
+import { UserCommentWidget, DetailPostWidget, PostNavigationWidget } from '@/widgets/post/detail'
 import type { FC } from 'react'
 
 interface Props {
@@ -24,6 +23,10 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
         <main className='page-container gap-10 mx-auto max-w-screen-lg w-full pt-[120px] pb-6'>
             <DetailPostWidget post={post} />
             <Separator className='bg-slate-500' />
+            <PostNavigationWidget
+                id={id}
+                order={post.order as number}
+            />
             <UserCommentWidget postId={id} />
         </main>
     )

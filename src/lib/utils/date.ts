@@ -25,7 +25,7 @@ export const formatBeforeTime = (dateString: string | Date): string => {
     } else if (diffInWeeks < 4) {
         return `${diffInWeeks}주 전`
     } else if (diffInMonths < 12) {
-        return `${diffInMonths}달 전`
+        return `${diffInMonths + 1}달 전`
     } else {
         return `${diffInYears}년 전`
     }
