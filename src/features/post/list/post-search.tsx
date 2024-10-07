@@ -25,9 +25,9 @@ export const PostSearch: FC = () => {
         <div className='relative'>
             <Input
                 type='text'
-                placeholder='검색어를 입력하세요...'
+                placeholder='제목 또는 테그로 검색'
                 variant='clear'
-                className='flex-1 p-3 rounded-l-md bg-gray-800 pr-0 text-white placeholder:text-gray-500 h-10'
+                className='flex-1 p-3 rounded-l-md bg-gray-800 pr-0 text-white placeholder:text-gray-600 h-10'
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
