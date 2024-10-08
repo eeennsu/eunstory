@@ -10,7 +10,7 @@ interface Props {
 
 export const EditOrderPostItem: FC<Props> = ({ className, title, createdAt }) => {
     return (
-        <div className={cn('w-full bg-slate-700 p-4 rounded-lg shadow-sm', className)}>
+        <div className={cn('w-full bg-slate-700 p-4 shadow-sm', className)}>
             <h3 className='text-lg font-medium text-gray-100'>제목 : {title}</h3>
             <time className='text-gray-400 text-sm'>작성일 : {formatDateToFull(createdAt)}</time>
         </div>

@@ -1,5 +1,6 @@
 import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
+import { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const GET = async (request: NextRequest) => {
@@ -11,16 +12,34 @@ export const GET = async (request: NextRequest) => {
     }
 
     try {
-        const posts = await prisma.post.findMany({
+        const posts = (await prisma.post.findMany({
             where: {
-                title: {
-                    contains: keyword,
-                },
-                tags: {
-                    contains: keyword,
-                },
+                OR: [
+                    {
+                        title: {
+                            contains: keyword,
+                        },
+                    },
+                    {
+                        content: {
+                            contains: keyword,
+                        },
+                    },
+                    {
+                        tags: {
+                            contains: keyword,
+                        },
+                    },
+                ],
             },
-        })
+            select: {
+                id: true,
+                title: true,
+                tags: true,
+                thumbnail: true,
+                createdAt: true,
+            },
+        })) as SearchedPost[]
 
         if (!posts) {
             return NextResponse.json({ error: 'Posts not found' }, { status: 404 })
@@ -33,4 +52,5 @@ export const GET = async (request: NextRequest) => {
     }
 }
 
-export type ResponseGetSearchedPostList = NextResponseData<typeof GET>
+export type SearchedPost = Pick<Post, 'id' | 'title' | 'tags' | 'thumbnail' | 'createdAt'>
+export type ResponseGetSearchedPostListType = NextResponseData<typeof GET>

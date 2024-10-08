@@ -50,8 +50,9 @@ export const GET = async (request: NextRequest) => {
                 thumbnail: true,
                 summary: true,
                 createdAt: true,
+                order: true,
             },
-        })) as PostListItemType[]
+        })) as PostListItem[]
 
         if (!posts) {
             return NextResponse.json({ error: 'Posts not found' }, { status: 404 })
@@ -165,7 +166,10 @@ export const PATCH = async (request: NextRequest) => {
     }
 }
 
-export type PostListItemType = Pick<Post, 'id' | 'title' | 'content' | 'tags' | 'thumbnail' | 'summary' | 'createdAt'>
+export type PostListItem = Pick<
+    Post,
+    'id' | 'title' | 'content' | 'tags' | 'thumbnail' | 'summary' | 'createdAt' | 'order'
+>
 export type ResponseGetPostListType = NextResponseData<typeof GET>
 export type RequestCreatePostType = Pick<
     Post,

@@ -5,6 +5,7 @@ import { ResponseGetDetailPostType } from '@/app/api/post/[id]/route'
 import { ResponseGetActivePostCountType } from '@/app/api/post/active-count/route'
 import { ResponseGetPostIdListType } from '@/app/api/post/id-list/route'
 import { ResponseGetPostListType } from '@/app/api/post/route'
+import { ResponseGetSearchedPostListType } from '@/app/api/post/search/route'
 import { ResponseGetPostTagListType } from '@/app/api/post/tags/route'
 import { getUrlFromServer, generateRequest } from '@/lib/fetch'
 
@@ -93,7 +94,10 @@ export const serverRequestGetPostListBySearch = async (keyword: string) => {
     const searchParams = new URLSearchParams()
     searchParams.append('keyword', keyword)
 
-    return generateRequest<undefined, ResponseGetPostListType>({
+    return generateRequest<undefined, ResponseGetSearchedPostListType>({
         url: getUrlFromServer(`/api/post/search?${searchParams.toString()}`),
+        config: {
+            cache: 'no-store',
+        },
     })
 }

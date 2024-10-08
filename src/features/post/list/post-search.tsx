@@ -1,6 +1,5 @@
 'use client'
 
-import { requestGetPostListBySearch } from '@/entities/post'
 import { useProgressBar } from '@/lib/hooks'
 import { mainPath } from '@/lib/route'
 import { Input } from '@/lib/ui/input'
@@ -25,7 +24,7 @@ export const PostSearch: FC = () => {
         <div className='relative'>
             <Input
                 type='text'
-                placeholder='제목 또는 테그로 검색'
+                placeholder='제목, 내용 또는 태그로 검색'
                 variant='clear'
                 className='flex-1 p-3 rounded-l-md bg-gray-800 pr-0 text-white placeholder:text-gray-600 h-10'
                 value={searchKeyword}

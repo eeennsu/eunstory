@@ -41,11 +41,11 @@ export const Sortable = <T extends Data & CustomSortableItem>({
         <div
             ref={setNodeRef}
             className={cn(
-                'flex flex-col w-full h-fit gap-6 bg-white rounded-lg border border-gray-500',
+                'flex flex-col w-full h-fit gap-6 bg-white border border-gray-500',
                 isDragging ? 'opacity-60 z-100 cursor-grabbing' : 'cursor-grab'
             )}
             style={parentStyles}>
-            <div className={cn('w-full rounded-md overflow-hidden', wrapperClassName)}>
+            <div className={cn('w-full overflow-hidden', wrapperClassName)}>
                 {sequence}
 
                 <div
