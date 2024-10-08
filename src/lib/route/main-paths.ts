@@ -25,6 +25,10 @@ const post = {
     edit(id?: string) {
         return post.root().concat(id ? `/edit/${id}` : '/edit')
     },
+
+    search(keyword: string) {
+        return post.root().concat(`/search?keyword=${keyword}`)
+    },
 }
 
 export const mainPath = {

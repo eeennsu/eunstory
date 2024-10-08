@@ -67,7 +67,34 @@ export const PostPreviewDrawer: FC<Props> = ({
         const reader = new FileReader()
 
         reader.onload = () => {
-            setThumbnail((reader.result as string) || null)
+            const img = new Image()
+            img.src = reader.result as string
+
+            img.onload = () => {
+                const targetWidth = 300
+                const aspectRatio = img.height / img.width
+                const targetHeight = targetWidth * aspectRatio
+
+                const canvas = document.createElement('canvas')
+                canvas.width = targetWidth
+                canvas.height = targetHeight
+
+                const ctx = canvas.getContext('2d')
+
+                if (ctx) {
+                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight)
+                    const resizedBase64 = canvas.toDataURL('image/jpeg', 1)
+
+                    setThumbnail(resizedBase64)
+                } else {
+                    callToast({
+                        variant: 'warning',
+                        position: 'top',
+                        title: '썸네일 업로드에 실패했습니다.',
+                        description: '다시 시도해주세요.',
+                    })
+                }
+            }
         }
         reader.readAsDataURL(file)
     }
@@ -118,7 +145,7 @@ export const PostPreviewDrawer: FC<Props> = ({
                                         <Button
                                             type='button'
                                             variant='link'
-                                            className='size-9 p-0 absolute -right-1 -top-1 rounded-full bg-orange-600 text-gray-200 hover:brightness-150'
+                                            className='size-9 p-0 absolute -right-2.5 -top-2.5 rounded-sm border-2 border-gray-400 bg-gray-800 text-gray-200 hover:brightness-150'
                                             onClick={initialThumbnail}>
                                             <X className='size-4' />
                                         </Button>
@@ -186,7 +213,7 @@ export const PostPreviewDrawer: FC<Props> = ({
 
                     <DrawerFooter className='flex justify-between gap-4'>
                         <Button
-                            type='submit'
+                            onClick={handleSubmit}
                             size={'lg'}
                             className='flex-grow'>
                             작성하기

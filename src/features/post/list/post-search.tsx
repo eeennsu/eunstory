@@ -1,5 +1,6 @@
 'use client'
 
+import { requestGetPostListBySearch } from '@/entities/post'
 import { useProgressBar } from '@/lib/hooks'
 import { mainPath } from '@/lib/route'
 import { Input } from '@/lib/ui/input'
@@ -13,12 +14,11 @@ export const PostSearch: FC = () => {
     const { executeWithProgress } = useProgressBar()
 
     const handleSearch = () => {
-        if (!searchKeyword) return
+        if (!searchKeyword?.trim()) return
 
-        alert('공사 중..')
-        // executeWithProgress(() => {
-        //     router.push(mainPath.post.list(searchKeyword))
-        // })
+        executeWithProgress(async () => {
+            router.push(mainPath.post.search(searchKeyword))
+        })
     }
 
     return (

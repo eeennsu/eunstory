@@ -88,3 +88,12 @@ export const serverRequestGetPostNavigation = async ({ id, order }: { id: string
         url: getUrlFromServer(`/api/post/${id}/navigation?${params.toString()}`),
     })
 }
+
+export const serverRequestGetPostListBySearch = async (keyword: string) => {
+    const searchParams = new URLSearchParams()
+    searchParams.append('keyword', keyword)
+
+    return generateRequest<undefined, ResponseGetPostListType>({
+        url: getUrlFromServer(`/api/post/search?${searchParams.toString()}`),
+    })
+}

@@ -138,7 +138,7 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
             <DialogContent
                 className='sm:max-w-[425px] bg-gray-800 text-gray-100 border border-gray-700'
                 isCloseHidden
-                overlayClassName='bg-black/90'>
+                overlayClassName='bg-black/70'>
                 <DialogHeader>
                     <div className='flex justify-between items-center'>
                         <DialogTitle>Sign in</DialogTitle>

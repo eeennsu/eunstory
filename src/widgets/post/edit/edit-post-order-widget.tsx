@@ -7,15 +7,15 @@ import dynamic from 'next/dynamic'
 import { CustomSortableItem, Sortable } from '@/features/common/dnd/sortable'
 import { DragEndEvent } from '@dnd-kit/core'
 import { EditPostOrderHead } from '@/features/post/edit'
-import { formatDateToFull } from '@/lib/utils'
 import { EditOrderPostItem } from '@/shared/post/list'
+import { PostListItemType } from '@/app/api/post/route'
 
 interface Props {
-    allPosts: Post[]
+    allPosts: PostListItemType[]
     totalCount: number
 }
 
-export type DraggablePost = Post & CustomSortableItem
+export type DraggablePost = PostListItemType & CustomSortableItem
 
 /* 
     DnDProvider를 dynamic을 사용하여 import 하는 이유

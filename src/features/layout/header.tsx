@@ -22,12 +22,12 @@ export const Header: FC = () => {
     }
 
     return (
-        <header className='bg-slate-700/50 backdrop-blur-lg w-full py-2 flex items-center justify-center border-b fixed top-0 z-10 h-[90px]'>
+        <header className='bg-slate-700/50 backdrop-blur-lg w-full py-2 flex items-center justify-center border-b border-slate-500 fixed top-0 z-10 h-[90px]'>
             <section className='relative flex w-full max-w-5xl justify-between items-center'>
                 <Link
                     href={isAdminAuthorized ? adminPath.admin() : mainPath.home()}
-                    className='flex items-center gap-4'>
-                    <figure className='size-[72px] relative'>
+                    className='flex items-center gap-2 md:gap-4'>
+                    <figure className='size-[64px] relative'>
                         <Image
                             src={'/images/eunstory-logo.png'}
                             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
@@ -37,27 +37,25 @@ export const Header: FC = () => {
                             priority
                         />
                     </figure>
-
                     <WordFadeIn
                         words='Eunstory'
-                        className='md:text-2xl text-slate-200'
+                        className='text-xl md:text-2xl text-slate-200'
                         delay={0.5}
                     />
                 </Link>
-
-                <nav className='flex gap-9 py-4 justify-center items-center'>
+                <nav className='flex gap-6 py-4 justify-center items-center'>
                     {NAV_LINKS.map((link) => (
                         <Link
                             key={link.title}
                             href={link.url}
-                            className='transition-colors hover:text-foreground text-foreground/60'>
+                            className='text-sm md:text-base transition-colors hover:text-slate-300 text-slate-300/70'>
                             {link.title}
                         </Link>
                     ))}
                     {status === 'authenticated' && (
                         <Button
                             onClick={handleSignOut}
-                            className='bg-gray-900/60 text-gray-200 hover:bg-gray-900/90 gap-2.5 hover:text-white border border-gray-400/20'>
+                            className='bg-gray-900/60 text-gray-200 hover:bg-gray-900 gap-2.5 hover:text-white border border-gray-400/20'>
                             <LogOut size={16} />
                             Sign Out
                         </Button>
@@ -66,7 +64,7 @@ export const Header: FC = () => {
                         <LoginModal>
                             <Button
                                 variant='outline'
-                                className='bg-slate-600 hover:bg-slate-700 border-none '>
+                                className='bg-slate-600 hover:bg-slate-500 border-none'>
                                 Sign In
                             </Button>
                         </LoginModal>

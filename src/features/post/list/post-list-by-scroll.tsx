@@ -6,14 +6,15 @@ import { Post } from '@prisma/client'
 import { Ellipsis } from 'lucide-react'
 import { FC, useEffect, useState } from 'react'
 import { PostItem } from './post-item'
+import { PostListItemType } from '@/app/api/post/route'
 
 interface Props {
-    initialPosts: Post[]
+    initialPosts: PostListItemType[]
 }
 
 export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
     const [curPage, setCurPage] = useState<number>(1)
-    const [postList, setPostList] = useState<Post[]>([...initialPosts])
+    const [postList, setPostList] = useState<PostListItemType[]>([...initialPosts])
     const [hasMore, setHasMore] = useState<boolean>(true)
     const { isLoading, execute } = useLoading()
     const perPage = 5

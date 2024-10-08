@@ -42,7 +42,16 @@ export const GET = async (request: NextRequest) => {
                 order: 'desc',
             },
             ...(paginationParams && { ...paginationParams }),
-        })) as Post[]
+            select: {
+                id: true,
+                title: true,
+                content: true,
+                tags: true,
+                thumbnail: true,
+                summary: true,
+                createdAt: true,
+            },
+        })) as PostListItemType[]
 
         if (!posts) {
             return NextResponse.json({ error: 'Posts not found' }, { status: 404 })
@@ -64,8 +73,6 @@ export const POST = async (request: NextRequest) => {
     try {
         const body = (await request.json()) as RequestCreatePostType
         const { title, content, tags, authorId, order, thumbnail, summary } = body
-
-        console.log('썸네일 왔냐?', thumbnail)
 
         // TODO title debounce error
         if (!title || !content || !authorId) {
@@ -115,8 +122,6 @@ export const POST = async (request: NextRequest) => {
             return NextResponse.json({ error: 'Failed to create post' }, { status: 500 })
         }
 
-        console.log('썸네일 떳냐?', createdPost)
-
         if (!isTemporarySave) {
             revalidatePath(mainPath.post.list())
         }
@@ -160,6 +165,7 @@ export const PATCH = async (request: NextRequest) => {
     }
 }
 
+export type PostListItemType = Pick<Post, 'id' | 'title' | 'content' | 'tags' | 'thumbnail' | 'summary' | 'createdAt'>
 export type ResponseGetPostListType = NextResponseData<typeof GET>
 export type RequestCreatePostType = Pick<
     Post,

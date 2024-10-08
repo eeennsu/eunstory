@@ -83,3 +83,4 @@ export const requestEditPostListOrder = async ({ updatedSequences }: RequestEdit
         },
     })
 }
+
