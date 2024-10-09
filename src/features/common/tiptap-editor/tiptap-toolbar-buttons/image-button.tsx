@@ -2,9 +2,9 @@ import { type FC } from 'react'
 import type { Editor } from '@tiptap/react'
 import { TiptapCommonButton } from './tiptap-common-button'
 import { ImageIcon } from 'lucide-react'
-import { callToast } from '@/lib/fetch'
 import { useS3Upload } from 'next-s3-upload'
 import { useImageUploadStore } from '@/entities/post'
+import { useToast } from '@/lib/hooks'
 interface Props {
     editor: Editor | null
 }
@@ -15,11 +15,11 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 export const ImageButton: FC<Props> = ({ editor }) => {
     const setIsUploading = useImageUploadStore((state) => state.setIsUploading)
     const { uploadToS3 } = useS3Upload()
+    const { toast } = useToast()
 
-    const doNotUpload = () => {
-        callToast({
-            variant: 'warning',
-            position: 'top',
+    const failUpload = () => {
+        toast({
+            type: 'error',
             title: '이미지 파일을 불러올 수 없습니다.',
             description: '다시 시도해주세요.',
         })
@@ -29,9 +29,8 @@ export const ImageButton: FC<Props> = ({ editor }) => {
         if (!editor) return
 
         if (!files || files.length === 0) {
-            callToast({
-                variant: 'warning',
-                position: 'top',
+            toast({
+                type: 'error',
                 title: '이미지 파일을 찾을 수 없습니다.',
                 description: '다시 시도해주세요.',
             })
@@ -41,9 +40,8 @@ export const ImageButton: FC<Props> = ({ editor }) => {
         const file = files[0]
 
         if (!file.type.startsWith('image/')) {
-            callToast({
-                variant: 'warning',
-                position: 'top',
+            toast({
+                type: 'error',
                 title: '이미지 파일만 업로드 가능합니다.',
                 description: '다시 시도해주세요.',
             })
@@ -51,9 +49,8 @@ export const ImageButton: FC<Props> = ({ editor }) => {
         }
 
         if (file.size > MAX_FILE_SIZE) {
-            callToast({
-                variant: 'warning',
-                position: 'top',
+            toast({
+                type: 'error',
                 title: '이미지 파일의 크기가 너무 큽니다.',
                 description: '10MB 이하의 이미지 파일만 업로드 가능합니다.',
             })
@@ -69,11 +66,11 @@ export const ImageButton: FC<Props> = ({ editor }) => {
             if (url) {
                 editor.chain().focus().setImage({ src: url }).createParagraphNear().run()
             } else {
-                doNotUpload()
+                failUpload()
             }
         } catch (error) {
             console.error(error)
-            doNotUpload()
+            failUpload()
         } finally {
             setIsUploading(false)
         }

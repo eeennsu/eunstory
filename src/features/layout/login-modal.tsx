@@ -1,8 +1,8 @@
 'use client'
 
 import { useLoginModalStore } from '@/entities/user'
-import { callToast, ERROR_CODES } from '@/lib/fetch'
-import { useProgressBar } from '@/lib/hooks'
+import { ERROR_CODES } from '@/lib/fetch'
+import { useProgressBar, useToast } from '@/lib/hooks'
 import { Button } from '@/lib/ui/button'
 import {
     Dialog,
@@ -24,26 +24,26 @@ import { PropsWithChildren, useState, type FC } from 'react'
 export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
     const [isOpen, setIsOpen] = useLoginModalStore((state) => [state.isOpen, state.setIsOpen])
     const { executeWithProgress, barRouter } = useProgressBar()
+    const { status } = useSession()
+    const { toast } = useToast()
+
     const [id, setId] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const { status } = useSession()
 
     const isValidatedForm = () => {
-        if (!id.length) {
-            callToast({
+        if (!id.trim().length) {
+            toast({
+                type: 'warning',
                 title: 'ID를 입력해주세요.',
-                position: 'top',
-                variant: 'warning',
             })
 
             return false
         }
 
-        if (!password.length) {
-            callToast({
+        if (!password.trim().length) {
+            toast({
                 title: '비밀번호를 입력해주세요.',
-                position: 'top',
-                variant: 'warning',
+                type: 'warning',
             })
 
             return false
@@ -56,13 +56,6 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
         if (!isValidatedForm()) return
 
         executeWithProgress(async () => {
-            if (!id.length || !password.length) {
-                callToast({
-                    title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
-                    variant: 'warning',
-                })
-            }
-
             try {
                 const response = await signIn('credentials', {
                     id,
@@ -71,34 +64,34 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
                 })
 
                 if (response?.ok && response?.status === 200) {
-                    callToast({
+                    toast({
+                        type: 'success',
                         title: '로그인에 성공했습니다.',
-                        position: 'bottom',
                     })
 
                     barRouter.refresh()
                 } else {
                     switch (response?.error) {
                         case ERROR_CODES.MISSING_ID_OR_PASSWORD.code:
-                            callToast({
-                                type: 'MISSING_ID_OR_PASSWORD',
-                                variant: 'warning',
+                            toast({
+                                type: 'warning',
+                                title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
                             })
 
                             return
 
                         case ERROR_CODES.USER_NOT_FOUND.code:
-                            callToast({
-                                type: 'USER_NOT_FOUND',
-                                variant: 'warning',
+                            toast({
+                                type: 'warning',
+                                title: ERROR_CODES.USER_NOT_FOUND.title,
                             })
 
                             return
 
                         case ERROR_CODES.INCORRECT_ID_OR_PASSWORD.code:
-                            callToast({
-                                type: 'INCORRECT_ID_OR_PASSWORD',
-                                variant: 'warning',
+                            toast({
+                                type: 'warning',
+                                title: ERROR_CODES.INCORRECT_ID_OR_PASSWORD.title,
                             })
 
                             return
@@ -118,9 +111,9 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
                 })
 
                 if (response?.ok && response?.status === 200) {
-                    callToast({
+                    toast({
+                        type: 'success',
                         title: '로그인에 성공했습니다.',
-                        position: 'bottom',
                     })
                 }
             } catch (error) {

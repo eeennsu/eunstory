@@ -5,7 +5,7 @@ import {
     requestDeletePostComment,
     requestEditPostComment,
 } from '@/entities/post-comment/post-comment.api.client'
-import { useProgressBar } from '@/lib/hooks'
+import { useProgressBar, useToast } from '@/lib/hooks'
 import { Avatar, AvatarImage } from '@/lib/ui/avatar'
 import { Button } from '@/lib/ui/button'
 import { Textarea } from '@/lib/ui/textarea'
@@ -13,12 +13,12 @@ import { FilePenLine, LoaderCircle, Pencil, Trash } from 'lucide-react'
 import { useState, type FC } from 'react'
 import { ReplyItem } from './reply-item'
 import { defaultUserIcon } from '@/shared/constants'
-import { callToast } from '@/lib/fetch'
 import { formatBeforeTime } from '@/lib/utils'
 import { PostComment } from '@/entities/post-comment/post-comment.types'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { triggerUserLoginModal } from '@/entities/user'
 import Link from 'next/link'
+import { ERROR_CODES } from '@/lib/fetch'
 
 interface Props {
     comment: PostComment
@@ -27,6 +27,7 @@ interface Props {
 
 export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     const { executeWithProgress, barRouter } = useProgressBar()
+    const { toast } = useToast()
 
     const [editMode, setEditMode] = useState<'view' | 'edit'>('view')
     const [replyMode, setReplyMode] = useState<'view' | 'reply'>('view')
@@ -41,8 +42,9 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
 
     const isValidateCheck = () => {
         if (!currentUserId) {
-            callToast({
-                type: 'NEED_AUTHENTICATE',
+            toast({
+                type: 'warning',
+                title: ERROR_CODES.NEED_AUTHENTICATE.title,
             })
 
             return false
@@ -63,11 +65,16 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                         id: comment.id,
                         userId: currentUserId!,
                     })
+
+                    toast({
+                        type: 'success',
+                        title: '댓글이 수정되었습니다.',
+                    })
                 } catch (error) {
-                    callToast({
+                    toast({
+                        type: 'error',
                         title: '댓글 수정에 실패하였습니다.',
                         description: '관리자에게 문의해주세요.',
-                        variant: 'destructive',
                     })
                     console.error(error)
                 } finally {
@@ -92,11 +99,16 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                     id: comment.id,
                     userId: currentUserId!,
                 })
+
+                toast({
+                    type: 'success',
+                    title: '댓글이 삭제되었습니다.',
+                })
             } catch (error) {
-                callToast({
+                toast({
+                    type: 'error',
                     title: '댓글 삭제에 실패하였습니다.',
                     description: '관리자에게 문의해주세요.',
-                    variant: 'destructive',
                 })
                 console.error(error)
             } finally {
@@ -109,11 +121,10 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     const handleCreateReply = () => {
         if (!isValidateCheck()) return
 
-        if (replyContent.trim() === '') {
-            callToast({
-                title: '답글을 입력해주세요.',
-                variant: 'warning',
-                position: 'bottom',
+        if (replyContent.trim().length < 5) {
+            toast({
+                type: 'warning',
+                title: '답글은 5자 이상 작성해주세요.',
             })
 
             return
@@ -130,10 +141,10 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
                     },
                 })
             } catch (error) {
-                callToast({
+                toast({
+                    type: 'error',
                     title: '답글 작성에 실패하였습니다.',
                     description: '관리자에게 문의해주세요.',
-                    variant: 'destructive',
                 })
                 console.error(error)
             } finally {
@@ -147,10 +158,9 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
 
     const handleReplyTextareaOpen = () => {
         if (!currentUserId) {
-            callToast({
-                type: 'NEED_AUTHENTICATE',
-                position: 'bottom',
-                variant: 'warning',
+            toast({
+                title: ERROR_CODES.NEED_AUTHENTICATE.title,
+                type: 'warning',
             })
 
             triggerUserLoginModal(true)

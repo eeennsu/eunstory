@@ -17,7 +17,7 @@ import {
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { getProcessedText } from '@/lib/utils'
 import { useImageUploadStore } from '@/entities/post'
-import { UploadingImage } from '@/shared/common'
+import { UploadingImage } from '@/shared/post'
 
 interface TiptapEditorProps {
     placeholder?: string

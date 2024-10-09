@@ -1,1 +1,1 @@
-export * from './uploading-image'
+export * from './custom-tooltip'

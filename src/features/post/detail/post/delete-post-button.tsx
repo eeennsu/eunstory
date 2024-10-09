@@ -1,8 +1,7 @@
 'use client'
 
 import { requestDeletePost } from '@/entities/post'
-import { callToast } from '@/lib/fetch'
-import { useProgressBar } from '@/lib/hooks'
+import { useProgressBar, useToast } from '@/lib/hooks'
 import { mainPath } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import { Trash2 } from 'lucide-react'
@@ -14,6 +13,7 @@ interface Props {
 
 export const DeletePostButton: FC<Props> = ({ id }) => {
     const { executeWithProgress, barRouter } = useProgressBar()
+    const { toast } = useToast()
 
     const handleDelete = async () => {
         if (!confirm('정말 삭제하시겠습니까?')) {
@@ -24,10 +24,10 @@ export const DeletePostButton: FC<Props> = ({ id }) => {
             try {
                 await requestDeletePost({ postId: id, isPublished: true })
             } catch (error) {
-                callToast({
+                toast({
+                    type: 'error',
                     title: '게시물 삭제에 실패했습니다',
                     description: '다시 시도해주세요.',
-                    variant: 'destructive',
                 })
                 console.error(error)
             } finally {

@@ -2,15 +2,15 @@
 
 import { requestDeletePostComment, requestEditPostComment } from '@/entities/post-comment/post-comment.api.client'
 import { PostComment } from '@/entities/post-comment/post-comment.types'
-import { callToast } from '@/lib/fetch'
-import { useProgressBar } from '@/lib/hooks'
+import { ERROR_CODES } from '@/lib/fetch'
+import { useProgressBar, useToast } from '@/lib/hooks'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Avatar, AvatarImage } from '@/lib/ui/avatar'
 import { Button } from '@/lib/ui/button'
 import { Textarea } from '@/lib/ui/textarea'
 import { formatBeforeTime } from '@/lib/utils'
 import { defaultUserIcon } from '@/shared/constants'
-import { CornerDownRight, FilePenLine, LoaderCircle, Pencil, Trash, Undo2 } from 'lucide-react'
+import { CornerDownRight, FilePenLine, LoaderCircle, Pencil, Trash } from 'lucide-react'
 import Link from 'next/link'
 import { useState, type FC } from 'react'
 
@@ -22,6 +22,7 @@ interface Props {
 
 export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
     const { executeWithProgress, barRouter } = useProgressBar()
+    const { toast } = useToast()
 
     const [editedContent, setEditedContent] = useState<string>(reply.content)
     const [editMode, setEditMode] = useState<'view' | 'edit'>('view')
@@ -29,9 +30,9 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
 
     const isValidateCheck = () => {
         if (!currentUserId) {
-            callToast({
-                type: 'NEED_AUTHENTICATE',
-                variant: 'destructive',
+            toast({
+                type: 'warning',
+                title: ERROR_CODES.NEED_AUTHENTICATE.title,
             })
             return false
         }
@@ -50,11 +51,16 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                     postId: reply?.postId,
                     userId: currentUserId!,
                 })
+
+                toast({
+                    type: 'success',
+                    title: '답글이 수정되었습니다.',
+                })
             } catch (error) {
-                callToast({
+                toast({
+                    type: 'error',
                     title: '답글 수정에 실패하였습니다.',
                     description: '관리자에게 문의해주세요.',
-                    variant: 'destructive',
                 })
                 console.error(error)
             } finally {
@@ -76,11 +82,16 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                     postId: reply?.postId,
                     userId: currentUserId!,
                 })
+
+                toast({
+                    type: 'success',
+                    title: '답글이 삭제되었습니다.',
+                })
             } catch (error) {
-                callToast({
+                toast({
+                    type: 'error',
                     title: '답글 수정에 실패하였습니다.',
                     description: '관리자에게 문의해주세요.',
-                    variant: 'destructive',
                 })
                 console.error(error)
             } finally {

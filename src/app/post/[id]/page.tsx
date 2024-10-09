@@ -22,12 +22,14 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
     return (
         <main className='page-container gap-10 mx-auto max-w-screen-lg w-full pt-[120px] pb-6'>
             <DetailPostWidget post={post} />
-            <Separator className='bg-slate-500' />
-            <PostNavigationWidget
-                id={id}
-                order={post.order as number}
-            />
-            <UserCommentWidget postId={id} />
+
+            <section className='flex flex-col gap-5'>
+                <PostNavigationWidget
+                    id={id}
+                    order={post.order as number}
+                />
+                <UserCommentWidget postId={id} />
+            </section>
         </main>
     )
 }

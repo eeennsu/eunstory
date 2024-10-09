@@ -15,9 +15,9 @@ import { Button } from '@/lib/ui/button'
 import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import { Input } from '@/lib/ui/input'
 import { Textarea } from '@/lib/ui/textarea'
-import { callToast } from '@/lib/fetch'
 import { usePostPreviewStore } from '@/entities/post'
 import { Badge } from '@/lib/ui/badge'
+import { useToast } from '@/lib/hooks'
 
 interface Props {
     triggerCheck: () => boolean
@@ -47,6 +47,7 @@ export const PostPreviewDrawer: FC<Props> = ({
 
     const fileRef = useRef<HTMLInputElement>(null)
     const [summary, setSummary] = useState<string | undefined>(postSummary)
+    const { toast } = useToast()
 
     const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || !e.target.files.length) return
@@ -55,9 +56,8 @@ export const PostPreviewDrawer: FC<Props> = ({
         if (!file) return
 
         if (!file.type.startsWith('image/')) {
-            callToast({
-                variant: 'warning',
-                position: 'top',
+            toast({
+                type: 'error',
                 title: '이미지 파일만 업로드 가능합니다.',
                 description: '다시 시도해주세요.',
             })
@@ -87,9 +87,8 @@ export const PostPreviewDrawer: FC<Props> = ({
 
                     setThumbnail(resizedBase64)
                 } else {
-                    callToast({
-                        variant: 'warning',
-                        position: 'top',
+                    toast({
+                        type: 'error',
                         title: '썸네일 업로드에 실패했습니다.',
                         description: '다시 시도해주세요.',
                     })

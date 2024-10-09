@@ -67,33 +67,3 @@ export const ERROR_CODES = {
         description: '관리자에게 문의하거나 다시 시도해주세요.',
     },
 } as const
-
-export const callToast = ({
-    title,
-    description,
-    type,
-    position = 'top',
-    variant = 'default',
-}: {
-    title?: string
-    description?: string
-    type?: keyof typeof ERROR_CODES
-    position?: ToastPosition
-    variant?: ToastVariant
-}) => {
-    let defaultTitle
-    let defaultDescription
-
-    if (type) {
-        const errorCode = ERROR_CODES[type]
-        defaultTitle = errorCode?.title
-        defaultDescription = errorCode?.description
-    }
-
-    toast({
-        title: title || defaultTitle,
-        description: description || defaultDescription,
-        variant,
-        position,
-    })
-}

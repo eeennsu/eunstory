@@ -3,7 +3,8 @@
 import { useSession, UseSessionOptions } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { mainPath } from '@/lib/route'
-import { callToast, ERROR_CODES } from '@/lib/fetch'
+import { ERROR_CODES } from '@/lib/fetch'
+import { useToast } from './use-toast'
 
 type Params = {
     isProtectedRoute?: boolean
@@ -12,6 +13,8 @@ type Params = {
 
 export const useAdminSession = ({ isProtectedRoute = false, options = { required: true } }: Params = {}) => {
     const router = useRouter()
+
+    const { toast } = useToast()
     const { data: session, status } = useSession({
         ...options,
         onUnauthenticated: () => {
@@ -19,9 +22,9 @@ export const useAdminSession = ({ isProtectedRoute = false, options = { required
                 router.replace(mainPath.home())
                 setTimeout(
                     () =>
-                        callToast({
-                            type: 'FORBIDDEN',
-                            variant: 'destructive',
+                        toast({
+                            type: 'warning',
+                            title: ERROR_CODES.FORBIDDEN.title,
                         }),
                     500
                 )

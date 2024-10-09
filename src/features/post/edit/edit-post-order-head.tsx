@@ -3,9 +3,8 @@
 import { type FC } from 'react'
 import { Button } from '@/lib/ui/button'
 import { requestEditPostListOrder } from '@/entities/post'
-import { useProgressBar } from '@/lib/hooks'
+import { useProgressBar, useToast } from '@/lib/hooks'
 import { DraggablePost } from '@/widgets/post/edit'
-import { useToast } from '@/lib/ui/use-toast'
 
 interface Props {
     totalCount: number
@@ -29,12 +28,17 @@ export const EditPostOrderHead: FC<Props> = ({ totalCount, mode, setMode, sortab
                     }))
 
                 await requestEditPostListOrder({ updatedSequences })
+
+                toast({
+                    type: 'success',
+                    title: '글 순서가 수정되었습니다.',
+                })
             } catch (error) {
                 console.error(error)
                 toast({
+                    type: 'error',
                     title: '글 순서 수정에 실패했습니다.',
                     description: '다시 시도해주세요.',
-                    variant: 'destructive',
                 })
             } finally {
                 barRouter.refresh()

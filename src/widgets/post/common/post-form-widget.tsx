@@ -1,23 +1,21 @@
 'use client'
 
 import { requestCreatePost, requestEditPost, requestGetDetailPost } from '@/entities/post'
-import { TagInput, TagInputRef } from '@/features/common/tag-input'
+import { TagInput, TagInputRef } from '@/features/post/create'
 import { TiptapEditor, TiptapRefType } from '@/features/common/tiptap-editor'
-import { useAdminSession, useAsync, useProgressBar } from '@/lib/hooks'
+import { useAdminSession, useAsync, useProgressBar, useToast } from '@/lib/hooks'
 import { useDebouncedValue } from '@/lib/hooks/use-debounced-value'
 import { mainPath } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import { Post } from '@prisma/client'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { KeyboardEvent, useEffect, useMemo, useRef, useState, type FC } from 'react'
-import { Tooltip, TooltipContent, TooltipProvider } from '@/lib/ui/tooltip'
-import { TooltipTrigger } from '@radix-ui/react-tooltip'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Ellipsis } from 'lucide-react'
-import { callToast } from '@/lib/fetch'
 import { PostPreviewDrawer } from '@/features/post/create'
 import { usePostPreviewStore } from '@/entities/post'
 import { Input } from '@/lib/ui/input'
+import { ERROR_CODES } from '@/lib/fetch'
 
 interface Props {
     prevPost?: Post // prevPost 가 있으면 수정 폼, 없으면 생성 폼
@@ -31,6 +29,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
 
     const { adminId: authorId, isAdminAuthorized } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
+    const { toast } = useToast()
 
     const [thumbnail, isPreviewOpen, setIsPreviewOpen] = usePostPreviewStore((state) => [
         state.thumbnail,
@@ -51,29 +50,31 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         [editorRef.current?.getText()]
     )
 
-    const debouncedPost = useDebouncedValue({ title, content }, 7000)
+    const debouncedPost = useDebouncedValue({ title, content }, 8000)
     const [previewTags, setPreviewTags] = useState<string[]>([])
 
     const isValidatedForm = () => {
         if (!authorId || !isAdminAuthorized) {
-            callToast({
-                type: 'FORBIDDEN',
-                variant: 'destructive',
+            toast({
+                type: 'error',
+                title: ERROR_CODES.FORBIDDEN.title,
             })
 
             return false
         }
 
-        if (!title.length && editorRef.current?.isEmpty()) {
-            callToast({
+        if (!title.trim().length && editorRef.current?.isEmpty()) {
+            toast({
+                type: 'warning',
                 title: '제목과 내용을 입력해주세요.',
             })
 
             return false
         }
 
-        if (!title.length) {
-            callToast({
+        if (!title.trim().length) {
+            toast({
+                type: 'warning',
                 title: '제목을 입력해주세요.',
             })
 
@@ -81,7 +82,8 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         }
 
         if (editorRef.current?.isEmpty()) {
-            callToast({
+            toast({
+                type: 'warning',
                 title: '내용을 입력해주세요.',
             })
 
@@ -142,19 +144,22 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                 }
 
                 if (response) {
-                    callToast({ title: `게시물이 ${toastKeyword}되었습니다` })
+                    toast({
+                        type: 'success',
+                        title: `게시물 ${toastKeyword}에 성공하였습니다.`,
+                    })
                 } else {
-                    callToast({
+                    toast({
+                        type: 'error',
                         title: `게시물 ${toastKeyword}에 실패하였습니다.`,
                         description: '다시 시도해주세요.',
-                        variant: 'destructive',
                     })
                 }
             } catch (error) {
-                callToast({
+                toast({
+                    type: 'error',
                     title: `게시물 ${toastKeyword}에 실패하였습니다.`,
                     description: '다시 시도해주세요.',
-                    variant: 'destructive',
                 })
                 console.error(error)
             } finally {
@@ -214,7 +219,8 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         }
 
         if (isSaved) {
-            callToast({
+            toast({
+                type: 'info',
                 title: '포스트가 임시 저장되었습니다.',
             })
         }
@@ -230,8 +236,9 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     }
 
     const isPreviewReady = () => {
-        if (!title.length || editorRef.current?.isEmpty()) {
-            callToast({
+        if (!title.trim().length || editorRef.current?.isEmpty()) {
+            toast({
+                type: 'warning',
                 title: '제목과 내용을 모두 입력해주세요.',
             })
             return false
@@ -296,29 +303,18 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                 <form className='flex flex-col gap-5 flex-1 py-10 text-black'>
                     <Input
                         variant={'secondary'}
-                        className='w-full px-4 text-2xl h-16 font-semibold placeholder:font-normal rounded-lg focus-within:ring-2 focus-within:ring-slate-400'
+                        className='w-full px-4 text-2xl h-16 font-semibold placeholder:font-normal rounded-lg '
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder='제목을 입력해주세요.'
                         onKeyDown={preventEnterInInput}
                     />
-                    <TooltipProvider delayDuration={100}>
-                        <Tooltip defaultOpen>
-                            <TooltipTrigger
-                                type='button'
-                                className='relative'>
-                                <TagInput
-                                    ref={tagInputRef}
-                                    className='w-full rounded-lg h-[48px] flex-1'
-                                    placeholder='태그를 입력해주세요.'
-                                    onKeyDown={preventEnterInInput}
-                                />
-                            </TooltipTrigger>
-                            <TooltipContent className='absolute left-[84px] top-6 w-[290px]'>
-                                쉼표 혹은 엔터를 입력하면 태그가 등록됩니다. <br /> 클릭하면 삭제됩니다.
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <TagInput
+                        ref={tagInputRef}
+                        className='w-full rounded-lg h-[48px] flex-1'
+                        placeholder='태그를 입력해주세요.'
+                        onKeyDown={preventEnterInInput}
+                    />
 
                     <TiptapEditor
                         ref={editorRef}
@@ -326,7 +322,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                         toolbarClassName='border-slate-700'
                         placeholder='내용을 입력해주세요.'
                         editorClassName='border-slate-700 bg-slate-800 text-slate-100'
-                        wrapperClassName='focus-within:ring-2 focus-within:ring-slate-400 rounded-xl'
+                        wrapperClassName=' rounded-xl'
                         onUpdate={({ editor }) => setContent(editor.getHTML())}
                         previousContent={prevPost?.content}
                     />
