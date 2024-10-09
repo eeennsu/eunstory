@@ -3,7 +3,9 @@ import { NextResponseData } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
 import { mainPath } from '@/lib/route'
 import { Comment } from '@prisma/client'
+import { User } from 'next-auth'
 import { revalidatePath, revalidateTag } from 'next/cache'
+import { Author } from 'next/dist/lib/metadata/types/metadata-types'
 import { NextRequest, NextResponse } from 'next/server'
 
 type Params = {

@@ -5,13 +5,10 @@ import { PostComment } from '@/entities/post-comment/post-comment.types'
 import { ERROR_CODES } from '@/lib/fetch'
 import { useProgressBar, useToast } from '@/lib/hooks'
 import { cn } from '@/lib/shadcn/shadcn-utils'
-import { Avatar, AvatarImage } from '@/lib/ui/avatar'
 import { Button } from '@/lib/ui/button'
 import { Textarea } from '@/lib/ui/textarea'
-import { formatBeforeTime } from '@/lib/utils'
-import { defaultUserIcon } from '@/shared/constants'
+import { UserInfo } from '@/shared/post/detail'
 import { CornerDownRight, FilePenLine, LoaderCircle, Pencil, Trash } from 'lucide-react'
-import Link from 'next/link'
 import { useState, type FC } from 'react'
 
 interface Props {
@@ -108,30 +105,18 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
             <CornerDownRight className='mt-2.5 text-gray-400 size-6' />
             <section
                 className={cn(
-                    'flex flex-grow flex-col gap-3 rounded-lg bg-gray-800 px-7',
-                    reply.isActive ? 'py-6' : 'py-3'
+                    'flex flex-grow flex-col gap-3  border-b border-b-gray-600  px-2 mx-5',
+                    reply.isActive ? 'py-8' : 'py-6'
                 )}>
                 {reply?.isActive ? (
                     <>
                         <section className='flex w-full justify-between'>
-                            <Link
-                                href={reply.author.url || '#'}
-                                target='_blank'
-                                className='inline-flex gap-3 items-center cursor-pointer hover:bg-gray-500 p-1 rounded-md'>
-                                <Avatar>
-                                    <AvatarImage
-                                        src={reply?.author?.image || defaultUserIcon}
-                                        alt={reply?.author?.name}
-                                    />
-                                </Avatar>
-                                <div className='flex flex-col'>
-                                    <span className='text-gray-200 font-medium'>{reply?.author?.name}</span>{' '}
-                                    <div className='flex gap-2 text-gray-400 text-sm'>
-                                        <time>{formatBeforeTime(reply?.createdAt)}</time>
-                                        {reply?.updatedAt && <span>(수정됨)</span>}
-                                    </div>
-                                </div>
-                            </Link>
+                            <UserInfo
+                                author={reply?.author}
+                                createdAt={reply?.createdAt}
+                                updatedAt={reply?.updatedAt}
+                            />
+
                             {isOwner && (
                                 <div className='flex items-center gap-3'>
                                     {editMode === 'view' ? (
@@ -175,7 +160,7 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                             <p className='text-gray-300 font-medium break-words'>{reply?.content}</p>
                         ) : (
                             <Textarea
-                                className='w-full mt-3 bg-gray-900/45'
+                                className='w-full mt-3 bg-gray-800'
                                 variant={'secondary'}
                                 value={editedContent}
                                 onChange={(e) => setEditedContent(e.target.value)}
@@ -183,7 +168,7 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
                         )}
                     </>
                 ) : (
-                    <p className='text-gray-400'>삭제된 답글입니다.</p>
+                    <p className='text-gray-500'>삭제된 답글입니다.</p>
                 )}
             </section>
         </li>

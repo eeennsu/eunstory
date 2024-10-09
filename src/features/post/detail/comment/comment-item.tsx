@@ -6,19 +6,16 @@ import {
     requestEditPostComment,
 } from '@/entities/post-comment/post-comment.api.client'
 import { useProgressBar, useToast } from '@/lib/hooks'
-import { Avatar, AvatarImage } from '@/lib/ui/avatar'
 import { Button } from '@/lib/ui/button'
 import { Textarea } from '@/lib/ui/textarea'
 import { FilePenLine, LoaderCircle, Pencil, Trash } from 'lucide-react'
 import { useState, type FC } from 'react'
 import { ReplyItem } from './reply-item'
-import { defaultUserIcon } from '@/shared/constants'
-import { formatBeforeTime } from '@/lib/utils'
 import { PostComment } from '@/entities/post-comment/post-comment.types'
 import { cn } from '@/lib/shadcn/shadcn-utils'
 import { triggerUserLoginModal } from '@/entities/user'
-import Link from 'next/link'
 import { ERROR_CODES } from '@/lib/fetch'
+import { UserInfo } from '@/shared/post/detail'
 
 interface Props {
     comment: PostComment
@@ -173,29 +170,16 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
 
     return (
         <li className={'flex flex-col gap-4 px-5'}>
-            <section className={cn('border-b border-gray-600', comment.isActive ? 'py-8' : 'py-6')}>
+            <section className={cn('border-b border-gray-600 px-3', comment.isActive ? 'py-8' : 'py-6')}>
                 {comment.isActive ? (
                     <div className='flex flex-col gap-3'>
                         <div className='flex w-full justify-between gap-4'>
                             <section className='flex flex-col gap-4 flex-grow max-w-[788px] break-words'>
-                                <Link
-                                    href={comment.author.url || '#'}
-                                    target='_blank'
-                                    className='inline-flex gap-3 w-fit items-center cursor-pointer hover:bg-slate-50 p-1 rounded-lg'>
-                                    <Avatar>
-                                        <AvatarImage
-                                            src={comment?.author?.image || defaultUserIcon}
-                                            alt={comment?.author?.name}
-                                        />
-                                    </Avatar>
-                                    <div className='flex flex-col gap-1'>
-                                        <span>{comment?.author?.name}</span>
-                                        <div className='flex gap-2'>
-                                            <time>{formatBeforeTime(comment?.createdAt)}</time>
-                                            {comment?.updatedAt && <span>(수정됨)</span>}
-                                        </div>
-                                    </div>
-                                </Link>
+                                <UserInfo
+                                    author={comment?.author}
+                                    createdAt={comment?.createdAt}
+                                    updatedAt={comment?.updatedAt}
+                                />
                                 {comment.isActive && editMode === 'view' && (
                                     <p className='break-words w-full'>{comment.content}</p>
                                 )}

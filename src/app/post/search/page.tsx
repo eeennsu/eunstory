@@ -1,5 +1,6 @@
 import { serverRequestGetPostListBySearch } from '@/entities/post'
 import { SearchedPostItem } from '@/features/post/search'
+import { EmptyKeyword, SearchResult } from '@/shared/post/search'
 import { FC } from 'react'
 
 interface Props {
@@ -12,11 +13,7 @@ const PostSearchPage: FC<Props> = async ({ searchParams }) => {
     const keyword = searchParams?.keyword
 
     if (!keyword) {
-        return (
-            <main className='page-container pt-28 max-w-[1200px] mx-auto text-center'>
-                <p className='text-xl text-gray-500'>검색어를 입력해주세요.</p>
-            </main>
-        )
+        return <EmptyKeyword />
     }
 
     const responseSearchedResult = await serverRequestGetPostListBySearch(keyword)
@@ -26,10 +23,8 @@ const PostSearchPage: FC<Props> = async ({ searchParams }) => {
     }
 
     return (
-        <main className='page-container pt-32 pb-10 max-w-[1200px] mx-auto'>
-            <h1 className='text-3xl font-bold text-gray-200 mb-8'>
-                <span className='text-indigo-400'>{keyword}</span> 검색 결과
-            </h1>
+        <main className='page-container pt-32 pb-10 max-w-[1200px] mx-auto gap-5'>
+            <SearchResult keyword={keyword} />
             <section className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
                 {responseSearchedResult.posts.length > 0 ? (
                     responseSearchedResult.posts.map((post) => (

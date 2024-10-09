@@ -22,21 +22,22 @@ export const SearchedPostItem: FC<Props> = ({ post }) => {
                     className='object-cover group-hover:scale-105 group-hover:brightness-105 transition-transform duration-300'
                 />
             </figure>
-            <section className='flex flex-col gap-2 w-full'>
+            <section className='flex flex-col gap-4 w-full'>
                 <h2 className='text-lg font-medium text-white truncate w-full group-hover:text-indigo-300'>
                     {post.title}
                 </h2>
-                <div className='flex flex-wrap gap-2'>
-                    {post.tags?.split(',').map((tag) => (
-                        <Badge
-                            key={tag}
-                            variant={'tag'}
-                            className='bg-indigo-600 text-white px-2 py-1 rounded-full'>
-                            {tag}
-                        </Badge>
-                    ))}
+                <div className='flex flex-col gap-1.5'>
+                    <div className='flex flex-wrap gap-2'>
+                        {post.tags?.split(',').map((tag) => (
+                            <Badge
+                                key={tag}
+                                variant={'tag'}>
+                                {tag}
+                            </Badge>
+                        ))}
+                    </div>
+                    <time className='text-xs text-gray-400'>{formatBeforeTime(post.createdAt)}</time>
                 </div>
-                <time className='text-xs text-gray-400'>{formatBeforeTime(post.createdAt)}</time>
             </section>
         </Link>
     )
