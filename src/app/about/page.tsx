@@ -1,5 +1,5 @@
-import { MySkillsWidget, MyCareerWidget, MyCertificationsWidget } from '@/widgets/about'
 import type { FC } from 'react'
+import { MySkillsWidget, MyCareerWidget, MyCertificationsWidget } from '@/widgets/about'
 
 const AboutPage: FC = () => {
     return (

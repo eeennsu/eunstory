@@ -23,7 +23,7 @@ const PostSearchPage: FC<Props> = async ({ searchParams }) => {
     }
 
     return (
-        <section className='flex flex-col gap-5 lg:px-20 md:px-14 px-8 pt-10 pb-10'>
+        <section className='flex flex-col gap-6 lg:px-20 md:px-14 px-8 pb-10'>
             <SearchResult keyword={keyword} />
             <section className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8'>
                 {responseSearchedResult.posts.length > 0 ? (
