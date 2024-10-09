@@ -3,8 +3,8 @@ const post = {
         return mainPath.root.concat('post')
     },
 
-    list(keyword?: string) {
-        return post.root().concat(keyword ? `?keyword=${keyword}` : '')
+    list() {
+        return post.root().concat('/list')
     },
 
     create(params?: string) {
@@ -27,7 +27,7 @@ const post = {
     },
 
     search(keyword: string) {
-        return post.root().concat(`/search?keyword=${keyword}`)
+        return post.list().concat(`/search?keyword=${keyword}`)
     },
 }
 

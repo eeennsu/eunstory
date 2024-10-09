@@ -23,9 +23,9 @@ const PostSearchPage: FC<Props> = async ({ searchParams }) => {
     }
 
     return (
-        <main className='page-container pt-32 pb-10 max-w-[1200px] mx-auto gap-5'>
+        <section className='flex flex-col gap-5 lg:px-20 md:px-14 px-8 pt-10 pb-10'>
             <SearchResult keyword={keyword} />
-            <section className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+            <section className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8'>
                 {responseSearchedResult.posts.length > 0 ? (
                     responseSearchedResult.posts.map((post) => (
                         <SearchedPostItem
@@ -37,7 +37,7 @@ const PostSearchPage: FC<Props> = async ({ searchParams }) => {
                     <p className='text-lg text-gray-400 col-span-full'>검색 결과가 없습니다.</p>
                 )}
             </section>
-        </main>
+        </section>
     )
 }
 
