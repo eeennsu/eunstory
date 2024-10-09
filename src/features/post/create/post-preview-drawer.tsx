@@ -128,38 +128,39 @@ export const PostPreviewDrawer: FC<Props> = ({
                 triggerCheck() && setIsPreviewOpen(open)
             }}>
             <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-            <DrawerContent className='p-7'>
+            <DrawerContent className='py-10 bg-gray-950'>
                 <div className='mx-auto w-full max-w-4xl'>
                     <DrawerHeader>
-                        <DrawerTitle className='text-2xl font-bold text-gray-100'>포스트 미리보기</DrawerTitle>
-                        <DrawerDescription className='text-sm text-gray-400'>
+                        <DrawerTitle className='text-3xl font-semibold text-gray-100'>포스트 미리보기</DrawerTitle>
+                        <DrawerDescription className='text-sm text-gray-500 mt-1'>
                             작성될 포스트의 요약과 썸네일을 지정해주세요.
                         </DrawerDescription>
                     </DrawerHeader>
-                    <section className='flex gap-6 justify-between p-4'>
-                        <figure className='flex flex-col gap-2 flex-1 h-[400px]'>
-                            <figcaption className='text-sm text-gray-400'>썸네일 미리보기</figcaption>
-                            <div className='bg-gray-700 flex-grow rounded-md flex flex-col justify-center items-center gap-5 border border-gray-600'>
+                    <section className='flex gap-8 justify-between p-6'>
+                        <figure className='flex flex-col gap-3 flex-1 h-[400px]'>
+                            <figcaption className='text-sm text-gray-500'>썸네일 미리보기</figcaption>
+                            <div className='bg-gray-800 flex-grow rounded-md flex flex-col justify-center items-center gap-5 border border-gray-600 shadow-lg'>
                                 {thumbnail ? (
                                     <div className='relative max-w-[390px] max-h-[280px] w-full flex-grow flex items-center'>
                                         <Button
                                             type='button'
                                             variant='link'
-                                            className='size-9 p-0 absolute -right-2.5 -top-2.5 rounded-sm border-2 border-gray-400 bg-gray-800 text-gray-200 hover:brightness-150'
+                                            className='size-9 p-0 absolute -right-3 -top-3 rounded-full bg-red-600 text-white hover:bg-red-700 transition'
                                             onClick={initialThumbnail}>
-                                            <X className='size-4' />
+                                            <X className='size-5' />
                                         </Button>
                                         <img
                                             src={thumbnail as string}
                                             alt='thumbnail'
-                                            className='object-cover w-full h-full rounded-md max-w-full max-h-full'
+                                            className='object-cover w-full h-full rounded-md shadow-md'
                                         />
                                     </div>
                                 ) : (
-                                    <ImagePlus className='size-24 text-gray-500' />
+                                    <ImagePlus className='size-28 text-gray-500' />
                                 )}
                                 <Button
                                     variant='tertiary'
+                                    className='bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md'
                                     onClick={() => {
                                         fileRef.current?.click()
                                     }}>
@@ -174,23 +175,23 @@ export const PostPreviewDrawer: FC<Props> = ({
                                 />
                             </div>
                         </figure>
-                        <div className='flex flex-1 flex-col gap-10'>
-                            <div className='max-w-full flex flex-col gap-2'>
-                                <h2 className='text-gray-400 text-sm'>제목</h2>
-                                <p className='text-2xl font-bold text-ellipsis line-clamp-1'>{postTitle}</p>
+                        <div className='flex flex-1 flex-col gap-6'>
+                            <div className='max-w-full flex flex-col gap-1'>
+                                <h2 className='text-gray-500 text-sm'>제목</h2>
+                                <p className='text-2xl font-semibold text-white line-clamp-1'>{postTitle}</p>
                             </div>
 
-                            <div className='flex flex-col gap-2'>
-                                <h3 className='text-gray-400 text-sm'>태그</h3>
+                            <div className='flex flex-col gap-1'>
+                                <h3 className='text-gray-500 text-sm'>태그</h3>
                                 <div className='flex gap-2'>
                                     {!previewTags?.length ? (
-                                        <p className='text-sm'>등록된 태그가 없습니다.</p>
+                                        <p className='text-sm text-gray-500'>등록된 태그가 없습니다.</p>
                                     ) : (
                                         previewTags?.map((tag) => (
                                             <Badge
                                                 key={tag}
                                                 variant='outline'
-                                                className='text-sm'>
+                                                className='text-sm text-gray-200 bg-gray-700'>
                                                 {tag}
                                             </Badge>
                                         ))
@@ -198,12 +199,12 @@ export const PostPreviewDrawer: FC<Props> = ({
                                 </div>
                             </div>
 
-                            <div className='flex flex-col gap-2 flex-grow'>
-                                <h3 className='text-gray-400 text-sm'>요약</h3>
+                            <div className='flex flex-col gap-1 flex-grow'>
+                                <h3 className='text-gray-500 text-sm'>요약</h3>
                                 <Textarea
                                     placeholder='포스트 요약을 작성해주세요.'
-                                    variant={'secondary'}
-                                    className='flex-grow'
+                                    variant='secondary'
+                                    className='flex-grow text-gray-200 bg-gray-800 rounded-md border border-gray-600'
                                     value={summary}
                                     onChange={(e) => setSummary(e.target.value)}
                                 />
@@ -214,15 +215,15 @@ export const PostPreviewDrawer: FC<Props> = ({
                     <DrawerFooter className='flex justify-between gap-4'>
                         <Button
                             onClick={handleSubmit}
-                            size={'lg'}
-                            className='flex-grow'>
+                            size='lg'
+                            className=' bg-blue-600 text-white hover:bg-blue-700 rounded-md transition'>
                             작성하기
                         </Button>
                         <DrawerClose asChild>
                             <Button
-                                variant='signature'
-                                size={'lg'}
-                                className='flex-grow'>
+                                variant='outline'
+                                size='lg'
+                                className=' text-gray-400 border border-gray-600 bg-gray-800 hover:bg-gray-700 rounded-md transition'>
                                 취소
                             </Button>
                         </DrawerClose>
