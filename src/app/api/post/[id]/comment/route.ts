@@ -1,11 +1,9 @@
 import { getServerAuth } from '@/lib/auth'
-import { NextResponseData } from '@/lib/fetch'
+import { NextResponseData, REVALIDATE_TAGS } from '@/lib/fetch'
 import prisma from '@/lib/prisma/prisma-client'
 import { mainPath } from '@/lib/route'
 import { Comment } from '@prisma/client'
-import { User } from 'next-auth'
 import { revalidatePath, revalidateTag } from 'next/cache'
-import { Author } from 'next/dist/lib/metadata/types/metadata-types'
 import { NextRequest, NextResponse } from 'next/server'
 
 type Params = {
@@ -119,7 +117,7 @@ export const POST = async (request: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to create comment' }, { status: 500 })
         }
 
-        revalidateTag('post-comment')
+        revalidateTag(REVALIDATE_TAGS.POST_COMMENT)
         revalidatePath(mainPath.post.detail(postId))
 
         return NextResponse.json({ comment: createdComment }, { status: 201 })
@@ -134,7 +132,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
     const { isAuthenticated, user } = await getServerAuth()
 
     if (!isAuthenticated) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
     }
 
     try {
@@ -171,7 +169,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to edit comment' }, { status: 500 })
         }
 
-        revalidateTag('post-comment')
+        revalidateTag(REVALIDATE_TAGS.POST_COMMENT)
         revalidatePath(mainPath.post.detail(postId))
 
         return NextResponse.json({ comment: editedComment })
@@ -186,7 +184,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
     const { isAuthenticated, user } = await getServerAuth()
 
     if (!isAuthenticated) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
     }
 
     const postId = params?.id
@@ -222,7 +220,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to delete comment' }, { status: 500 })
         }
 
-        revalidateTag('post-comment')
+        revalidateTag(REVALIDATE_TAGS.POST_COMMENT)
         revalidatePath(mainPath.post.detail(postId))
 
         return new NextResponse(null, { status: 204 })

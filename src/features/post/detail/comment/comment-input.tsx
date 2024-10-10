@@ -9,6 +9,7 @@ import { LoaderCircle } from 'lucide-react'
 import { useState, type FC, type FormEvent } from 'react'
 import { CommentsCount } from './comments-count'
 import { ERROR_CODES } from '@/lib/fetch'
+import { triggerUserLoginModal } from '@/entities/user'
 
 interface Props {
     postId: string
@@ -23,12 +24,14 @@ export const CommentInput: FC<Props> = ({ postId, commentCount }) => {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
     const [comment, setComment] = useState<string>('')
 
-    const authCheck = () => {
+    const checkIsValid = () => {
         if (!isAuthenticated) {
             toast({
-                type: 'warning',
+                type: 'info',
                 title: ERROR_CODES.NEED_AUTHENTICATE.title,
             })
+
+            triggerUserLoginModal(true)
 
             return false
         }
@@ -46,7 +49,7 @@ export const CommentInput: FC<Props> = ({ postId, commentCount }) => {
     }
 
     const handleComment = async () => {
-        if (!authCheck()) {
+        if (!checkIsValid()) {
             return
         }
 

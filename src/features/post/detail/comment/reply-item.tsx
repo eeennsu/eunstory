@@ -28,7 +28,7 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
     const isValidateCheck = () => {
         if (!currentUserId) {
             toast({
-                type: 'warning',
+                type: 'info',
                 title: ERROR_CODES.NEED_AUTHENTICATE.title,
             })
             return false

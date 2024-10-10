@@ -48,7 +48,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
         const { isAdminAuthorized } = await getServerAuth()
 
         if (!isAdminAuthorized) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+            return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
         }
 
         const id = params?.id
@@ -116,7 +116,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
     const { isAdminAuthorized, user } = await getServerAuth()
 
     if (!isAdminAuthorized) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
     }
 
     const id = params?.id

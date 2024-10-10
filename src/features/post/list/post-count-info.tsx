@@ -1,4 +1,5 @@
 import { serverRequestGetActivePostCount } from '@/entities/post'
+import NumberTicker from '@/lib/ui/number-ticker'
 import type { FC } from 'react'
 
 export const PostCountInfo: FC = async () => {
@@ -11,11 +12,18 @@ export const PostCountInfo: FC = async () => {
         <div className='flex justify-around text-center text-gray-400'>
             <div>
                 <p className='text-xs uppercase tracking-wide'>전체</p>
-                <p className='text-xl font-semibold text-white'>{activePostCount}</p>
+
+                <NumberTicker
+                    className='text-xl font-semibold text-white'
+                    value={activePostCount}
+                />
             </div>
             <div>
                 <p className='text-xs uppercase tracking-wide'>최근 3개월 글</p>
-                <p className='text-xl font-semibold text-white'>{threeMonthPostCount}</p>
+                <NumberTicker
+                    className='text-xl font-semibold text-white'
+                    value={threeMonthPostCount}
+                />
             </div>
         </div>
     )

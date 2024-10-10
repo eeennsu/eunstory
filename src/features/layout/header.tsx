@@ -43,7 +43,7 @@ export const Header: FC = () => {
                         delay={0.5}
                     />
                 </Link>
-                <nav className='flex gap-6 py-4 justify-center items-center'>
+                <nav className='flex gap-7 py-4 justify-center items-center'>
                     {NAV_LINKS.map((link) => (
                         <Link
                             key={link.title}

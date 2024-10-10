@@ -37,12 +37,14 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
 
     const isDisabled = isDeleting || isReplying
 
-    const isValidateCheck = () => {
+    const checkIsValid = () => {
         if (!currentUserId) {
             toast({
-                type: 'warning',
+                type: 'info',
                 title: ERROR_CODES.NEED_AUTHENTICATE.title,
             })
+
+            triggerUserLoginModal(true)
 
             return false
         }
@@ -51,7 +53,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     }
 
     const handleEditComment = () => {
-        if (!isValidateCheck()) return
+        if (!checkIsValid()) return
 
         if (editMode === 'edit') {
             executeWithProgress(async () => {
@@ -85,7 +87,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     }
 
     const handleDeleteComment = () => {
-        if (!isValidateCheck()) return
+        if (!checkIsValid()) return
 
         executeWithProgress(async () => {
             try {
@@ -116,7 +118,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     }
 
     const handleCreateReply = () => {
-        if (!isValidateCheck()) return
+        if (!checkIsValid()) return
 
         if (replyContent.trim().length < 5) {
             toast({
@@ -156,8 +158,8 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     const handleReplyTextareaOpen = () => {
         if (!currentUserId) {
             toast({
+                type: 'info',
                 title: ERROR_CODES.NEED_AUTHENTICATE.title,
-                type: 'warning',
             })
 
             triggerUserLoginModal(true)

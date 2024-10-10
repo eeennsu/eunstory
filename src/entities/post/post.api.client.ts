@@ -6,15 +6,14 @@ import {
 import { RequestCreatePostType, ResponseCreatePostType, ResponseGetPostListType } from '@/app/api/post/route'
 import { generateRequest } from '@/lib/fetch'
 import { Post } from '@prisma/client'
+import { PaginationParams } from '../common'
 
 export const requestGetPostList = async ({
     tag,
     curPage,
     perPage,
     isPublished,
-}: {
-    curPage?: number
-    perPage?: number
+}: PaginationParams & {
     tag?: string
     isPublished?: boolean
 }) => {
@@ -83,4 +82,3 @@ export const requestEditPostListOrder = async ({ updatedSequences }: RequestEdit
         },
     })
 }
-

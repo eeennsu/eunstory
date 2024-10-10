@@ -8,6 +8,7 @@ import { ResponseGetPostListType } from '@/app/api/post/route'
 import { ResponseGetSearchedPostListType } from '@/app/api/post/search/route'
 import { ResponseGetPostTagListType } from '@/app/api/post/tags/route'
 import { getUrlFromServer, generateRequest } from '@/lib/fetch'
+import { PaginationParams } from '../common'
 
 export const serverRequestGetAllPostList = async ({ isPublished }: { isPublished: boolean }) => {
     const params = new URLSearchParams()
@@ -25,9 +26,7 @@ export const serverRequestGetSomePostList = async ({
     curPage = 1,
     perPage = 5,
     isPublished,
-}: {
-    curPage?: number
-    perPage?: number
+}: PaginationParams & {
     isPublished: boolean
 }) => {
     const params = new URLSearchParams()

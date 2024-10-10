@@ -74,7 +74,7 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
                     switch (response?.error) {
                         case ERROR_CODES.MISSING_ID_OR_PASSWORD.code:
                             toast({
-                                type: 'warning',
+                                type: 'error',
                                 title: ERROR_CODES.MISSING_ID_OR_PASSWORD.title,
                             })
 
@@ -82,7 +82,7 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
 
                         case ERROR_CODES.USER_NOT_FOUND.code:
                             toast({
-                                type: 'warning',
+                                type: 'error',
                                 title: ERROR_CODES.USER_NOT_FOUND.title,
                             })
 
@@ -90,7 +90,7 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
 
                         case ERROR_CODES.INCORRECT_ID_OR_PASSWORD.code:
                             toast({
-                                type: 'warning',
+                                type: 'error',
                                 title: ERROR_CODES.INCORRECT_ID_OR_PASSWORD.title,
                             })
 
