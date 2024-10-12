@@ -18,7 +18,7 @@ const levelLabels: Record<SkillLevel, string> = {
 export const SkillSection: FC<Props> = ({ level, skills }) => {
     return (
         <section className={cn('flex max-lg:flex-col justify-between w-full max-lg:gap-3')}>
-            <h3 className='text-2xl lg:text-3xl font-semibold flex items-center'>{levelLabels[level]}</h3>
+            <h3 className='text-xl lg:text-2xl font-semibold text-gray-100 flex items-center'>{levelLabels[level]}</h3>
             <ul className='flex flex-wrap gap-3 max-w-full items-center lg:max-w-[60%] w-full '>
                 {skills.map((skill) => (
                     <Badge
