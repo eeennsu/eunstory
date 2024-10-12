@@ -11,11 +11,11 @@ import { Post } from '@prisma/client'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { KeyboardEvent, useEffect, useMemo, useRef, useState, type FC } from 'react'
 import { cn } from '@/lib/shadcn/shadcn-utils'
-import { Ellipsis } from 'lucide-react'
 import { PostPreviewDrawer } from '@/features/post/create'
 import { usePostPreviewStore } from '@/entities/post'
 import { Input } from '@/lib/ui/input'
 import { ERROR_CODES } from '@/lib/fetch'
+import { EllipsisLoading } from '@/shared/common'
 
 interface Props {
     prevPost?: Post // prevPost 가 있으면 수정 폼, 없으면 생성 폼
@@ -293,9 +293,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         <>
             {isLoading && (
                 <section className='flex w-full h-full items-center justify-center flex-grow'>
-                    <div className='w-full flex justify-center'>
-                        <Ellipsis className='size-8 animate-ping' />
-                    </div>
+                    <EllipsisLoading />
                 </section>
             )}
             <section

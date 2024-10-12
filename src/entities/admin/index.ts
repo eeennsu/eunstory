@@ -1,1 +1,1 @@
-export * from './admin.api.server'
+export * from './admin.api.client'

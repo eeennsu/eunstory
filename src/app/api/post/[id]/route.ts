@@ -1,10 +1,10 @@
 import { getServerAuth } from '@/lib/auth'
 import { NextResponseData } from '@/lib/fetch'
-import prisma from '@/lib/prisma/prisma-client'
 import { mainPath } from '@/lib/route'
 import { Post } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
+import prisma from '../../../../../prisma/prisma-client';
 
 type Params = {
     params: {
@@ -44,19 +44,19 @@ export const GET = async (request: NextRequest, { params }: Params) => {
 
 // edit post
 export const PATCH = async (request: NextRequest, { params }: Params) => {
+    const { isAdminAuthorized } = await getServerAuth()
+
+    if (!isAdminAuthorized) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
+    }
+
+    const id = params?.id
+
+    if (!id) {
+        return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+    }
+
     try {
-        const { isAdminAuthorized } = await getServerAuth()
-
-        if (!isAdminAuthorized) {
-            return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
-        }
-
-        const id = params?.id
-
-        if (!id) {
-            return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
-        }
-
         const body = await request.json()
         const order = body?.order
 

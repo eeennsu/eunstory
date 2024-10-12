@@ -1,13 +1,11 @@
+export const adminPageParams = {
+    account: 'account-page',
+    comment: 'comment-page',
+}
+
 export const adminPath = {
     root: '/admin',
     admin() {
-        return adminPath.root
-    },
-    users(id?: string) {
-        return `${adminPath.root}/users`.concat(id ? `/${id}` : '')
-    },
-
-    comments() {
-        return `${adminPath.root}/comments`
+        return adminPath.root.concat(`?${adminPageParams.account}=1&${adminPageParams.comment}=1`)
     },
 }

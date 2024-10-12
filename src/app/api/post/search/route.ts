@@ -1,7 +1,7 @@
 import { NextResponseData } from '@/lib/fetch'
-import prisma from '@/lib/prisma/prisma-client'
 import { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
+import prisma from '../../../../../prisma/prisma-client'
 
 export const GET = async (request: NextRequest) => {
     const params = request.nextUrl.searchParams

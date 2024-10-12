@@ -1,10 +1,10 @@
 import { getServerAuth } from '@/lib/auth'
 import { NextResponseData, REVALIDATE_TAGS } from '@/lib/fetch'
-import prisma from '@/lib/prisma/prisma-client'
 import { mainPath } from '@/lib/route'
 import { Comment } from '@prisma/client'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
+import prisma from '../../../../../../prisma/prisma-client'
 
 type Params = {
     params: {

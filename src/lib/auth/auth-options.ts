@@ -6,8 +6,8 @@ import bcrypt from 'bcryptjs'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import GitHubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
-import prisma from '@/lib/prisma/prisma-client'
 import { assertValue } from '@/lib//utils'
+import prisma from '../../../prisma/prisma-client'
 
 export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),

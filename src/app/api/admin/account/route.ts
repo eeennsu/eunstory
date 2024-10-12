@@ -1,7 +1,7 @@
 import { getServerAuth } from '@/lib/auth'
 import { NextResponseData } from '@/lib/fetch'
-import prisma from '@/lib/prisma/prisma-client'
 import { NextRequest, NextResponse } from 'next/server'
+import prisma from '../../../../../prisma/prisma-client'
 
 export const GET = async (request: NextRequest) => {
     const { isAdminAuthorized } = await getServerAuth()
@@ -15,9 +15,15 @@ export const GET = async (request: NextRequest) => {
     const curPage = Number(params.get('curPage')) || 1
     const perPage = Number(params.get('perPage')) || 10
 
+    const totalCount = await prisma.account.count()
+    const totalPage = Math.ceil(totalCount / perPage) || 1
+
     const accounts = await prisma.account.findMany({
         skip: perPage * (curPage - 1),
         take: perPage,
+        orderBy: {
+            user: {},
+        },
         select: {
             id: true,
             provider: true,
@@ -26,6 +32,7 @@ export const GET = async (request: NextRequest) => {
                     name: true,
                     email: true,
                     image: true,
+                    url: true,
                 },
             },
         },
@@ -35,7 +42,7 @@ export const GET = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Accounts not found' }, { status: 404 })
     }
 
-    return NextResponse.json({ accounts })
+    return NextResponse.json({ accounts, totalPage })
 }
 
 export type ResponseGetAccountListType = NextResponseData<typeof GET>

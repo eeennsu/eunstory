@@ -1,9 +1,9 @@
 import type { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { NextResponseData } from '@/lib/fetch'
-import prisma from '@/lib/prisma/prisma-client'
 import { mainPath } from '@/lib/route'
 import { revalidatePath } from 'next/cache'
+import prisma from '../../../../prisma/prisma-client'
 
 // get post list
 export const GET = async (request: NextRequest) => {

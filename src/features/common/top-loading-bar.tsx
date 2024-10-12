@@ -7,7 +7,7 @@ export const TopLoadingBar: FC = () => {
     return (
         <ProgressBar
             height='4px'
-            color='#c4d3cc'
+            color='#4790da'
             options={{ showSpinner: false, trickleSpeed: 700, easing: 'ease-out' }}
             shallowRouting
         />

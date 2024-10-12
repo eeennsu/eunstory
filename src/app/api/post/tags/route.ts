@@ -1,6 +1,6 @@
 import { NextResponseData } from '@/lib/fetch'
-import prisma from '@/lib/prisma/prisma-client'
 import { NextRequest, NextResponse } from 'next/server'
+import prisma from '../../../../../prisma/prisma-client'
 
 export const GET = async (_: NextRequest) => {
     try {
