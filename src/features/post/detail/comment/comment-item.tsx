@@ -120,10 +120,10 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
     const handleCreateReply = () => {
         if (!checkIsValid()) return
 
-        if (replyContent.trim().length < 5) {
+        if (replyContent.trim().length < 1) {
             toast({
                 type: 'warning',
-                title: '답글은 5자 이상 작성해주세요.',
+                title: '답글을 입력해세요.',
             })
 
             return
@@ -172,7 +172,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
 
     return (
         <li className={'flex flex-col gap-4 px-5'}>
-            <section className={cn('border-b border-gray-600 px-3', comment.isActive ? 'py-8' : 'py-6')}>
+            <section className={cn('border-b border-gray-600 px-3', comment.isActive ? 'py-7' : 'py-5')}>
                 {comment.isActive ? (
                     <div className='flex flex-col gap-3'>
                         <div className='flex w-full justify-between gap-4'>
@@ -292,7 +292,7 @@ export const CommentItem: FC<Props> = ({ comment, currentUserId }) => {
             )}
 
             {!!comment?.replies?.length && (
-                <ul className='flex flex-col gap-6 pl-4'>
+                <ul className='flex flex-col pl-4'>
                     {comment?.replies?.map((reply) => (
                         <ReplyItem
                             key={reply.id}

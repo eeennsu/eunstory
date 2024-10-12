@@ -36,10 +36,10 @@ export const CommentInput: FC<Props> = ({ postId, commentCount }) => {
             return false
         }
 
-        if (comment.trim().length < 5) {
+        if (comment.trim().length < 1) {
             toast({
                 type: 'warning',
-                title: '댓글은 5자 이상 작성해주세요.',
+                title: '댓글을 입력해주세요.',
             })
 
             return false

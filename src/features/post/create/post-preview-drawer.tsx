@@ -12,7 +12,7 @@ import {
     DrawerTrigger,
 } from '@/lib/ui/drawer'
 import { Button } from '@/lib/ui/button'
-import { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import { FC, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react'
 import { Input } from '@/lib/ui/input'
 import { Textarea } from '@/lib/ui/textarea'
 import { usePostPreviewStore } from '@/entities/post'
@@ -21,29 +21,27 @@ import { useToast } from '@/lib/hooks'
 
 interface Props {
     triggerCheck: () => boolean
-    trigger: ReactNode
     postTitle: string
     postSummary: string
     handleSubmit: () => void
     previewTags?: string[]
     prevThumbnail?: string | null
+    isPreviewOpen: boolean
+    setIsPreviewOpen: (open: boolean) => void
 }
 
-export const PostPreviewDrawer: FC<Props> = ({
+export const PostPreviewDrawer: FC<PropsWithChildren<Props>> = ({
+    children,
     triggerCheck,
-    trigger,
     postTitle,
     postSummary,
     handleSubmit,
     previewTags,
     prevThumbnail,
+    isPreviewOpen,
+    setIsPreviewOpen,
 }) => {
-    const [thumbnail, setThumbnail, isPreviewOpen, setIsPreviewOpen] = usePostPreviewStore((state) => [
-        state.thumbnail,
-        state.setThumbnail,
-        state.isPreviewOpen,
-        state.setIsPreviewOpen,
-    ])
+    const [thumbnail, setThumbnail] = usePostPreviewStore((state) => [state.thumbnail, state.setThumbnail])
 
     const fileRef = useRef<HTMLInputElement>(null)
     const [summary, setSummary] = useState<string | undefined>(postSummary)
@@ -126,7 +124,7 @@ export const PostPreviewDrawer: FC<Props> = ({
             onOpenChange={(open) => {
                 triggerCheck() && setIsPreviewOpen(open)
             }}>
-            <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+            <DrawerTrigger asChild>{children}</DrawerTrigger>
             <DrawerContent className='py-10 bg-gray-950'>
                 <div className='mx-auto w-full max-w-4xl'>
                     <DrawerHeader>
@@ -144,9 +142,9 @@ export const PostPreviewDrawer: FC<Props> = ({
                                         <Button
                                             type='button'
                                             variant='link'
-                                            className='size-9 p-0 absolute -right-3 -top-3 rounded-full bg-red-600 text-white hover:bg-red-700 transition'
+                                            className='size-9 p-0 absolute -right-6 -top-6 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition'
                                             onClick={initialThumbnail}>
-                                            <X className='size-5' />
+                                            <X className='size-[18px]' />
                                         </Button>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img

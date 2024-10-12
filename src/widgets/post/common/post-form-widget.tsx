@@ -30,12 +30,9 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const { adminId: authorId, isAdminAuthorized } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
     const { toast } = useToast()
+    const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false)
 
-    const [thumbnail, isPreviewOpen, setIsPreviewOpen] = usePostPreviewStore((state) => [
-        state.thumbnail,
-        state.isPreviewOpen,
-        state.setIsPreviewOpen,
-    ])
+    const thumbnail = usePostPreviewStore((state) => state.thumbnail)
 
     const editorRef = useRef<TiptapRefType>(null)
     const tagInputRef = useRef<TagInputRef>(null)
@@ -146,7 +143,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                 if (response) {
                     toast({
                         type: 'success',
-                        title: `게시물 ${toastKeyword}에 성공하였습니다.`,
+                        title: `게시물이 ${toastKeyword}되었습니다.`,
                     })
                 } else {
                     toast({
@@ -163,7 +160,6 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                 })
                 console.error(error)
             } finally {
-                setIsPreviewOpen(false)
                 barRouter.replace(mainPath.post.list())
                 barRouter.refresh()
             }
@@ -353,20 +349,20 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                         <PostPreviewDrawer
                             key={editorRef.current?.getText()}
                             triggerCheck={isPreviewReady}
-                            trigger={
-                                <Button
-                                    type='button'
-                                    size={'lg'}
-                                    variant={'default'}>
-                                    {prevPost ? '수정하기' : '작성하기'}
-                                </Button>
-                            }
                             postTitle={title}
                             postSummary={summary}
                             handleSubmit={handleSubmit}
                             prevThumbnail={prevPost?.thumbnail}
                             previewTags={previewTags}
-                        />
+                            isPreviewOpen={isPreviewOpen}
+                            setIsPreviewOpen={setIsPreviewOpen}>
+                            <Button
+                                type='button'
+                                size={'lg'}
+                                variant={'default'}>
+                                {prevPost ? '수정하기' : '작성하기'}
+                            </Button>
+                        </PostPreviewDrawer>
                     </div>
                 </form>
             </section>

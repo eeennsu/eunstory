@@ -106,7 +106,7 @@ export const ReplyItem: FC<Props> = ({ reply, currentUserId, isOwner }) => {
             <section
                 className={cn(
                     'flex flex-grow flex-col gap-3  border-b border-b-gray-600  px-2 mx-5',
-                    reply.isActive ? 'py-8' : 'py-6'
+                    reply.isActive ? 'py-6' : 'py-4'
                 )}>
                 {reply?.isActive ? (
                     <>
