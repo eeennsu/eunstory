@@ -4,7 +4,7 @@ import { mainPath } from '@/lib/route'
 import { Post } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '../../../../../prisma/prisma-client';
+import prisma from '../../../../../prisma/prisma-client'
 
 type Params = {
     params: {

@@ -25,9 +25,7 @@ export const Header: FC = () => {
         <header className='bg-slate-700/50 backdrop-blur-lg w-full py-2 flex items-center justify-center border-b border-slate-500 fixed top-0 z-10 h-[90px]'>
             <section className='relative flex w-full max-w-5xl justify-between items-center'>
                 <Link
-                    href={
-                        isAdminAuthorized ? adminPath.admin() : mainPath.home()
-                    }
+                    href={isAdminAuthorized ? adminPath.admin() : mainPath.home()}
                     className='flex items-center gap-2 md:gap-4'
                     prefetch={!isAdminAuthorized}>
                     <figure className='size-[64px] relative'>

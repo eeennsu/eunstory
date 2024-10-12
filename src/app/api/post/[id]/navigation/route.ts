@@ -1,6 +1,6 @@
 import { NextResponseData } from '@/lib/fetch'
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '../../../../../../prisma/prisma-client';
+import prisma from '../../../../../../prisma/prisma-client'
 
 // get prev, next post
 

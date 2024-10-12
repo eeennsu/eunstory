@@ -148,6 +148,7 @@ export const PostPreviewDrawer: FC<Props> = ({
                                             onClick={initialThumbnail}>
                                             <X className='size-5' />
                                         </Button>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={thumbnail as string}
                                             alt='thumbnail'

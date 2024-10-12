@@ -1,6 +1,5 @@
 export type ExtractSafety<T, K extends keyof T> = T extends Record<K, any> ? T[K] : never
 
-
 // TODO: 좀 더 연구 필요
 // type ExtractErrorFree<T> = T extends { error?: unknown } ? never : T
 

@@ -35,6 +35,8 @@ export const AboutSectionTitle: FC<Props> = ({ title }) => {
                 observer.unobserve(observerRef.current)
             }
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
