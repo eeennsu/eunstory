@@ -3,10 +3,12 @@ import type { FC, PropsWithChildren } from 'react'
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
     return (
-        <>
-            {children}
-            <AdminSidebarMenuWidget />
-        </>
+        <div className='flex w-full flex-grow pt-[90px]'>
+            <aside className='w-56 flex justify-center'>
+                <AdminSidebarMenuWidget />
+            </aside>
+            <div className='flex-grow mr-56'>{children}</div>
+        </div>
     )
 }
 
