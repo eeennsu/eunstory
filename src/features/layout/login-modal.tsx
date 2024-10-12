@@ -99,6 +99,10 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
                 }
             } catch (error) {
                 console.error(error)
+                toast({
+                    type: 'error',
+                    title: '로그인에 실패했습니다.',
+                })
             }
         })
     }
@@ -118,6 +122,33 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
                 }
             } catch (error) {
                 console.error(error)
+                toast({
+                    type: 'error',
+                    title: '로그인에 실패했습니다.',
+                })
+            }
+        })
+    }
+
+    const handleGoogleSignIn = () => {
+        executeWithProgress(async () => {
+            try {
+                const response = await signIn('google', {
+                    redirect: false,
+                })
+
+                if (response?.ok && response?.status === 200) {
+                    toast({
+                        type: 'success',
+                        title: '로그인에 성공했습니다.',
+                    })
+                }
+            } catch (error) {
+                console.error(error)
+                toast({
+                    type: 'error',
+                    title: '로그인에 실패했습니다.',
+                })
             }
         })
     }
@@ -195,7 +226,8 @@ export const LoginModal: FC<PropsWithChildren> = ({ children }) => {
                             </Button>
                             <Button
                                 className='w-full'
-                                variant='signature'>
+                                variant='signature'
+                                onClick={handleGoogleSignIn}>
                                 <Google />
                                 Sign in with Google
                             </Button>

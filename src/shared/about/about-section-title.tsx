@@ -25,18 +25,17 @@ export const AboutSectionTitle: FC<Props> = ({ title }) => {
                 threshold: 0.1,
             }
         )
+        const currentRef = observerRef.current
 
-        if (observerRef.current) {
-            observer.observe(observerRef.current)
+        if (currentRef) {
+            observer.observe(currentRef)
         }
 
         return () => {
-            if (observerRef.current) {
-                observer.unobserve(observerRef.current)
+            if (currentRef) {
+                observer.disconnect()
             }
         }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

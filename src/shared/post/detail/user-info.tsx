@@ -1,8 +1,8 @@
 import { PostComment } from '@/entities/post-comment/post-comment.types'
-import { Avatar, AvatarImage } from '@/lib/ui/avatar'
+import { cn } from '@/lib/shadcn/shadcn-utils'
 import { formatBeforeTime } from '@/lib/utils'
-import { defaultUserIcon } from '@/shared/constants'
 import { Comment } from '@prisma/client'
+import Image from 'next/image'
 import Link from 'next/link'
 import type { FC } from 'react'
 
@@ -13,24 +13,29 @@ interface Props {
 }
 
 export const UserInfo: FC<Props> = ({ author, createdAt, updatedAt }) => {
+    const Comp = author.url ? Link : 'div'
+
     return (
-        <Link
-            href={author.url || '#'}
+        <Comp
+            href={author?.url || ''}
             target='_blank'
             className='inline-flex gap-3 w-fit items-center cursor-pointer group rounded-lg'>
-            <Avatar>
-                <AvatarImage
-                    src={author?.image || defaultUserIcon}
-                    alt={author?.name}
-                />
-            </Avatar>
+            <Image
+                src={author.isAdmin ? '/images/eunstory-logo-icon.png' : author?.image || ''}
+                alt={author?.name}
+                className='rounded-full object-contain'
+                width={40}
+                height={40}
+            />
+
             <div className='flex flex-col gap-1'>
-                <span className='group-hover:underline underline-offset-2'>{author?.name}</span>
+                <span className={cn(author.url && 'group-hover:underline underline-offset-2')}>{author?.name}</span>
+
                 <div className='flex gap-2'>
                     <time>{formatBeforeTime(createdAt)}</time>
                     {updatedAt && <span>(수정됨)</span>}
                 </div>
             </div>
-        </Link>
+        </Comp>
     )
 }

@@ -60,6 +60,13 @@ export const authOptions: AuthOptions = {
         GoogleProvider({
             clientId: assertValue(process.env.GOOGLE_CLIENT_ID),
             clientSecret: assertValue(process.env.GOOGLE_CLIENT_SECRET),
+            authorization: {
+                params: {
+                    prompt: 'consent',
+                    access_type: 'offline',
+                    response_type: 'code',
+                },
+            },
         }),
     ],
     session: {
@@ -72,6 +79,7 @@ export const authOptions: AuthOptions = {
     callbacks: {
         jwt: async ({ token, user, profile }) => {
             if (user) {
+                console.log('user', user)
                 token.isAdmin = user.isAdmin
                 token['@id'] = user['@id']
                 token['url'] = profile?.html_url || undefined // TODO: add google url
