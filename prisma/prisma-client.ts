@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { createDefaultAdmin } from './initialize-data/admin'
+import { createDefaultAdmin } from './initialize-data'
 
 const prismaClientSingleton = () => {
     const prisma = new PrismaClient()
@@ -11,11 +11,14 @@ const prismaClientSingleton = () => {
 
     setInitializeData()
         .then(() => {
-            console.log('🚀 Prisma is ready')
+            // eslint-disable-next-line no-console
+            console.log('🚀  Prisma is ready')
         })
-        .catch(() => {
-            console.log('Failed to ready about prisma')
-            process.exit(1)
+        .catch((error) => {
+            // eslint-disable-next-line no-console
+            console.log('❌  Failed to ready about prisma')
+            // eslint-disable-next-line no-console
+            console.log(error)
         })
 
     return prisma

@@ -1,59 +1,79 @@
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
 generator client {
     provider = "prisma-client-js"
 }
 
-datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
-}
-
-model Admin {
-    id       String    @id @default(cuid())
-    password String    @db.VarChar(255)
-    name     String    @db.VarChar(255)
-    posts    Post[]
-    comments Comment[]
-}
-
-model Visitor {
-    id        String    @id @default(uuid())
-    createdAt DateTime  @default(now())
-    comments  Comment[]
+model User {
+    id            String    @id @default(cuid()) // primary key
+    username      String?   @unique // user id
+    password      String?
+    name          String
+    email         String?   @unique // NextAuth 요구사항, 이메일 추가
+    emailVerified DateTime? // 이메일 인증 여부 (NextAuth)
+    image         String?
+    posts         Post[]
+    comments      Comment[]
+    accounts      Account[]
+    isAdmin       Boolean   @default(false)
+    url           String?
 }
 
 model Post {
-    id         String       @id @default(cuid())
-    categoryId Int
-    category   PostCategory @relation(fields: [categoryId], references: [id])
-    title      String       @db.VarChar(255)
-    content    String       @db.Text
-    createdAt  DateTime     @default(now())
-    updatedAt  DateTime     @updatedAt
-    author     Admin        @relation(fields: [authorId], references: [id])
-    authorId   String
-    comments   Comment[]
+    id        String    @id @unique @default(cuid())
+    isActive  Boolean   @default(true)
+    title     String
+    content   String
+    tags      String?
+    order     Int?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime?
+    deletedAt DateTime?
+    authorId  String
+    author    User      @relation(fields: [authorId], references: [id])
+    comments  Comment[]
+    thumbnail String?
+    summary   String
 
-    @@index([categoryId], name: "categoryId")
-    @@index([title])
-}
-
-model PostCategory {
-    id    Int    @id @default(autoincrement())
-    name  String
-    posts Post[]
+    @@index([isActive, title, tags])
 }
 
 model Comment {
-    id              String   @id @default(cuid())
-    content         String   @db.Text
-    postId          String
-    post            Post     @relation(fields: [postId], references: [id])
-    createdAt       DateTime @default(now())
-    adminId         String
-    visitorAuthor   Visitor? @relation(fields: [visitorAuthorId], references: [id])
-    visitorAuthorId String?
-    adminAuthor     Admin?   @relation(fields: [adminAuthorId], references: [id])
-    adminAuthorId   String?
+    id        String    @id @default(cuid())
+    isActive  Boolean   @default(true)
+    content   String
+    postId    String
+    post      Post      @relation(fields: [postId], references: [id])
+    createdAt DateTime  @default(now())
+    updatedAt DateTime?
+    deletedAt DateTime?
+    authorId  String
+    author    User      @relation(fields: [authorId], references: [id])
+    parentId  String?
+    parent    Comment?  @relation("ChildComments", fields: [parentId], references: [id])
+    children  Comment[] @relation("ChildComments") // 대댓글의 리스트
+}
+
+model Account {
+    id                String    @id @default(cuid())
+    userId            String
+    provider          String
+    providerAccountId String
+    type              String
+    access_token      String? // OAuth access token
+    token_type        String?
+    expires_at        Int?
+    refresh_token     String?
+    scope             String?
+    id_token          String?
+    user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt         DateTime  @default(now())
+    updatedAt         DateTime? @default(now()) @updatedAt
+
+    @@unique([provider, providerAccountId]) // 각 제공자별 고유 계정
 }
 
 // VarChar(255) 가변 길이 문자열, 최대 가능 길이 255
