@@ -5,7 +5,7 @@ import type { FC } from 'react'
 
 export const PostListHeadWidget: FC = () => {
     return (
-        <section className='fixed flex p-3 rounded-sm flex-col gap-3 top-28 right-0'>
+        <section className='fixed flex rounded-sm flex-col gap-3 top-28 right-1'>
             <Button
                 asChild
                 variant={'signature'}>
