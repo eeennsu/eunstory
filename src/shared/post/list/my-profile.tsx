@@ -1,14 +1,21 @@
+import { poorStory } from '@/lib/font'
+import { cn } from '@/lib/shadcn/shadcn-utils'
+import TypingAnimation from '@/lib/ui/typing-animation'
 import type { FC } from 'react'
 
 export const MyProfile: FC = () => {
     return (
-        <figure className='flex flex-col items-center text-center'>
+        <figure className='flex flex-col items-center text-center gap-4'>
             <div className='size-24 bg-gray-700 rounded-full flex items-center justify-center'>
                 <span className='text-lg font-bold text-gray-400'>내 사진</span>
             </div>
-            <h2 className='text-xl font-semibold text-white mt-4 leading-relaxed'>
-                프론트엔드 개발자 <br /> 방은수의 기록들
-            </h2>
+            <TypingAnimation
+                className={cn(
+                    'text-xl font-semibold w-[150px] text-white leading-relaxed break-words h-[66px]',
+                    poorStory.className
+                )}
+                text='프론트엔드 개발자 방은수의 기록'
+            />
         </figure>
     )
 }
