@@ -38,7 +38,7 @@ export const authOptions: AuthOptions = {
                     throw new Error(ERROR_CODES.USER_NOT_FOUND.code)
                 }
 
-                const isPasswordMatch = bcrypt.compare(password, admin.password)
+                const isPasswordMatch = await bcrypt.compare(password, admin.password)
 
                 if (!isPasswordMatch) {
                     throw new Error(ERROR_CODES.INCORRECT_ID_OR_PASSWORD.code)
