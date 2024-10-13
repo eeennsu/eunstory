@@ -19,7 +19,7 @@ const PostSearchPage: FC<Props> = async ({ searchParams }) => {
     const responseSearchedResult = await serverRequestGetPostListBySearch(keyword)
 
     if ('error' in responseSearchedResult) {
-        throw responseSearchedResult.error
+        return null
     }
 
     return (
