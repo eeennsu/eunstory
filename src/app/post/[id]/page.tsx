@@ -36,12 +36,12 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
 
 export default DetailPostPage
 
-export const generateStaticParams = async () => {
-    const response = (await serverRequestGetPostIdList()) as ResponseGetPostIdListType
+// export const generateStaticParams = async () => {
+//     const response = (await serverRequestGetPostIdList()) as ResponseGetPostIdListType
 
-    if ('error' in response) return []
+//     if ('error' in response) return []
 
-    return response.ids
-}
+//     return response.ids
+// }
 
-export const revalidate = 60 * 60 * 4 // 4 hours
+// export const revalidate = 60 * 60 * 4 // 4 hours
