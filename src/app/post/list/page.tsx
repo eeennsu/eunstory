@@ -1,4 +1,3 @@
-import { getServerAuth } from '@/lib/auth'
 import { PostListBodyWidget, PostListHeadWidget } from '@/widgets/post/list'
 import type { FC } from 'react'
 
@@ -13,3 +12,5 @@ const PostListPage: FC = async () => {
 }
 
 export default PostListPage
+
+export const dynamic = 'force-dynamic'

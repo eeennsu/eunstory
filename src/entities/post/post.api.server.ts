@@ -3,7 +3,6 @@
 import { ResponseGetPostNavigationType } from '@/app/api/post/[id]/navigation/route'
 import { ResponseGetDetailPostType } from '@/app/api/post/[id]/route'
 import { ResponseGetActivePostCountType } from '@/app/api/post/active-count/route'
-import { ResponseGetPostIdListType } from '@/app/api/post/id-list/route'
 import { ResponseGetPostListType } from '@/app/api/post/route'
 import { ResponseGetSearchedPostListType } from '@/app/api/post/search/route'
 import { ResponseGetPostTagListType } from '@/app/api/post/tags/route'
@@ -57,11 +56,11 @@ export const serverRequestGetDetailPost = async ({ postId, isPublished }: { post
     })
 }
 
-export const serverRequestGetPostIdList = async () => {
-    return generateRequest<undefined, ResponseGetPostIdListType>({
-        url: getUrlFromServer(`/api/post/id-list`),
-    })
-}
+// export const serverRequestGetPostIdList = async () => {
+//     return generateRequest<undefined, ResponseGetPostIdListType>({
+//         url: getUrlFromServer(`/api/post/id-list`),
+//     })
+// }
 
 export const serverRequestGetPostTagList = async () => {
     return generateRequest<undefined, ResponseGetPostTagListType>({

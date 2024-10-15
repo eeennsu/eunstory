@@ -10,13 +10,13 @@ interface Props {
 }
 
 const PostSearchPage: FC<Props> = async ({ searchParams }) => {
-    // const keyword = searchParams?.keyword
+    const keyword = searchParams?.keyword
 
-    // if (!keyword) {
-    //     return <EmptyKeyword />
-    // }
+    if (!keyword) {
+        return <EmptyKeyword />
+    }
 
-    const responseSearchedResult = await serverRequestGetPostListBySearch('keyword')
+    const responseSearchedResult = await serverRequestGetPostListBySearch(keyword)
 
     // 에러 발생시 조금 더 이쁜 결과 보여주기
     if ('error' in responseSearchedResult) {
@@ -43,3 +43,5 @@ const PostSearchPage: FC<Props> = async ({ searchParams }) => {
 }
 
 export default PostSearchPage
+
+export const dynamic = 'force-dynamic'
