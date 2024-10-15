@@ -21,16 +21,16 @@ export const AdminCommentsWidget: FC = () => {
     const [comments, setComments] = useState<Comment[]>([])
 
     const { isLoading, error } = useAsync(async () => {
-        const commentsResponse = await requestGetAllCommentList({ curPage: commentPage, perPage: 4 })
+        const responseComments = await requestGetAllCommentList({ curPage: commentPage, perPage: 4 })
 
-        if ('error' in commentsResponse) {
+        if ('error' in responseComments) {
             toast({ title: '계정 목록을 불러오는 중 오류가 발생했습니다.', type: 'error' })
             setComments([])
             return
         }
 
-        setComments(commentsResponse.comments)
-        setTotalPage(commentsResponse.totalPage)
+        setComments(responseComments.comments)
+        setTotalPage(responseComments.totalPage)
     }, [commentPage])
 
     return (

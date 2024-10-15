@@ -5,20 +5,20 @@ import { EditPostOrderWidget } from '@/widgets/post/edit'
 import { FC } from 'react'
 
 const EditPostListPage: FC = async () => {
-    const postListResponse = await serverRequestGetAllPostList({ isPublished: true })
+    const responsePostList = await serverRequestGetAllPostList({ isPublished: true })
 
-    if ('error' in postListResponse) {
-        throw postListResponse.error
+    if ('error' in responsePostList) {
+        throw responsePostList.error
     }
 
     return (
         <main className='page-container max-w-[1200px] mx-auto pt-32'>
-            {postListResponse.totalCount === 0 ? (
+            {responsePostList.totalCount === 0 ? (
                 '게시글이 없습니다.'
             ) : (
                 <EditPostOrderWidget
-                    allPosts={postListResponse.posts}
-                    totalCount={postListResponse.totalCount}
+                    allPosts={responsePostList.posts}
+                    totalCount={responsePostList.totalCount}
                 />
             )}
         </main>

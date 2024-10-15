@@ -75,7 +75,6 @@ export const POST = async (request: NextRequest) => {
         const body = (await request.json()) as RequestCreatePostType
         const { title, content, tags, authorId, order, thumbnail, summary } = body
 
-        // TODO title debounce error
         if (!title || !content || !authorId) {
             return NextResponse.json({ error: 'Title, content, and authorId are required' }, { status: 400 })
         }

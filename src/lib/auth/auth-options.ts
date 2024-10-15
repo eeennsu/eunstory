@@ -81,7 +81,7 @@ export const authOptions: AuthOptions = {
             if (user) {
                 token.isAdmin = user.isAdmin
                 token['@id'] = user['@id']
-                token['url'] = profile?.html_url || undefined // TODO: add google url
+                token['url'] = profile?.html_url || undefined
 
                 if (user.isAdmin === false) {
                     try {

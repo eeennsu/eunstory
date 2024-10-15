@@ -21,16 +21,16 @@ export const AdminAccountsWidget: FC = () => {
     const [totalPage, setTotalPage] = useState<number>(1)
 
     const { isLoading, error } = useAsync(async () => {
-        const accountsResponse = await requestGetAllAccounts({ curPage: accountPage, perPage: 100 })
+        const responseAccounts = await requestGetAllAccounts({ curPage: accountPage, perPage: 100 })
 
-        if ('error' in accountsResponse) {
+        if ('error' in responseAccounts) {
             toast({ title: '계정 목록을 불러오는 중 오류가 발생했습니다.', type: 'error' })
             setAccounts([])
             return
         }
 
-        setAccounts(accountsResponse.accounts)
-        setTotalPage(accountsResponse.totalPage)
+        setAccounts(responseAccounts.accounts)
+        setTotalPage(responseAccounts.totalPage)
     }, [accountPage])
 
     return (

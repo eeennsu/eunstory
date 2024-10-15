@@ -3,13 +3,13 @@ import { TemporarySavedPostItem } from '@/features/post/temporary-saved'
 import type { FC } from 'react'
 
 const TemporaryListPage: FC = async () => {
-    const response = await serverRequestGetAllPostList({ isPublished: false })
+    const responseAllPosts = await serverRequestGetAllPostList({ isPublished: false })
 
-    if ('error' in response) {
-        return null
+    if ('error' in responseAllPosts) {
+        throw responseAllPosts.error
     }
 
-    const temporarySavedPosts = response.posts
+    const temporarySavedPosts = responseAllPosts.posts
 
     return (
         <main className='page-container mx-auto w-full gap-3 max-w-4xl pt-28 pb-8'>

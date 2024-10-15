@@ -11,7 +11,7 @@ export const UserCommentWidget: FC<Props> = async ({ postId }) => {
     const responseCommentList = await serverRequestGetCommentList({ postId })
 
     if ('error' in responseCommentList) {
-        return null
+        throw responseCommentList.error
     }
 
     return (

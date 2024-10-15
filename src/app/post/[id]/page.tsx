@@ -11,13 +11,13 @@ interface Props {
 }
 
 const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
-    const response = await serverRequestGetDetailPost({ postId: id, isPublished: true })
+    const responseDetailPost = await serverRequestGetDetailPost({ postId: id, isPublished: true })
 
-    if (!('post' in response)) {
-        throw new Error('Post not found')
+    if ('error' in responseDetailPost) {
+        throw responseDetailPost.error
     }
 
-    const post = response?.post
+    const post = responseDetailPost?.post
 
     return (
         <main className='page-container gap-10 mx-auto max-w-screen-lg w-full pt-[120px] pb-6'>
@@ -37,11 +37,11 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
 export default DetailPostPage
 
 // export const generateStaticParams = async () => {
-//     const response = (await serverRequestGetPostIdList()) as ResponseGetPostIdListType
+//     const responsePostIds = (await serverRequestGetPostIdList()) as ResponseGetPostIdListType
 
-//     if ('error' in response) return []
+//     if ('error' in responsePostIds) return []
 
-//     return response.ids
+//     return responsePostIds.ids
 // }
 
 // export const revalidate = 60 * 60 * 4 // 4 hours

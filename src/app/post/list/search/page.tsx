@@ -18,8 +18,9 @@ const PostSearchPage: FC<Props> = async ({ searchParams }) => {
 
     const responseSearchedResult = await serverRequestGetPostListBySearch(keyword)
 
+    // 에러 발생시 조금 더 이쁜 결과 보여주기
     if ('error' in responseSearchedResult) {
-        return null
+        throw responseSearchedResult.error
     }
 
     return (

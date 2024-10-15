@@ -11,7 +11,7 @@ export const PostNavigationWidget: FC<Props> = async ({ id, order }) => {
     const responsePostNavigation = await serverRequestGetPostNavigation({ id, order })
 
     if ('error' in responsePostNavigation) {
-        return null
+        throw responsePostNavigation.error
     }
 
     return (

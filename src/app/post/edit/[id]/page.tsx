@@ -9,18 +9,16 @@ interface Props {
 }
 
 const EditDetailPostPage: FC<Props> = async ({ params: { id } }) => {
-    const response = await serverRequestGetDetailPost({ postId: id, isPublished: true })
+    const responseDetailPost = await serverRequestGetDetailPost({ postId: id, isPublished: true })
 
-    if (!('post' in response)) {
-        throw response.error
+    if ('error' in responseDetailPost) {
+        throw responseDetailPost.error
     }
-
-    const { post } = response
 
     return (
         <main className='page-container pt-24'>
             <Suspense>
-                <PostFormWidget prevPost={post} />
+                <PostFormWidget prevPost={responseDetailPost.post} />
             </Suspense>
         </main>
     )
