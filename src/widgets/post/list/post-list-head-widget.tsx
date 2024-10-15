@@ -1,15 +1,10 @@
-'use client'
-
-import { useAdminSession } from '@/lib/hooks'
 import { mainPath } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import Link from 'next/link'
 import type { FC } from 'react'
 
 export const PostListHeadWidget: FC = () => {
-    const { isAdminAuthorized } = useAdminSession()
-
-    return isAdminAuthorized ? (
+    return (
         <section className='fixed flex rounded-sm flex-col gap-3 top-28 right-1'>
             <Button
                 asChild
@@ -27,5 +22,5 @@ export const PostListHeadWidget: FC = () => {
                 <Link href={mainPath.post.edit()}>포스트 순서 수정</Link>
             </Button>
         </section>
-    ) : null
+    )
 }
