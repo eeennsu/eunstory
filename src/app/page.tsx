@@ -7,6 +7,7 @@ import {
 import { FC } from 'react'
 
 async function test() {
+    console.log('Testing post API')
     try {
         const postTagList = await serverRequestGetPostTagList()
         console.log('postTagList', postTagList)
@@ -35,6 +36,7 @@ async function test() {
         console.log('Error fetching some post list:', error)
     }
 }
+
 test()
 
 const HomePage: FC = async () => {
