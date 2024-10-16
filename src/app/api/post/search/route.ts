@@ -11,6 +11,12 @@ export const GET = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Keyword not found' }, { status: 404 })
     }
 
+    console.log('get-searched-post-list-params')
+
+    params.forEach((value, key) => {
+        console.log(key, value)
+    })
+
     try {
         const posts = (await prisma.post.findMany({
             where: {

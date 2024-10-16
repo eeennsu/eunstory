@@ -30,9 +30,15 @@ export const authOptions: AuthOptions = {
                     throw new Error(ERROR_CODES.MISSING_ID_OR_PASSWORD.code)
                 }
 
-                const admin = await prisma.user.findFirst({
-                    where: { username: id },
-                })
+                let admin: User | null = null
+
+                try {
+                    admin = await prisma.user.findFirst({
+                        where: { username: id },
+                    })
+                } catch (error) {
+                    return Promise.reject(new Error(ERROR_CODES.USER_NOT_FOUND.code))
+                }
 
                 if (!admin || !admin?.password) {
                     throw new Error(ERROR_CODES.USER_NOT_FOUND.code)

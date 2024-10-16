@@ -19,6 +19,12 @@ export const GET = async (request: NextRequest) => {
             take: perPage,
         }
 
+    console.log('get-post-list-params')
+
+    params.forEach((value, key) => {
+        console.log(key, value)
+    })
+
     try {
         const totalCount = await prisma.post.count({
             where: {
