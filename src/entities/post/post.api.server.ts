@@ -34,7 +34,7 @@ export const serverRequestGetSomePostList = async ({
     params.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetPostListType>({
-        url: getUrlFromServer(`/api/post/?${params.toString()}`),
+        url: getUrlFromServer(`/api/post?${params.toString()}`),
         config: {
             next: {
                 revalidate: 60 * 60, // 1 hours
