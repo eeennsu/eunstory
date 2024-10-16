@@ -20,7 +20,6 @@ export const GET = async (request: NextRequest) => {
         }
 
     try {
-        console.log('111111111')
         const totalCount = await prisma.post.count({
             where: {
                 order: {
@@ -28,7 +27,7 @@ export const GET = async (request: NextRequest) => {
                 },
             },
         })
-        console.log('22222222')
+
         const posts = (await prisma.post.findMany({
             where: {
                 isActive: true,
@@ -55,12 +54,10 @@ export const GET = async (request: NextRequest) => {
             },
         })) as PostListItem[]
 
-        console.log('3333333333')
         if (!posts) {
             return NextResponse.json({ error: 'Posts not found' }, { status: 404 })
         }
 
-        console.log('444444444')
         if (isPublished) {
             return NextResponse.json({ totalCount, posts })
         } else {
