@@ -7,22 +7,34 @@ import {
 import { FC } from 'react'
 
 async function test() {
-    const postTagList = serverRequestGetPostTagList()
-    console.log('postTagList', postTagList)
+    try {
+        const postTagList = await serverRequestGetPostTagList()
+        console.log('postTagList', postTagList)
+    } catch (error) {
+        console.log('Error fetching post tags:', error)
+    }
 
-    const responsePostList = await serverRequestGetSomePostList({ curPage: 1, perPage: 5, isPublished: true })
+    try {
+        const responseSearchedResult = await serverRequestGetPostListBySearch('test')
+        console.log('responseSearchedResult', responseSearchedResult)
+    } catch (error) {
+        console.log('Error fetching post list by search:', error)
+    }
 
-    console.log('responsePostList', responsePostList)
+    try {
+        const postTotalResponse = await serverRequestGetActivePostCount({ lastThreeMonths: true })
+        console.log('postTotalResponse', postTotalResponse)
+    } catch (error) {
+        console.log('Error fetching active post count:', error)
+    }
 
-    const responseSearchedResult = await serverRequestGetPostListBySearch('test')
-
-    console.log('responseSearchedResult', responseSearchedResult)
-
-    const postTotalResponse = await serverRequestGetActivePostCount({ lastThreeMonths: true })
-
-    console.log('postTotalResponse', postTotalResponse)
+    try {
+        const responsePostList = await serverRequestGetSomePostList({ curPage: 1, perPage: 5, isPublished: true })
+        console.log('responsePostList', responsePostList)
+    } catch (error) {
+        console.log('Error fetching some post list:', error)
+    }
 }
-
 test()
 
 const HomePage: FC = async () => {
