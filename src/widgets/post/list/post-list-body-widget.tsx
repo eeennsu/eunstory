@@ -8,7 +8,5 @@ export const PostListBodyWidget: FC = async () => {
         throw responsePostList.error
     }
 
-    console.log('responsePostList', responsePostList)
-
     return <PostListByScroll initialPosts={responsePostList?.posts} />
 }
