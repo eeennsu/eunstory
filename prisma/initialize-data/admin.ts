@@ -7,22 +7,25 @@ export const createDefaultAdmin = async (prisma: PrismaClient) => {
     const adminPassword = assertValue(process.env.ADMIN_PASSWORD)
     const adminName = assertValue(process.env.ADMIN_NAME)
 
-    const adminCount = await prisma.user.count()
+    try {
+        const adminCount = await prisma.user.count()
 
-    if (adminCount === 0) {
-        bcrypt.hash(adminPassword, 10, async (err, hash) => {
-            if (err) {
-                throw new Error('Failed to hash password')
-            }
+        if (adminCount === 0) {
+            const hashedPassword = await bcrypt.hash(adminPassword, 10)
 
             await prisma.user.create({
                 data: {
                     username: adminId,
-                    password: hash,
+                    password: hashedPassword,
                     name: adminName,
                     isAdmin: true,
                 },
             })
-        })
+
+            console.log('✅ Default admin created successfully')
+        }
+    } catch (error) {
+        console.error('Failed to create default admin:', error)
+        return false
     }
 }

@@ -5,21 +5,17 @@ function prismaClientSingleton() {
     const prisma = new PrismaClient()
 
     const setInitializeData = async () => {
-        await createDefaultAdmin(prisma)
-        return true
+        try {
+            await createDefaultAdmin(prisma)
+            console.log('✅ Prisma initialized successfully with default admin')
+        } catch (error) {
+            console.error('❌ Prisma initialization failed:', error)
+        }
     }
 
-    setInitializeData()
-        .then(() => {
-            // eslint-disable-next-line no-console
-            console.log('🚀  Prisma is ready')
-        })
-        .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.log('❌  Failed to ready about prisma')
-            // eslint-disable-next-line no-console
-            console.log(error)
-        })
+    setInitializeData().then(() => {
+        console.log('🚀 Prisma is ready')
+    })
 
     return prisma
 }
