@@ -3,6 +3,7 @@ name: GitHub Actions Vercel Production Deployment
 env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    DATABASE_URL: ${{ secrets.DATABASE_URL }} # GitHub Secrets에 설정한 DATABASE_URL을 추가
 
 on:
     push:
