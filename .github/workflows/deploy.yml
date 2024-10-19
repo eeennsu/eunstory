@@ -20,21 +20,26 @@ jobs:
             - name: Install pnpm
               run: npm install -g pnpm
 
-            # 5. 프로젝트 의존성 설치
+            # 3. pnpm global 설정
+            - name: Setup pnpm global bin directory
+              run: pnpm setup
+
+            # 4. 프로젝트 의존성 설치
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            # 3. Vercel CLI 설치
+            # 5. Vercel CLI 설치
             - name: Install Vercel CLI
               run: pnpm add -g vercel@latest
 
-            # 4. Vercel 환경 정보 가져오기
+            # 6. Vercel 환경 정보 가져오기
             - name: Pull Vercel Environment Information
               run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
+            # 7. 프로젝트 빌드
             - name: Build Project Artifacts
-              run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+              run: pnpm build
 
-            # 7. Vercel에 프로젝트 배포
+            # 8. Vercel에 프로젝트 배포
             - name: Deploy Project Artifacts to Vercel
               run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
