@@ -8,6 +8,7 @@
         "start": "next start",
         "lint": "next lint",
         "pretty": "prettier --write \"**/*.{js,ts,tsx,jsx,json,css}\"",
+        "vercel-build": "prisma generate && prisma migrate deploy && next build",
         "postinstall": "prisma generate"
     },
     "dependencies": {
