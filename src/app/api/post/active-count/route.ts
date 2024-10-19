@@ -7,15 +7,13 @@ export const dynamic = 'force-dynamic'
 
 export const GET = async (request: NextRequest) => {
     try {
-        const params = request.nextUrl.searchParams
+        const searchParams = request.nextUrl.searchParams
 
-        console.log('get-active-post-count-params')
-
-        params.forEach((value, key) => {
+        searchParams.forEach((value, key) => {
             console.log(key, value)
         })
 
-        const filter = params.get('filter')?.toString()
+        const filter = searchParams.get('filter')?.toString()
 
         const filterOptions = {
             ...(filter === 'last-three-months' && {

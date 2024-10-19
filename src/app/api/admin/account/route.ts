@@ -10,10 +10,10 @@ export const GET = async (request: NextRequest) => {
         return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
     }
 
-    const params = request.nextUrl.searchParams
+    const searchParams = request.nextUrl.searchParams
 
-    const curPage = Number(params.get('curPage')) || 1
-    const perPage = Number(params.get('perPage')) || 10
+    const curPage = Number(searchParams.get('curPage')) || 1
+    const perPage = Number(searchParams.get('perPage')) || 10
 
     const totalCount = await prisma.account.count()
     const totalPage = Math.ceil(totalCount / perPage) || 1

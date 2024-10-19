@@ -5,25 +5,21 @@ import { mainPath } from '@/lib/route'
 import { revalidatePath } from 'next/cache'
 import prisma from '../../../../prisma/prisma-client'
 
+export const dynamic = 'force-dynamic'
+
 // get post list
 export const GET = async (request: NextRequest) => {
-    const params = request.nextUrl.searchParams
-    const curPage = Number(params.get('curPage')) || 1
-    const perPage = Number(params.get('perPage')) || 10
-    const tag = params.get('tag')
-    const isPublished = params.get('isPublished')?.toString() === 'true'
+    const searchParams = request.nextUrl.searchParams
+    const curPage = Number(searchParams.get('curPage')) || 1
+    const perPage = Number(searchParams.get('perPage')) || 10
+    const tag = searchParams.get('tag')
+    const isPublished = searchParams.get('isPublished')?.toString() === 'true'
 
     const paginationParams = curPage &&
         perPage && {
             skip: perPage * (curPage - 1),
             take: perPage,
         }
-
-    console.log('get-post-list-params')
-
-    params.forEach((value, key) => {
-        console.log(key, value)
-    })
 
     try {
         const totalCount = await prisma.post.count({

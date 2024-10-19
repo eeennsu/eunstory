@@ -5,14 +5,12 @@ import prisma from '../../../../../../prisma/prisma-client'
 // get prev, next post
 
 export const GET = async (request: NextRequest) => {
-    const params = request.nextUrl.searchParams
-    const order = params.get('order')?.toString()
+    const searchParams = request.nextUrl.searchParams
+    const order = searchParams.get('order')?.toString()
 
     if (!order) {
         return NextResponse.json({ error: 'Invalid params' }, { status: 400 })
     }
-
-    console.log(order)
 
     try {
         const prevPost =

@@ -3,19 +3,15 @@ import { Post } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '../../../../../prisma/prisma-client'
 
+export const dynamic = 'force-dynamic'
+
 export const GET = async (request: NextRequest) => {
-    const params = request.nextUrl.searchParams
-    const keyword = params.get('keyword')
+    const searchParams = request.nextUrl.searchParams
+    const keyword = searchParams.get('keyword')
 
     if (!keyword) {
         return NextResponse.json({ error: 'Keyword not found' }, { status: 404 })
     }
-
-    console.log('get-searched-post-list-params')
-
-    params.forEach((value, key) => {
-        console.log(key, value)
-    })
 
     try {
         const posts = (await prisma.post.findMany({
