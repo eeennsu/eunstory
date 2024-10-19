@@ -13,7 +13,7 @@ export const DetailPostWidget: FC<Props> = async ({ post }) => {
     const { isAdminAuthorized } = await getServerAuth()
 
     return (
-        <article className='flex flex-col gap- text-white rounded-lg'>
+        <article className='flex flex-col gap-7 text-white rounded-lg pb-14'>
             <section className='flex flex-col gap-4 border-b border-b-slate-700 pb-7'>
                 <h1 className='text-3xl font-bold text-slate-100 leading-tight'>{post?.title}</h1>
 

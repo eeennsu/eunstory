@@ -1,39 +1,53 @@
-import { serverRequestGetPostNavigation } from '@/entities/post'
+'use client'
+
+import { requestGetPostNavigation } from '@/entities/post'
 import { PostNavigationItem } from '@/features/post/detail/navigation'
-import type { FC } from 'react'
+import { useAsync } from '@/lib/hooks'
+import { useState, type FC } from 'react'
 
 interface Props {
     id: string
     order: number
 }
 
-export const PostNavigationWidget: FC<Props> = async ({ id, order }) => {
-    const responsePostNavigation = await serverRequestGetPostNavigation({ id, order })
+export const PostNavigationWidget: FC<Props> = ({ id, order }) => {
+    const [postNav, setPostNav] = useState<{ prevPost: any; nextPost: any } | null>(null)
 
-    if ('error' in responsePostNavigation) {
-        throw responsePostNavigation.error
-    }
+    useAsync(async () => {
+        const responsePostNavigation = await requestGetPostNavigation({ id, order })
+
+        if ('error' in responsePostNavigation) {
+            throw responsePostNavigation.error
+        }
+
+        setPostNav(responsePostNavigation)
+    }, [])
+
+    console.log(postNav)
 
     return (
-        <section className='flex justify-between max-w-5xl w-full mx-auto items-center gap-4 py-6'>
-            {responsePostNavigation.prevPost ? (
-                <PostNavigationItem
-                    id={responsePostNavigation.prevPost.id}
-                    title={responsePostNavigation.prevPost.title}
-                    type='prev'
-                />
-            ) : (
-                <div className='w-1/2' />
-            )}
-            {responsePostNavigation.nextPost ? (
-                <PostNavigationItem
-                    id={responsePostNavigation.nextPost.id}
-                    title={responsePostNavigation.nextPost.title}
-                    type='next'
-                />
-            ) : (
-                <div className='w-1/2' />
-            )}
-        </section>
+        postNav?.prevPost ||
+        (postNav?.nextPost && (
+            <section className='flex justify-between max-w-5xl w-full mx-auto items-center gap-4 py-6'>
+                {postNav?.prevPost ? (
+                    <PostNavigationItem
+                        id={postNav?.prevPost.id}
+                        title={postNav?.prevPost.title}
+                        type='prev'
+                    />
+                ) : (
+                    <div className='w-1/2' />
+                )}
+                {postNav?.nextPost ? (
+                    <PostNavigationItem
+                        id={postNav?.nextPost.id}
+                        title={postNav?.nextPost.title}
+                        type='next'
+                    />
+                ) : (
+                    <div className='w-1/2' />
+                )}
+            </section>
+        ))
     )
 }

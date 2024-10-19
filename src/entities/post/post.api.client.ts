@@ -7,6 +7,7 @@ import { RequestCreatePostType, ResponseCreatePostType, ResponseGetPostListType 
 import { generateRequest } from '@/lib/fetch'
 import { Post } from '@prisma/client'
 import { PaginationParams } from '../common'
+import { ResponseGetPostNavigationType } from '@/app/api/post/[id]/navigation/route'
 
 export const requestGetPostList = async ({
     tag,
@@ -80,5 +81,14 @@ export const requestEditPostListOrder = async ({ updatedSequences }: RequestEdit
         body: {
             updatedSequences,
         },
+    })
+}
+
+export const requestGetPostNavigation = async ({ id, order }: { id: string; order: number }) => {
+    const params = new URLSearchParams()
+    params.append('order', order.toString())
+
+    return generateRequest<undefined, ResponseGetPostNavigationType>({
+        url: `/api/post/${id}/navigation?${params.toString()}`,
     })
 }

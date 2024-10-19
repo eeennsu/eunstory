@@ -15,7 +15,7 @@ export const UserCommentWidget: FC<Props> = async ({ postId }) => {
     }
 
     return (
-        <section className='flex flex-col gap-9 px-10'>
+        <section className='flex flex-col gap-3'>
             <CommentInput
                 postId={postId}
                 commentCount={responseCommentList.commentCount}
