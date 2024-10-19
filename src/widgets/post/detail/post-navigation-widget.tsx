@@ -17,13 +17,11 @@ export const PostNavigationWidget: FC<Props> = ({ id, order }) => {
         const responsePostNavigation = await requestGetPostNavigation({ id, order })
 
         if ('error' in responsePostNavigation) {
-            throw responsePostNavigation.error
+            return { prevPost: null, nextPost: null }
         }
 
         setPostNav(responsePostNavigation)
     }, [])
-
-    console.log(postNav)
 
     return (
         postNav?.prevPost ||
