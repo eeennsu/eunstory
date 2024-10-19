@@ -9,10 +9,6 @@ export const GET = async (request: NextRequest) => {
     try {
         const searchParams = request.nextUrl.searchParams
 
-        searchParams.forEach((value, key) => {
-            console.log(key, value)
-        })
-
         const filter = searchParams.get('filter')?.toString()
 
         const filterOptions = {

@@ -1,25 +1,42 @@
 name: GitHub Actions Vercel Production Deployment
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-on:
-  push:
-    branches:
-      - main
-jobs:
-  Deploy-Production:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install pnpm
-        run: npm install --global pnpm
-      - name: Install Vercel CLI
-        run: npm install --global vercel@canary
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-        
+env:
+    VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+    VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    Deploy-Production:
+        runs-on: ubuntu-latest
+
+        steps:
+            # 1. 저장소에서 코드 클론
+            - uses: actions/checkout@v2
+
+            # 2. pnpm 설치
+            - name: Install pnpm
+              run: npm install --global pnpm
+
+            # 3. Vercel CLI 설치
+            - name: Install Vercel CLI
+              run: npm install --global vercel@canary
+
+            # 4. 의존성 설치
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            # 5. Prisma 마이그레이션 적용 (배포 전 데이터베이스 스키마 적용)
+            - name: Run Prisma Migrations
+              run: pnpm prisma migrate deploy
+
+            # 6. 빌드 실행
+            - name: Build Project Artifacts
+              run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+            # 7. 배포 실행
+            - name: Deploy Project Artifacts to Vercel
+              run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
