@@ -25,10 +25,10 @@ jobs:
                   cache: 'pnpm'
 
             - name: Install pnpm
-              run: npm install --g pnpm
+              run: npm install -g pnpm
 
             - name: Install Vercel CLI
-              run: npm install --g vercel@canary
+              run: npm install -g vercel@canary
 
             - name: Pull Vercel Environment Information
               run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
