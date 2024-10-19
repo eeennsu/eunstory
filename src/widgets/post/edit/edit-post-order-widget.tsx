@@ -86,7 +86,7 @@ export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {
                                         </div>
                                     }>
                                     <EditOrderPostItem
-                                        className='cursor-move rounded-none'
+                                        className='rounded-none '
                                         title={post.title}
                                         createdAt={post.createdAt}
                                     />

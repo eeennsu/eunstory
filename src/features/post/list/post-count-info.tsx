@@ -4,16 +4,12 @@ import type { FC } from 'react'
 
 export const PostCountInfo: FC = async () => {
     const postTotalResponse = await serverRequestGetActivePostCount({ lastThreeMonths: true })
-    if ('error' in postTotalResponse) {
-        console.log('error in postTotalResponse', postTotalResponse.error)
-        return null
-    }
 
     const activePostCount = 'error' in postTotalResponse ? 0 : postTotalResponse.activeCount
     const threeMonthPostCount = 'error' in postTotalResponse ? 0 : postTotalResponse.activeCount
 
     return (
-        <div className='flex justify-around text-center text-gray-400'>
+        <section className='flex justify-around text-center text-gray-400'>
             <div>
                 <p className='text-xs uppercase tracking-wide'>전체</p>
 
@@ -29,6 +25,6 @@ export const PostCountInfo: FC = async () => {
                     value={threeMonthPostCount}
                 />
             </div>
-        </div>
+        </section>
     )
 }

@@ -5,16 +5,7 @@ import { cn } from '@/lib/shadcn/shadcn-utils'
 import { Badge } from '@/lib/ui/badge'
 import { Input } from '@/lib/ui/input'
 import { CustomTooltip } from '@/shared/common'
-import {
-    FC,
-    forwardRef,
-    InputHTMLAttributes,
-    KeyboardEvent,
-    PropsWithChildren,
-    useImperativeHandle,
-    useRef,
-    useState,
-} from 'react'
+import { forwardRef, InputHTMLAttributes, KeyboardEvent, useImperativeHandle, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {}
@@ -51,20 +42,6 @@ export const TagInput = forwardRef<TagInputRef, Props>(({ className, placeholder
         const value = inputRef.current?.value
 
         switch (e.key) {
-            case ',':
-                if (handleTagLimit()) {
-                    return
-                }
-
-                if (typeof value === 'string' && value.trim() !== '') {
-                    setTags((prev) => [...prev, value.trim().slice(0, -1)])
-
-                    if (inputRef.current) {
-                        inputRef.current.value = ''
-                    }
-                }
-
-                break
             case 'Enter':
                 if (handleTagLimit()) {
                     return

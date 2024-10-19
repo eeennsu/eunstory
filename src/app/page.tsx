@@ -1,9 +1,3 @@
-import {
-    serverRequestGetActivePostCount,
-    serverRequestGetPostListBySearch,
-    serverRequestGetPostTagList,
-    serverRequestGetSomePostList,
-} from '@/entities/post'
 import { FC } from 'react'
 
 const HomePage: FC = async () => {

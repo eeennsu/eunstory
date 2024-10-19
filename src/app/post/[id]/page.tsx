@@ -18,7 +18,7 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
     const post = responseDetailPost?.post
 
     return (
-        <main className='page-container gap-10 mx-auto max-w-screen-lg w-full pt-[120px] pb-6'>
+        <main className='page-container gap-10 mx-auto max-w-screen-lg w-full pt-[130px] pb-6'>
             <DetailPostWidget post={post} />
 
             <section className='flex flex-col gap-5'>

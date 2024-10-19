@@ -19,7 +19,7 @@ export const UserInfo: FC<Props> = ({ author, createdAt, updatedAt }) => {
         <Comp
             href={author?.url || ''}
             target='_blank'
-            className='inline-flex gap-3 w-fit items-center cursor-pointer group rounded-lg'>
+            className='inline-flex gap-3 w-fit items-center group rounded-lg'>
             <Image
                 src={author.isAdmin ? '/images/eunstory-logo-icon.png' : author?.image || ''}
                 alt={author?.name}

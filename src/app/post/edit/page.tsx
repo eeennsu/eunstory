@@ -12,9 +12,11 @@ const EditPostListPage: FC = async () => {
     }
 
     return (
-        <main className='page-container max-w-[1200px] mx-auto pt-32'>
+        <main className='page-container max-w-4xl mx-auto pt-28'>
             {responsePostList.totalCount === 0 ? (
-                '게시글이 없습니다.'
+                <section className='text-gray-500 flex flex-grow flex-col items-center justify-center'>
+                    저장된 포스트가 없습니다.
+                </section>
             ) : (
                 <EditPostOrderWidget
                     allPosts={responsePostList.posts}

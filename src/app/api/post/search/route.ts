@@ -29,7 +29,7 @@ export const GET = async (request: NextRequest) => {
                     },
                     {
                         tags: {
-                            contains: keyword,
+                            hasSome: [keyword],
                         },
                     },
                 ],

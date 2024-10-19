@@ -13,8 +13,12 @@ export async function middleware(request: NextRequest) {
     }
 
     if (token?.name !== assertValue(process.env.ADMIN_NAME) || !token?.isAdmin) {
-        console.log('Unauthenticated access')
-        return NextResponse.redirect(new URL(mainPath.home(), request.url))
+        const redirectUrl = new URL(mainPath.home(), request.url)
+
+        redirectUrl.searchParams.set('unauthenticated', 'true')
+        redirectUrl.searchParams.set('from', request.nextUrl.pathname)
+
+        return NextResponse.redirect(redirectUrl)
     }
 
     return NextResponse.next()

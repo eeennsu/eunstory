@@ -34,7 +34,7 @@ export const PostItem: FC<Props> = ({ id, title, thumbnail, date, summary, tags 
                         <Fragment>
                             <span className='text-[10px]'>|</span>
                             <div className='flex gap-3'>
-                                {tags?.split(',').map((tag) => (
+                                {tags?.map((tag) => (
                                     <Badge
                                         key={tag}
                                         variant={'tag'}>

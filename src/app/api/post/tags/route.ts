@@ -13,7 +13,7 @@ export const GET = async (_: NextRequest) => {
         })
 
         const allTags = posts
-            .flatMap((post) => post.tags?.split(',') || [])
+            .flatMap((post) => post.tags || [])
             .map((tag) => tag.trim())
             .filter((tag, i, arr) => tag && arr.indexOf(tag) === i)
 

@@ -13,8 +13,6 @@ interface Props<T extends Data & CustomSortableItem> extends Arguments {
     forceDragging?: boolean
     isOverlay?: boolean
     sequence?: ReactNode
-    // removeButton?: ReactNode
-    // removeItem?: (id: string) => void
 }
 
 export const Sortable = <T extends Data & CustomSortableItem>({
@@ -24,8 +22,7 @@ export const Sortable = <T extends Data & CustomSortableItem>({
     forceDragging = false,
     isOverlay,
     sequence,
-    // removeButton,
-    // removeItem,
+
     ...props
 }: PropsWithChildren<Props<T>>) => {
     const { setNodeRef, listeners, setActivatorNodeRef, attributes, isDragging, transform, transition } = useSortable({
@@ -40,17 +37,13 @@ export const Sortable = <T extends Data & CustomSortableItem>({
     return (
         <div
             ref={setNodeRef}
-            className={cn(
-                'flex flex-col w-full h-fit gap-6 bg-white border border-gray-500',
-                isDragging ? 'opacity-60 z-100 cursor-grabbing' : 'cursor-grab'
-            )}
+            className={cn('flex flex-col w-full h-fit gap-6 bg-white border border-gray-500')}
             style={parentStyles}>
             <div className={cn('w-full overflow-hidden', wrapperClassName)}>
                 {sequence}
-
                 <div
                     ref={setActivatorNodeRef}
-                    className={cn('flex-grow')}
+                    className={cn('flex-grow', isDragging ? 'opacity-60 z-100 cursor-grabbing' : 'cursor-grab')}
                     {...attributes}
                     {...listeners}>
                     {children}

@@ -9,22 +9,27 @@ const TemporaryListPage: FC = async () => {
         throw responseAllPosts.error
     }
 
-    const temporarySavedPosts = responseAllPosts.posts
+    const temporarySavedPosts = responseAllPosts.posts || []
 
     return (
-        <main className='page-container mx-auto w-full gap-3 max-w-4xl pt-28 pb-8'>
-            <h2 className='text-2xl font-bold text-gray-100 mb-6'>임시 저장된 포스트</h2> {/* 리스트 제목 추가 */}
-            <div className='flex flex-col gap-6'>
-                {temporarySavedPosts.map((post) => (
-                    <TemporarySavedPostItem
-                        key={post.id}
-                        id={post.id}
-                        title={post.title}
-                        summary={post.summary}
-                        createdAt={post.createdAt.toString()}
-                    />
-                ))}
-            </div>
+        <main className='page-container mx-auto w-full gap-6 max-w-4xl pt-28 pb-8'>
+            {temporarySavedPosts.length > 0 ? (
+                <section className='flex flex-col gap-6'>
+                    {temporarySavedPosts.map((post) => (
+                        <TemporarySavedPostItem
+                            key={post.id}
+                            id={post.id}
+                            title={post.title}
+                            summary={post.summary}
+                            createdAt={post.createdAt.toString()}
+                        />
+                    ))}
+                </section>
+            ) : (
+                <section className='flex items-center justify-center flex-1 text-gray-500'>
+                    임시 저장된 포스트가 없습니다.
+                </section>
+            )}
         </main>
     )
 }

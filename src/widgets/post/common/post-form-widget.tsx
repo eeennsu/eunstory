@@ -94,7 +94,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const handleSubmit = async () => {
         if (!isValidatedForm()) return
 
-        const tags = tagInputRef.current?.getTags().join(',') || ''
+        const tags = tagInputRef.current?.getTags() || []
         const toastKeyword = prevPost ? '수정' : '생성'
 
         executeWithProgress(async () => {
@@ -107,7 +107,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                         editedPost: {
                             title,
                             content,
-                            tags: tags || null,
+                            tags,
                             authorId: authorId!,
                             thumbnail,
                         },
@@ -120,7 +120,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                             editedPost: {
                                 title,
                                 content: content !== '' ? content : editorRef.current?.getHtml(), // '' 일때는, 임시저장 리스트에서 작성 폼에 작성한 경우임.
-                                tags: tags || null,
+                                tags,
                                 authorId: authorId!,
                                 order: -1,
                             },
@@ -132,7 +132,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
                             title,
                             content,
                             authorId: authorId!,
-                            tags: tags || null,
+                            tags,
                             order: -1,
                             summary,
                             thumbnail,
@@ -172,7 +172,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
 
         let isSaved
 
-        const tags = tagInputRef.current?.getTags().join(',') || null
+        const tags = tagInputRef.current?.getTags() || []
         const content = editorRef.current?.getHtml() || ''
 
         // 임시 저장된 포스트가 있으면? 임시저장된 포스트 내용 변경하며 임시저장
@@ -264,7 +264,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
         setTitle(prevPost.title)
         setContent(prevPost.content)
 
-        prevPost.tags && tagInputRef.current?.setTagValues(prevPost.tags.split(','))
+        prevPost.tags && tagInputRef.current?.setTagValues(prevPost.tags)
     }, [prevPost])
 
     const { isLoading } = useAsync(async () => {
@@ -281,7 +281,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
             setTitle(post.title)
 
             editorRef.current?.setContent(post.content)
-            post.tags && tagInputRef.current?.setTagValues(post.tags.split(','))
+            post.tags && tagInputRef.current?.setTagValues(post.tags)
         }
     }, [temporarySavedPostId])
 

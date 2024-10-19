@@ -21,12 +21,12 @@ export const PostSearch: FC = () => {
     }
 
     return (
-        <div className='relative'>
+        <section className='relative'>
             <Input
                 type='text'
                 placeholder='제목, 내용 또는 태그로 검색'
                 variant='clear'
-                className='flex-1 p-3 rounded-l-md bg-gray-800 pr-0 text-white placeholder:text-gray-600 h-10'
+                className='flex-1 p-3 rounded-l-md placeholder:text-xs bg-gray-800 pr-0 text-white placeholder:text-slate-500 h-10'
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -36,6 +36,6 @@ export const PostSearch: FC = () => {
                 onClick={handleSearch}>
                 <Search size={18} />
             </button>
-        </div>
+        </section>
     )
 }

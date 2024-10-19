@@ -18,4 +18,4 @@ const PostListLayout: FC<PropsWithChildren> = async ({ children }) => {
     )
 }
 
-export default PostListLayout 
+export default PostListLayout

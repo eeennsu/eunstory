@@ -5,31 +5,31 @@ import type { FC } from 'react'
 export const PostTagsInfo: FC = async () => {
     const tagsResponse = await serverRequestGetPostTagList()
 
-    if ('error' in tagsResponse) {
-        console.log('error in tagsResponse', tagsResponse.error)
-        return null
-    }
-
     const postTags = 'error' in tagsResponse ? [] : tagsResponse.tags
 
     return (
-        <div className='flex flex-col flex-grow gap-4'>
+        <section className='flex flex-col flex-grow gap-4'>
             <h3 className='text-lg font-semibold text-white flex items-center justify-between'>
-                <span>태그 전체보기</span>
-                <span className='bg-gray-800 text-gray-300 font-normal text-xs rounded-full px-2 py-1'>
+                태그 목록
+                <span className='bg-gray-800 text-gray-300 font-normal text-xs rounded-full px-3 py-1.5'>
                     {postTags.length} 개
                 </span>
             </h3>
 
-            <div className='custom-scrollbar flex-grow flex flex-wrap gap-2 p-3 rounded-lg bg-gray-800 max-h-[calc(100vh-570px)]'>
-                {postTags.map((tag) => (
-                    <Badge
-                        key={tag}
-                        variant={'tag'}>
-                        {tag}
-                    </Badge>
-                ))}
-            </div>
-        </div>
+            {postTags.length !== 0 && (
+                <div className='custom-scrollbar max-h-[calc(100vh-570px)] p-3 bg-gray-800 rounded-sm h-full'>
+                    <div className='flex gap-2.5'>
+                        {postTags.map((tag, index) => (
+                            <Badge
+                                key={index}
+                                className='h-fit'
+                                variant={'tag'}>
+                                {tag}
+                            </Badge>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </section>
     )
 }

@@ -28,7 +28,7 @@ export const SearchedPostItem: FC<Props> = ({ post }) => {
                 </h2>
                 <div className='flex flex-col gap-1.5'>
                     <div className='flex flex-wrap gap-2'>
-                        {post.tags?.split(',').map((tag) => (
+                        {post.tags.map((tag) => (
                             <Badge
                                 key={tag}
                                 variant={'tag'}>

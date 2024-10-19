@@ -5,10 +5,10 @@ import type { FC } from 'react'
 
 export const MyProfile: FC = () => {
     return (
-        <figure className='flex flex-col items-center text-center gap-4'>
-            <div className='size-24 bg-gray-700 rounded-full flex items-center justify-center'>
+        <section className='flex flex-col items-center text-center gap-4'>
+            <figure className='size-24 bg-gray-700 rounded-full flex items-center justify-center'>
                 <span className='text-lg font-bold text-gray-400'>내 사진</span>
-            </div>
+            </figure>
             <TypingAnimation
                 className={cn(
                     'text-xl font-semibold w-[150px] text-white leading-relaxed break-words h-[66px]',
@@ -16,6 +16,6 @@ export const MyProfile: FC = () => {
                 )}
                 text='프론트엔드 개발자 방은수의 기록'
             />
-        </figure>
+        </section>
     )
 }

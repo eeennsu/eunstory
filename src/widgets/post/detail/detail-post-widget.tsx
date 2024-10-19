@@ -13,14 +13,14 @@ export const DetailPostWidget: FC<Props> = async ({ post }) => {
     const { isAdminAuthorized } = await getServerAuth()
 
     return (
-        <article className='flex flex-col gap-6 text-white rounded-lg'>
-            <section className='flex flex-col gap-4 border-b border-b-slate-700 pb-4'>
-                <h1 className='text-5xl font-bold  text-slate-100 leading-tight'>{post?.title}</h1>
+        <article className='flex flex-col gap- text-white rounded-lg'>
+            <section className='flex flex-col gap-4 border-b border-b-slate-700 pb-7'>
+                <h1 className='text-3xl font-bold text-slate-100 leading-tight'>{post?.title}</h1>
 
                 <div className='flex flex-col gap-2'>
                     {!!post?.tags?.length && (
                         <div className='flex gap-2'>
-                            {post?.tags.split(',').map((tag) => (
+                            {post?.tags.map((tag) => (
                                 <Badge
                                     key={tag}
                                     variant={'tag'}
