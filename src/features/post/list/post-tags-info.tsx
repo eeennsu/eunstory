@@ -5,6 +5,11 @@ import type { FC } from 'react'
 export const PostTagsInfo: FC = async () => {
     const tagsResponse = await serverRequestGetPostTagList()
 
+    if ('error' in tagsResponse) {
+        console.log('error in tagsResponse', tagsResponse.error)
+        return null
+    }
+
     const postTags = 'error' in tagsResponse ? [] : tagsResponse.tags
 
     return (

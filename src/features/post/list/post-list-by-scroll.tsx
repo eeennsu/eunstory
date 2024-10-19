@@ -2,7 +2,6 @@
 
 import { requestGetPostList } from '@/entities/post'
 import { useInfiniteScroll, useLoading } from '@/lib/hooks'
-import { Post } from '@prisma/client'
 import { Ellipsis } from 'lucide-react'
 import { FC, useEffect, useState } from 'react'
 import { PostItem } from './post-item'

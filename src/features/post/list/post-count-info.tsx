@@ -4,6 +4,10 @@ import type { FC } from 'react'
 
 export const PostCountInfo: FC = async () => {
     const postTotalResponse = await serverRequestGetActivePostCount({ lastThreeMonths: true })
+    if ('error' in postTotalResponse) {
+        console.log('error in postTotalResponse', postTotalResponse.error)
+        return null
+    }
 
     const activePostCount = 'error' in postTotalResponse ? 0 : postTotalResponse.activeCount
     const threeMonthPostCount = 'error' in postTotalResponse ? 0 : postTotalResponse.activeCount
