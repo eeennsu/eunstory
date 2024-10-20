@@ -17,7 +17,7 @@ export const PostTagsInfo: FC = async () => {
             </h3>
 
             {postTags.length !== 0 && (
-                <div className='custom-scrollbar max-h-[calc(100vh-570px)] p-3 bg-gray-800/60 rounded-sm h-full'>
+                <div className='custom-scrollbar max-h-[calc(100vh-600px)] p-3 bg-gray-800/60 rounded-sm h-full'>
                     <div className='flex gap-2.5'>
                         {postTags.map((tag, index) => (
                             <Badge
