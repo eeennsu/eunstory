@@ -9,6 +9,12 @@ import GoogleProvider from 'next-auth/providers/google'
 import { assertValue } from '@/lib//utils'
 import prisma from '../../../prisma/prisma-client'
 
+console.log('NEXT_AUTH_GITHUB_CLIENT_ID', process.env.NEXT_AUTH_GITHUB_CLIENT_ID ? 'true' : 'false')
+console.log('NEXT_AUTH_GITHUB_CLIENT_SECRET', process.env.NEXT_AUTH_GITHUB_CLIENT_SECRET ? 'true' : 'false')
+console.log('GOOGLE_CLIENT_ID', process.env.GOOGLE_CLIENT_ID ? 'true' : 'false')
+console.log('GOOGLE_CLIENT_SECRET', process.env.GOOGLE_CLIENT_SECRET ? 'true' : 'false')
+console.log('NEXTAUTH_SECRET', process.env.NEXTAUTH_SECRET ? 'true' : 'false')
+
 export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [

@@ -3,10 +3,6 @@ import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 export const createDefaultAdmin = async (prisma: PrismaClient) => {
-    console.log('ADMIN_ID', process.env.ADMIN_ID ? 'true' : 'false')
-    console.log('ADMIN_PASSWORD', process.env.ADMIN_PASSWORD ? 'true' : 'false')
-    console.log('ADMIN_NAME', process.env.ADMIN_NAME ? 'true' : 'false')
-
     const adminId = assertValue(process.env.ADMIN_ID)
     const adminPassword = assertValue(process.env.ADMIN_PASSWORD)
     const adminName = assertValue(process.env.ADMIN_NAME)
