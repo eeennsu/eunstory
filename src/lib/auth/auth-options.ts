@@ -6,7 +6,6 @@ import bcrypt from 'bcryptjs'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import GitHubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
-import { assertValue } from '@/lib//utils'
 import prisma from '../../../prisma/prisma-client'
 
 export const authOptions: AuthOptions = {
@@ -54,8 +53,8 @@ export const authOptions: AuthOptions = {
             },
         }),
         GitHubProvider({
-            clientId: assertValue(process.env.GITHUB_CLIENT_ID),
-            clientSecret: assertValue(process.env.GITHUB_CLIENT_SECRET),
+            clientId: process.env.GITHUB_CLIENT_ID as string,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
             authorization: {
                 params: {
                     scope: 'read:user user:email',
@@ -64,8 +63,8 @@ export const authOptions: AuthOptions = {
             },
         }),
         GoogleProvider({
-            clientId: assertValue(process.env.GOOGLE_CLIENT_ID),
-            clientSecret: assertValue(process.env.GOOGLE_CLIENT_SECRET),
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
             authorization: {
                 params: {
                     prompt: 'consent',
@@ -80,7 +79,7 @@ export const authOptions: AuthOptions = {
         maxAge: 60 * 60 * 24, // 24 hours
     },
 
-    secret: assertValue(process.env.NEXTAUTH_SECRET),
+    secret: process.env.NEXTAUTH_SECRET,
 
     callbacks: {
         jwt: async ({ token, user, profile }) => {
