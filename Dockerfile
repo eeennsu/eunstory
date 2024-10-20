@@ -18,3 +18,7 @@ COPY --from=base /app/.next ./.next
 EXPOSE 3000
 
 CMD ["pnpm", "start"]
+
+
+
+
