@@ -54,8 +54,8 @@ export const authOptions: AuthOptions = {
             },
         }),
         GitHubProvider({
-            clientId: assertValue(process.env.GITHUB_CLIENT_ID),
-            clientSecret: assertValue(process.env.GITHUB_CLIENT_SECRET),
+            clientId: assertValue(process.env.NEXT_AUTH_GITHUB_CLIENT_ID),
+            clientSecret: assertValue(process.env.NEXT_AUTH_GITHUB_CLIENT_SECRET),
             authorization: {
                 params: {
                     scope: 'read:user user:email',
