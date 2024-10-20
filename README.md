@@ -1,5 +1,7 @@
 5개월차 FE 직장인이 이제서야 만드는 개인 블로그 포트폴리오
 
+접속 주소: https://eunstory.eunsu.kr
+
 * 기술 스택
   - next.js (app router) & typescript
   - tailwindcss & shadcn
