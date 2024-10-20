@@ -4,12 +4,6 @@ env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
-    NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-    NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-    NEXT_AUTH_GITHUB_CLIENT_ID: ${{ secrets.NEXT_AUTH_GITHUB_CLIENT_ID }}
-    NEXT_AUTH_GITHUB_CLIENT_SECRET: ${{ secrets.NEXT_AUTH_GITHUB_CLIENT_SECRET }}
-    GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-    GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
 on:
     push:
@@ -28,12 +22,6 @@ jobs:
               run: |
                   docker build \
                     --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
-                    --build-arg NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
-                    --build-arg NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
-                    --build-arg NEXT_AUTH_GITHUB_CLIENT_ID=${{ secrets.NEXT_AUTH_GITHUB_CLIENT_ID }} \
-                    --build-arg NEXT_AUTH_GITHUB_CLIENT_SECRET=${{ secrets.NEXT_AUTH_GITHUB_CLIENT_SECRET }} \
-                    --build-arg GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
-                    --build-arg GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
                     -t eunstory:latest .
 
             # Vercel CLI 설치
