@@ -116,7 +116,7 @@ export const POST = async (request: NextRequest) => {
                 updatedAt: null,
                 thumbnail,
                 summary,
-                ...(lastPostOrder && { order: lastPostOrder + 1 }),
+                ...(lastPostOrder !== null && lastPostOrder !== undefined && { order: lastPostOrder + 1 }),
             },
         })
 
@@ -159,6 +159,8 @@ export const PATCH = async (request: NextRequest) => {
         )
 
         revalidatePath(mainPath.post.list())
+
+        console.log('✅ Updated post order successfully')
 
         return NextResponse.json({}, { status: 200 })
     } catch (error) {

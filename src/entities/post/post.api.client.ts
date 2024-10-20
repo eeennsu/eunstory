@@ -9,6 +9,18 @@ import { Post } from '@prisma/client'
 import { PaginationParams } from '../common'
 import { ResponseGetPostNavigationType } from '@/app/api/post/[id]/navigation/route'
 
+export const requestGetAllPostList = async ({ isPublished }: { isPublished: boolean }) => {
+    const params = new URLSearchParams()
+    params.append('isPublished', isPublished.toString())
+
+    return generateRequest<undefined, ResponseGetPostListType>({
+        url: `/api/post?${params.toString()}`,
+        config: {
+            cache: 'no-store',
+        },
+    })
+}
+
 export const requestGetPostList = async ({
     tag,
     curPage,

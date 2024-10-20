@@ -7,7 +7,6 @@ function prismaClientSingleton() {
     const setInitializeData = async () => {
         try {
             await createDefaultAdmin(prisma)
-            console.log('✅ Prisma initialized successfully with default admin')
         } catch (error) {
             console.error('❌ Prisma initialization failed:', error)
         }
