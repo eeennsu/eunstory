@@ -1,20 +1,26 @@
+# 이 워크플로의 이름
 name: GitHub Actions Vercel Production Deployment
 
+# Github actions가 사용할 환경 변수.
 env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-    DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
+# 이 워크플로가 실행될 조건. (main 브렌치에 푸시)
 on:
     push:
         branches:
             - main
 
+# delpoy-production이라는 job을 실행
 jobs:
     deploy-production:
+        # 이 job이 실행될 환경, 최신 Ubuntu 이미지를 사용하여 실행
         runs-on: ubuntu-latest
 
+        # 작업의 단계들
         steps:
+            # 코드를 체크아웃하여 Github 리포지토리의 내용을 작업 공간으로 가져옴
             - uses: actions/checkout@v2
 
             # Docker 이미지 빌드

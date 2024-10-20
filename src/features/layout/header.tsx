@@ -11,15 +11,20 @@ import { LoginModal } from '@/features/layout'
 import { useAdminSession, useProgressBar } from '@/lib/hooks'
 import WordFadeIn from '@/lib/ui/word-fade-in'
 import { LogOut } from 'lucide-react'
+import { MenuButton } from '@/shared/layout'
+import { usePathname } from 'next/navigation'
 
 export const Header: FC = () => {
     const { isAdminAuthorized, status } = useAdminSession({ options: { required: false } })
     const { barRouter } = useProgressBar()
+    const pathname = usePathname()
 
     const handleSignOut = () => {
         signOut()
         barRouter.refresh()
     }
+
+    console.log('pathname', pathname)
 
     return (
         <header className='bg-slate-700/50 backdrop-blur-lg w-full py-2 flex items-center justify-center border-b border-slate-500 fixed top-0 z-10 h-[90px]'>
@@ -46,12 +51,12 @@ export const Header: FC = () => {
                 </Link>
                 <nav className='flex gap-7 py-4 justify-center items-center'>
                     {NAV_LINKS.map((link) => (
-                        <Link
+                        <MenuButton
                             key={link.title}
-                            href={link.url}
-                            className='text-sm md:text-base transition-colors hover:text-slate-300 text-slate-300/70'>
-                            {link.title}
-                        </Link>
+                            title={link.title}
+                            url={link.url}
+                            isActive={pathname === link.url}
+                        />
                     ))}
                     {status === 'authenticated' && (
                         <Button
