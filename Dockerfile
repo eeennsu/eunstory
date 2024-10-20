@@ -21,6 +21,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# 여기에 prisma 관련 명령어를 제거하고, 빌드만 수행
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
@@ -41,4 +42,6 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
 EXPOSE 3000
-CMD ["node", "server.js"]
+
+# CMD 명령어를 수정하여, 컨테이너 시작 시 prisma migrate 및 prisma generate 수행
+CMD ["sh", "-c", "prisma migrate deploy && prisma generate && node server.js"]
