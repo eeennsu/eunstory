@@ -4,6 +4,7 @@ env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
 on:
     push:
@@ -15,17 +16,16 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            # 1. 저장소 체크아웃
             - uses: actions/checkout@v2
 
-            # 2. Docker 이미지 빌드
+            # Docker 이미지 빌드 및 DATABASE_URL 전달
             - name: Build Docker Image
-              run: docker build -t eunstory-app:latest .
+              run: docker build --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} -t eunstory-app:latest .
 
-            # 3. Vercel CLI 설치
+            # Vercel CLI 설치
             - name: Install Vercel CLI
               run: npm install --global vercel@latest
 
-            # 4. Vercel에 Docker 이미지 배포
+            # Vercel에 Docker 이미지 배포
             - name: Deploy to Vercel
               run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
