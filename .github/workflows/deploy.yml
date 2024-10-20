@@ -19,13 +19,14 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
-            # Docker 이미지 빌드 (Dockerfile이 있는 디렉토리로 이동)
+            # Docker 이미지 빌드
             - name: Build Docker Image
-              run: docker build \
-                  --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
-                  --build-arg NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
-                  --build-arg NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
-                  -t eunstory:latest .
+              run: |
+                  docker build \
+                    --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
+                    --build-arg NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
+                    --build-arg NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
+                    -t eunstory:latest .
 
             # Vercel CLI 설치
             - name: Install Vercel CLI
