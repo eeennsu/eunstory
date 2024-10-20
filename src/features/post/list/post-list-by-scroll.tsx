@@ -20,6 +20,7 @@ export const PostListByScroll: FC<Props> = ({ initialPosts }) => {
 
     const { targetRef } = useInfiniteScroll({
         onIntersect: () => {
+            console.log('onIntersect!!')
             setCurPage((prev) => prev + 1)
         },
         hasMore,
