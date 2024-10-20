@@ -6,10 +6,7 @@ env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
     NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
     NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-    GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
-    GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
-    GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-    GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+    NEXTAUTH_URL_INTERNAL: ${{ secrets.NEXTAUTH_URL_INTERNAL }}
 
 on:
     push:
@@ -30,10 +27,7 @@ jobs:
                     --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
                     --build-arg NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
                     --build-arg NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
-                    --build-arg GITHUB_CLIENT_ID=${{ secrets.GITHUB_CLIENT_ID }} \
-                    --build-arg GITHUB_CLIENT_SECRET=${{ secrets.GITHUB_CLIENT_SECRET }} \
-                    --build-arg GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
-                    --build-arg GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
+                    --build-arg NEXTAUTH_URL_INTERNAL=${{ secrets.NEXTAUTH_URL_INTERNAL }} \
                     -t eunstory:latest .
 
             # Vercel CLI 설치
