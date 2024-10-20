@@ -21,6 +21,7 @@ jobs:
 
             # Docker 이미지 빌드
             - name: Build Docker Image
+              working-directory: ./ # 루트 디렉토리에서 실행되도록 설정
               run: |
                   docker build \
                     --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
