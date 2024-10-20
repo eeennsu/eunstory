@@ -6,11 +6,18 @@ RUN npm i -g pnpm
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install
 
-# 소스 코드 복사 및 빌드
+# 소스 코드 복사
 COPY . .
-# Prisma가 DATABASE_URL을 필요로 하므로 이를 build 명령에 전달
+
+# 빌드에 필요한 환경변수를 설정
 ARG DATABASE_URL
+ARG NEXTAUTH_URL
+ARG NEXTAUTH_SECRET
 ENV DATABASE_URL=${DATABASE_URL}
+ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+
+# 애플리케이션 빌드
 RUN pnpm build
 
 # 최종 프로덕션 이미지 생성

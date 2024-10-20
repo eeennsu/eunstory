@@ -4,6 +4,8 @@ env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+    NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
 
 on:
     push:
@@ -19,7 +21,11 @@ jobs:
 
             # Docker 이미지 빌드
             - name: Build Docker Image
-              run: docker build --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} -t my-app:latest .
+              run: docker build \
+                  --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
+                  --build-arg NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
+                  --build-arg NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
+                  -t my-app:latest .
 
             # Vercel CLI 설치
             - name: Install Vercel CLI
