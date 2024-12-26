@@ -24,28 +24,25 @@ export const PostNavigationWidget: FC<Props> = ({ id, order }) => {
     }, [])
 
     return (
-        postNav?.prevPost ||
-        (postNav?.nextPost && (
-            <section className='flex justify-between max-w-5xl w-full mx-auto items-center gap-4 py-6'>
-                {postNav?.prevPost ? (
-                    <PostNavigationItem
-                        id={postNav?.prevPost.id}
-                        title={postNav?.prevPost.title}
-                        type='prev'
-                    />
-                ) : (
-                    <div className='w-1/2' />
-                )}
-                {postNav?.nextPost ? (
-                    <PostNavigationItem
-                        id={postNav?.nextPost.id}
-                        title={postNav?.nextPost.title}
-                        type='next'
-                    />
-                ) : (
-                    <div className='w-1/2' />
-                )}
-            </section>
-        ))
+        <section className='flex justify-between max-w-5xl w-full mx-auto items-center gap-4 py-6'>
+            {postNav?.prevPost ? (
+                <PostNavigationItem
+                    id={postNav?.prevPost.id}
+                    title={postNav?.prevPost.title}
+                    type='prev'
+                />
+            ) : (
+                <div className='w-1/2' />
+            )}
+            {postNav?.nextPost ? (
+                <PostNavigationItem
+                    id={postNav?.nextPost.id}
+                    title={postNav?.nextPost.title}
+                    type='next'
+                />
+            ) : (
+                <div className='w-1/2' />
+            )}
+        </section>
     )
 }

@@ -3,23 +3,34 @@ export type MyHistory = {
     sub: string
     icon: 'code-xml' | 'id-card' | 'graduation-cap'
     date: string
-    description?: string[]
+    descriptions?: string[]
 }
 
 export const MY_HISTORY: MyHistory[] = [
     {
+        title: '기업 전용 강의 수강 사이트 / 관리자 & 운영자 사이트 개발',
+        sub: '기업 내부 직원 교육을 위한 맞춤형 강의 플랫폼',
+        icon: 'code-xml',
+        date: '2024.11.18 ~ 현재',
+        descriptions: [
+            'WebSocket을 활용하여 실시간 강의 중 강사와 수강생들의 즉각적인 상호작용이 가능한 돌발 퀴즈 기능 개발',
+            '강의별 학습 진행 상태와 성과를 시각화하여 분석할 수 있는 관리자 페이지 개발',
+            '관리자와 운영자의 역할에 맞는 기능 및 권한을 구분한 UI 설계',
+        ],
+    },
+    {
         title: 'Flunti 고도화 및 유지보수',
         sub: '플랫폼 성능 및 기능 개선을 통한 사용자 경험 향상',
         icon: 'code-xml',
-        date: '2024.05.24 ~ 현재',
-        description: ['각 커리큘럼에 맞는 로드맵 페이지 개발', 'chart 등을 활용한 관리자 전용 대시보드 페이지 개발'],
+        date: '2024.05.24 ~ 11.15',
+        descriptions: ['Dnd, Infinity Scroll 이 가능한 공용 table 컴포넌트 개발', '커스터마이징한 chart 컴포넌트 개발'],
     },
     {
         title: 'Flunti의 코딩테스트 전용 사이트 개발',
         sub: '사용자 중심의 인터랙티브 코딩 테스트 솔루션',
         icon: 'code-xml',
         date: '2024.09.02 ~ 2024.09.30',
-        description: [
+        descriptions: [
             'code mirror를 커스터마이징하여 문제풀이가 가능한 코딩 에디터 개발',
             'React Hook Form과 Zod를 활용해 각 문제의 테스트케이스를 동적으로 생성 및 수정하는 관리자 페이지 개발',
             '유저가 자유롭게 관리할 수 있는 커스텀 테스트 케이스 기능 개발',
@@ -31,7 +42,7 @@ export const MY_HISTORY: MyHistory[] = [
         sub: '기업 특장점 소개 및 맞춤형 지원서 제출 플랫폼',
         icon: 'code-xml',
         date: '2024.07.15 ~ 2024.08.02',
-        description: [
+        descriptions: [
             '타사의 특장점을 소개하는 정적 페이지 제작',
             '네임스페이스 패턴을 기반으로 직접 만든 폼을 통해 지원서 양식 개발',
         ],
@@ -41,7 +52,7 @@ export const MY_HISTORY: MyHistory[] = [
         sub: '효율적인 학습 관리와 학습자 지원을 위한 시스템 구축',
         icon: 'code-xml',
         date: '2024.05.27 ~ 2024.06.28',
-        description: [
+        descriptions: [
             '프로젝트 설계, 공통 레이아웃과 컴포넌트 구조화',
             '생산성과 확장성을 고려한 FSD 아키텍쳐 도입 시작',
             '시험 평가 & 과제 제출 & 설문 조사 등 주요 기능 개발',
@@ -53,7 +64,7 @@ export const MY_HISTORY: MyHistory[] = [
         sub: 'IT 기술 학습을 위한 맞춤형 온라인 강의 플랫폼',
         icon: 'code-xml',
         date: '2024.03.11 ~ 2024.05.24',
-        description: [
+        descriptions: [
             '프로젝트 설계, 공통 레이아웃과 컴포넌트 구조화',
             '강의 리스트, 마이페이지, 게시판, 퀴즈 페이지 개발',
             '페이지 테스트를 위한 jest 도입',
@@ -67,7 +78,7 @@ export const MY_HISTORY: MyHistory[] = [
         sub: '前 코딩허브, 인수 합병 (2024.06)',
         icon: 'id-card',
         date: '2024.03.11 ~',
-        description: [
+        descriptions: [
             'IT 교육 사이트의 기능 및 컨텐츠를 자체 개발',
             '매일 아침 스크럼을 진행하는 애자일 방식으로 운영',
         ],
@@ -77,7 +88,7 @@ export const MY_HISTORY: MyHistory[] = [
         sub: '소프트웨어콘텐츠과',
         icon: 'graduation-cap',
         date: '2022.03.02 ~ 2024.02.29',
-        description: [
+        descriptions: [
             '평균 학점 4.26',
             '웹 개발 동아리 운영 및 프로젝트 개발 주도 (2022.06 ~ 2024.02)',
             '기자재 대여 시스템 사이트 / 주변 맛집 등 명소를 찾는 사이트 / 2D 로그라이크 앱 게임 등 개발',

@@ -15,7 +15,7 @@ const iconMap = {
     default: User,
 }
 
-export const VerticalTimelineItem: FC<Props> = ({ isRecent = false, title, sub, icon, date, description }) => {
+export const VerticalTimelineItem: FC<Props> = ({ isRecent = false, title, sub, icon, date, descriptions }) => {
     const Icon = iconMap[icon] || iconMap.default
 
     return (
@@ -48,16 +48,16 @@ export const VerticalTimelineItem: FC<Props> = ({ isRecent = false, title, sub, 
             }}
             icon={<Icon />}>
             <div className='flex flex-col gap-5'>
-                <div>
+                <div className='flex flex-col gap-0.5'>
                     <h3 className={cn('text-2xl font-bold', isRecent ? 'text-white' : 'text-gray-200')}>{title}</h3>
                     <sub className={cn('text-sm', isRecent ? 'text-blue-200' : 'text-gray-400')}>{sub}</sub>
                 </div>
 
-                {description && description.length > 0 && (
+                {descriptions && descriptions.length > 0 && (
                     <ul className='list-disc flex flex-col gap-1 ps-5'>
-                        {description.map((desc, idx) => (
+                        {descriptions.map((desc, i) => (
                             <li
-                                key={idx}
+                                key={i}
                                 className={cn(
                                     'text-base leading-relaxed',
                                     isRecent ? 'text-blue-100 font-semibold' : 'text-gray-300 font-medium'

@@ -18,7 +18,7 @@ export const MenuButton: FC<Props> = ({ title, url, isActive }) => {
             className={`relative text-sm md:text-base transition-all duration-200 ease-in-out ${
                 isActive
                     ? 'text-indigo-400 font-semibold before:content-[""] before:absolute before:w-full before:h-[2px] before:bg-indigo-400 before:bottom-[-2px] before:left-0'
-                    : 'text-slate-300/70 hover:text-slate-300 hover:scale-105'
+                    : 'text-slate-300/70 hover:text-slate-300'
             }`}>
             {title}
         </Link>

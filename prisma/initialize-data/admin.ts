@@ -25,7 +25,7 @@ export const createDefaultAdmin = async (prisma: PrismaClient) => {
             console.log('✅ Default admin created successfully')
         }
     } catch (error) {
-        console.error('Failed to create default admin:', error)
+        console.log('Failed to create default admin:', error)
         return false
     }
 }

@@ -24,10 +24,8 @@ export const Header: FC = () => {
         barRouter.refresh()
     }
 
-    console.log('pathname', pathname)
-
     return (
-        <header className='bg-slate-700/50 backdrop-blur-lg w-full py-2 flex items-center justify-center border-b border-slate-500 fixed top-0 z-10 h-[90px]'>
+        <header className='bg-slate-700/50 backdrop-blur-lg w-full py-2 flex items-center justify-center border-b border-slate-600 fixed top-0 z-10 h-[90px]'>
             <section className='relative flex w-full max-w-5xl justify-between items-center'>
                 <Link
                     href={isAdminAuthorized ? adminPath.admin() : mainPath.home()}
