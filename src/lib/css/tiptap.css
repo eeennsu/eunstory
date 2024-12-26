@@ -25,6 +25,24 @@
     @apply list-outside list-decimal pl-5;
 }
 
+.ProseMirror h1 {
+    @apply text-gray-200 text-3xl font-bold;
+}
+
+.ProseMirror h2 {
+    @apply text-gray-200 text-2xl font-semibold;
+}
+
+.ProseMirror h3 {
+    @apply text-gray-200 text-xl font-medium;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3 {
+    margin: revert;
+}
+
 .ProseMirror ul p,
 .ProseMirror ol p {
     @apply inline;
@@ -71,15 +89,15 @@
 }
 
 .tiptap-editor-content h1 {
-    @apply text-4xl font-bold mt-[26.8px] mb-4;
+    @apply text-4xl font-bold text-gray-200;
 }
 
 .tiptap-editor-content h2 {
-    @apply text-3xl font-bold mt-[26.8px] mb-4;
+    @apply text-3xl font-bold text-gray-200;
 }
 
 .tiptap-editor-content h3 {
-    @apply text-2xl font-bold mt-6 mb-4;
+    @apply text-2xl font-bold text-gray-200;
 }
 
 @keyframes fadeIn {
