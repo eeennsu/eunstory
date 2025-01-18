@@ -17,7 +17,7 @@ export const ContactLink: FC<Props> = ({ label, className, ...linkProps }) => {
             <Link
                 {...linkProps}
                 className='text-blue-400 hover:underline'>
-                xxx592@naver.com
+                {linkProps.href.startsWith('mailto') ? linkProps.href.split(':')[1] : linkProps.href}
             </Link>
         </p>
     )
