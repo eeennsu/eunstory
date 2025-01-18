@@ -10,3 +10,5 @@ export const NAV_LINKS = [
         url: mainPath.post.list(),
     },
 ]
+
+export const SITE_URL = 'http://eunstory.eunsu.kr'
