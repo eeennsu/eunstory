@@ -9,7 +9,7 @@ import { SITE_URL } from '@/shared/constants'
 
 export const metadata: Metadata = {
     metadataBase: new URL(SITE_URL),
-    title: '방은수 블로그그',
+    title: '방은수 블로그',
     description: '프론트엔드 개발자 방은수의 회고 블로그입니다.',
     authors: [
         {
