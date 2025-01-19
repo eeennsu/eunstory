@@ -9,12 +9,12 @@ export const GET = async (request: NextRequest) => {
     try {
         const searchParams = request.nextUrl.searchParams
 
-        const filter = searchParams.get('filter')?.toString()
+        const recently = Number(searchParams.get('recently'))
 
         const filterOptions = {
-            ...(filter === 'last-three-months' && {
+            ...(recently > 0 && {
                 createdAt: {
-                    gte: new Date(new Date().setMonth(new Date().getMonth() - 3)),
+                    gte: new Date(new Date().setMonth(new Date().getMonth() - recently)),
                 },
             }),
         }

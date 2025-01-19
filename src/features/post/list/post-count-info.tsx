@@ -3,10 +3,14 @@ import NumberTicker from '@/lib/ui/number-ticker'
 import type { FC } from 'react'
 
 export const PostCountInfo: FC = async () => {
-    const postTotalResponse = await serverRequestGetActivePostCount({ lastThreeMonths: true })
+    const recentlyMonth = 3
+    const [totalResponse, recentlyResponse] = await Promise.all([
+        serverRequestGetActivePostCount(),
+        serverRequestGetActivePostCount(recentlyMonth),
+    ])
 
-    const activePostCount = 'error' in postTotalResponse ? 0 : postTotalResponse.activeCount
-    const threeMonthPostCount = 'error' in postTotalResponse ? 0 : postTotalResponse.activeCount
+    const activePostCount = 'error' in totalResponse ? 0 : totalResponse.activeCount
+    const threeMonthPostCount = 'error' in recentlyResponse ? 0 : recentlyResponse.activeCount
 
     return (
         <section className='flex justify-around text-center text-gray-400'>
@@ -19,7 +23,7 @@ export const PostCountInfo: FC = async () => {
                 />
             </div>
             <div>
-                <p className='text-xs uppercase tracking-wide'>최근 3개월 글</p>
+                <p className='text-xs uppercase tracking-wide'>최근 {recentlyMonth}개월 글</p>
                 <NumberTicker
                     className='text-xl font-semibold text-white'
                     value={threeMonthPostCount}

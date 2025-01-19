@@ -70,11 +70,9 @@ export const serverRequestGetPostTagList = async () => {
     })
 }
 
-export const serverRequestGetActivePostCount = async ({
-    lastThreeMonths = false,
-}: { lastThreeMonths?: boolean } = {}) => {
+export const serverRequestGetActivePostCount = async (recentlyMonth?: number) => {
     const params = new URLSearchParams()
-    lastThreeMonths && params.append('filter', 'last-three-months')
+    recentlyMonth && params.append('recently', recentlyMonth.toString())
 
     return generateRequest<undefined, ResponseGetActivePostCountType>({
         url: getUrlFromServer(`/api/post/active-count?${params.toString()}`),

@@ -17,30 +17,28 @@
     @apply m-0;
 }
 
-.ProseMirror ul ul {
-    @apply list-outside list-disc pl-5;
-}
-
-.ProseMirror ol ol {
-    @apply list-outside list-decimal pl-5;
+.ProseMirror ul li::marker,
+.ProseMirror ol li::marker {
+    @apply text-white;
 }
 
 .ProseMirror h1 {
-    @apply text-gray-200 text-3xl font-bold;
+    @apply text-3xl font-bold;
 }
 
 .ProseMirror h2 {
-    @apply text-gray-200 text-2xl font-semibold;
+    @apply text-2xl font-semibold;
 }
 
 .ProseMirror h3 {
-    @apply text-gray-200 text-xl font-medium;
+    @apply text-xl font-medium;
 }
 
 .ProseMirror h1,
 .ProseMirror h2,
 .ProseMirror h3 {
     margin: revert;
+    @apply text-white;
 }
 
 .ProseMirror ul p,
@@ -49,7 +47,7 @@
 }
 
 .tiptap-editor-content {
-    @apply prose max-w-full text-gray-200;
+    @apply prose max-w-full text-white;
 }
 
 .ProseMirror a,
@@ -75,7 +73,7 @@
 }
 
 .tiptap-editor-content strong {
-    @apply font-semibold text-gray-200;
+    @apply font-semibold text-white;
 }
 
 .tiptap-editor-content ul p,
@@ -89,15 +87,15 @@
 }
 
 .tiptap-editor-content h1 {
-    @apply text-4xl font-bold text-gray-200;
+    @apply text-4xl font-bold text-white;
 }
 
 .tiptap-editor-content h2 {
-    @apply text-3xl font-bold text-gray-200;
+    @apply text-3xl font-bold text-white;
 }
 
 .tiptap-editor-content h3 {
-    @apply text-2xl font-bold text-gray-200;
+    @apply text-2xl font-bold text-white;
 }
 
 @keyframes fadeIn {
