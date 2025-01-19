@@ -7,6 +7,11 @@ export const dynamic = 'force-dynamic'
 export const GET = async (_: NextRequest) => {
     try {
         const posts = await prisma.post.findMany({
+            where: {
+                NOT: {
+                    order: null,
+                },
+            },
             select: {
                 tags: true,
             },

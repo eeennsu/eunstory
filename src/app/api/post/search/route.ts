@@ -16,6 +16,9 @@ export const GET = async (request: NextRequest) => {
     try {
         const posts = (await prisma.post.findMany({
             where: {
+                NOT: {
+                    order: null,
+                },
                 OR: [
                     {
                         title: {
@@ -42,6 +45,8 @@ export const GET = async (request: NextRequest) => {
                 createdAt: true,
             },
         })) as SearchedPost[]
+
+        console.log('posts', posts)
 
         if (!posts) {
             return NextResponse.json({ error: 'Posts not found' }, { status: 404 })
