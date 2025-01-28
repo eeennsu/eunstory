@@ -11,4 +11,4 @@ export const NAV_LINKS = [
     },
 ]
 
-export const SITE_URL = 'http://eunstory.eunsu.kr'
+export const SITE_URL = 'https://eunstory.eunsu.kr'
