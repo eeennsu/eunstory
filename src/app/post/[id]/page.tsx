@@ -35,12 +35,12 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
 
 export default DetailPostPage
 
-// export const generateStaticParams = async () => {
-//     const responsePostIds = (await serverRequestGetVisiblePostIds()) as ResponseGetPostIdListType
+export const generateStaticParams = async () => {
+    const responsePostIds = (await serverRequestGetVisiblePostIds()) as ResponseGetPostIdListType
 
-//     if ('error' in responsePostIds) return []
+    if ('error' in responsePostIds) return []
 
-//     console.log('responsePostIds.postIds', responsePostIds.postIds)
+    console.log('responsePostIds.postIds', responsePostIds.postIds)
 
-//     return responsePostIds.postIds.map((id) => ({ id: id.toString() }))
-// }
+    return responsePostIds.postIds.map((id) => ({ id: id.toString() }))
+}
