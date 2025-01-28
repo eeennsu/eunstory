@@ -64,6 +64,11 @@ export const serverRequestGetDetailPost = async ({ postId, isPublished }: { post
 export const serverRequestGetPostIds = async () => {
     return generateRequest<undefined, ResponseGetPostIdListType>({
         url: getUrlFromServer(`/api/post/ids`),
+        config: {
+            next: {
+                revalidate: 60 * 60, // 1 hours
+            },
+        },
     })
 }
 

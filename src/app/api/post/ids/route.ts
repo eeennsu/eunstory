@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '../../../../../prisma/prisma-client'
 import { NextResponseData } from '@/lib/fetch'
 
-export const GET = async (request: NextRequest) => {
+export const GET = async (_: NextRequest) => {
     try {
         const posts = await prisma.post.findMany({
             select: {
