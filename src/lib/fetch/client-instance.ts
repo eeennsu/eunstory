@@ -15,7 +15,6 @@ export const generateRequest = async <TRequest extends RequestProps | undefined,
     body,
     config,
 }: Parameters<TRequest>) => {
-    console.log('url!@#!@#!@', url)
     const requestOption: RequestInit = {
         method,
         headers: {
