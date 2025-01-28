@@ -8,6 +8,12 @@ export const GET = async (_: NextRequest) => {
             select: {
                 id: true,
             },
+            where: {
+                isActive: true,
+                order: {
+                    not: null,
+                },
+            },
         })
 
         if (!posts) {

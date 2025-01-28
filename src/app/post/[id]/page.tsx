@@ -1,5 +1,5 @@
 import { ResponseGetPostIdListType } from '@/app/api/post/ids/route'
-import { serverRequestGetDetailPost, serverRequestGetPostIds } from '@/entities/post'
+import { serverRequestGetDetailPost, serverRequestGetVisiblePostIds } from '@/entities/post'
 import { UserCommentWidget, DetailPostWidget, PostNavigationWidget } from '@/widgets/post/detail'
 import type { FC } from 'react'
 
@@ -36,7 +36,7 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
 export default DetailPostPage
 
 export const generateStaticParams = async () => {
-    const responsePostIds = (await serverRequestGetPostIds()) as ResponseGetPostIdListType
+    const responsePostIds = (await serverRequestGetVisiblePostIds()) as ResponseGetPostIdListType
 
     if ('error' in responsePostIds) return []
 

@@ -61,7 +61,7 @@ export const serverRequestGetDetailPost = async ({ postId, isPublished }: { post
     })
 }
 
-export const serverRequestGetPostIds = async () => {
+export const serverRequestGetVisiblePostIds = async () => {
     return generateRequest<undefined, ResponseGetPostIdListType>({
         url: getUrlFromServer(`/api/post/ids`),
         config: {
