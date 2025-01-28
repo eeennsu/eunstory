@@ -1,93 +1,78 @@
-datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "rhel-openssl-3.0.x", "linux-musl"]
 }
 
-generator client {
-    provider      = "prisma-client-js"
-    binaryTargets = ["native", "debian-openssl-1.1.x", "rhel-openssl-3.0.x", "linux-musl"]
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id            String    @id @default(cuid()) // primary key
-    username      String?   @unique // user id
-    password      String?
-    name          String
-    email         String?   @unique // NextAuth 요구사항, 이메일 추가
-    emailVerified DateTime? // 이메일 인증 여부 (NextAuth)
-    image         String?
-    posts         Post[]
-    comments      Comment[]
-    accounts      Account[]
-    isAdmin       Boolean   @default(false)
-    url           String?
+  id            String    @id @default(cuid())
+  username      String?   @unique
+  password      String?
+  name          String
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  isAdmin       Boolean   @default(false)
+  url           String?
+  accounts      Account[]
+  comments      Comment[]
+  posts         Post[]
 }
 
 model Post {
-    id        String    @id @unique @default(cuid())
-    isActive  Boolean   @default(true)
-    title     String
-    content   String
-    tags      String[]
-    order     Int?
-    createdAt DateTime  @default(now())
-    updatedAt DateTime?
-    deletedAt DateTime?
-    authorId  String
-    author    User      @relation(fields: [authorId], references: [id])
-    comments  Comment[]
-    thumbnail String?
-    summary   String
+  id        String    @id @unique @default(cuid())
+  isActive  Boolean   @default(true)
+  title     String
+  content   String
+  order     Int?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+  authorId  String
+  thumbnail String?
+  summary   String
+  tags      String[]
+  comments  Comment[]
+  author    User      @relation(fields: [authorId], references: [id])
 
-    @@index([isActive, title, tags])
+  @@index([isActive, title, tags])
 }
 
 model Comment {
-    id        String    @id @default(cuid())
-    isActive  Boolean   @default(true)
-    content   String
-    postId    String
-    post      Post      @relation(fields: [postId], references: [id])
-    createdAt DateTime  @default(now())
-    updatedAt DateTime?
-    deletedAt DateTime?
-    authorId  String
-    author    User      @relation(fields: [authorId], references: [id])
-    parentId  String?
-    parent    Comment?  @relation("ChildComments", fields: [parentId], references: [id])
-    children  Comment[] @relation("ChildComments") // 대댓글의 리스트
+  id        String    @id @default(cuid())
+  isActive  Boolean   @default(true)
+  content   String
+  postId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+  authorId  String
+  parentId  String?
+  author    User      @relation(fields: [authorId], references: [id])
+  parent    Comment?  @relation("ChildComments", fields: [parentId], references: [id])
+  children  Comment[] @relation("ChildComments")
+  post      Post      @relation(fields: [postId], references: [id])
 }
 
 model Account {
-    id                String    @id @default(cuid())
-    userId            String
-    provider          String
-    providerAccountId String
-    type              String
-    access_token      String? // OAuth access token
-    token_type        String?
-    expires_at        Int?
-    refresh_token     String?
-    scope             String?
-    id_token          String?
-    user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    createdAt         DateTime  @default(now())
-    updatedAt         DateTime? @updatedAt
+  id                String    @id @default(cuid())
+  userId            String
+  provider          String
+  providerAccountId String
+  type              String
+  access_token      String?
+  token_type        String?
+  expires_at        Int?
+  refresh_token     String?
+  scope             String?
+  id_token          String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime? @updatedAt
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId]) // 각 제공자별 고유 계정
+  @@unique([provider, providerAccountId])
 }
-
-// VarChar(255) 가변 길이 문자열, 최대 가능 길이 255
-// Char(10) 고정 길이 문자열, 고정된 문자 수 10
-// Text 큰 텍스트 데이터 저장
-// Boolean true, false
-// Int 32비트 정수
-// BigInt 64비트 정수, 큰 범위의 정수
-// Float 32비트 부동 소수점
-// Decimal(10, 2) 소수점 이하의 숫자를 정확하게 저장할 수 있는 Decimal 타입을 지정. 10은 전체 자리수, scale은 소수점 이하 자리수 
-// Date  날짜 데이터 지정
-// Time 시간 데이터 지정
-// DateTime 날짜와 시간 데이터 지정
-// Json JSON 데이터 저장
-// Binary 바이너리 데이터 저장
-// Enum 열거형 데이터 저장
