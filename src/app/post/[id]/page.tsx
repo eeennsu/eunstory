@@ -40,5 +40,7 @@ export const generateStaticParams = async () => {
 
     if ('error' in responsePostIds) return []
 
+    console.log('responsePostIds.postIds', responsePostIds.postIds)
+
     return responsePostIds.postIds.map((id) => ({ id: id.toString() }))
 }
