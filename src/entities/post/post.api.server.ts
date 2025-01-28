@@ -7,6 +7,7 @@ import { ResponseGetSearchedPostListType } from '@/app/api/post/search/route'
 import { ResponseGetPostTagListType } from '@/app/api/post/tags/route'
 import { getUrlFromServer, generateRequest } from '@/lib/fetch'
 import { PaginationParams } from '../common'
+import { ResponseGetPostIdListType } from '@/app/api/post/ids/route'
 
 export const serverRequestGetAllPostList = async ({ isPublished }: { isPublished: boolean }) => {
     const params = new URLSearchParams()
@@ -52,14 +53,19 @@ export const serverRequestGetDetailPost = async ({ postId, isPublished }: { post
 
     return generateRequest<undefined, ResponseGetDetailPostType>({
         url: getUrlFromServer(`/api/post/${postId}?${params.toString()}`),
+        config: {
+            next: {
+                revalidate: 60 * 60, // 1 hours
+            },
+        },
     })
 }
 
-// export const serverRequestGetPostIdList = async () => {
-//     return generateRequest<undefined, ResponseGetPostIdListType>({
-//         url: getUrlFromServer(`/api/post/id-list`),
-//     })
-// }
+export const serverRequestGetPostIds = async () => {
+    return generateRequest<undefined, ResponseGetPostIdListType>({
+        url: getUrlFromServer(`/api/post/ids`),
+    })
+}
 
 export const serverRequestGetPostTagList = async () => {
     return generateRequest<undefined, ResponseGetPostTagListType>({
