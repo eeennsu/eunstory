@@ -17,11 +17,10 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
     }
 
     const post = responseDetailPost?.post
-    //
 
     return (
         <main className='page-container gap-10 mx-auto max-w-screen-lg w-full pt-[130px] pb-6'>
-            {/* <DetailPostWidget post={post} />
+            <DetailPostWidget post={post} />
 
             <section className='flex flex-col gap-5'>
                 <PostNavigationWidget
@@ -29,7 +28,7 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
                     order={post.order as number}
                 />
                 <UserCommentWidget postId={id} />
-            </section> */}
+            </section>
         </main>
     )
 }
