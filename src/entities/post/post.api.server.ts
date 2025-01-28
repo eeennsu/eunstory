@@ -1,5 +1,3 @@
-'use server'
-
 import { ResponseGetDetailPostType } from '@/app/api/post/[id]/route'
 import { ResponseGetActivePostCountType } from '@/app/api/post/active-count/route'
 import { ResponseGetPostListType } from '@/app/api/post/route'
