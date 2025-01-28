@@ -9,6 +9,7 @@ export const GET = async (_: NextRequest) => {
                 id: true,
             },
             where: {
+                isActive: true,
                 order: {
                     not: null,
                 },
@@ -18,8 +19,6 @@ export const GET = async (_: NextRequest) => {
         if (!posts) {
             return NextResponse.json({ error: 'Post ids not found' }, { status: 404 })
         }
-
-        console.log('posts', posts)
 
         return NextResponse.json({ postIds: posts.map((post) => post.id) })
     } catch (error) {
