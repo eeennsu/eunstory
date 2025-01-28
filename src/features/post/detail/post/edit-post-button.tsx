@@ -1,6 +1,6 @@
 'use client'
 
-import { useAdminSession, useProgressBar } from '@/lib/hooks'
+import { useProgressBar } from '@/lib/hooks'
 import { mainPath } from '@/lib/route'
 import { Button } from '@/lib/ui/button'
 import { Pencil } from 'lucide-react'

@@ -1,17 +1,14 @@
-import { DeletePostButton, EditPostButton } from '@/features/post/detail/post'
-import { getServerAuth } from '@/lib/auth'
+import type { FC } from 'react'
+import { PostAuthorButtons } from '@/features/post/detail/post'
 import { Badge } from '@/lib/ui/badge'
 import { formatDateToFull, textSanitizing } from '@/lib/utils'
 import { Post } from '@prisma/client'
-import type { FC } from 'react'
 
 interface Props {
     post: Post
 }
 
 export const DetailPostWidget: FC<Props> = async ({ post }) => {
-    const { isAdminAuthorized } = await getServerAuth()
-
     return (
         <article className='flex flex-col gap-7 text-white rounded-lg pb-14'>
             <section className='flex flex-col gap-4 border-b border-b-slate-700 pb-7'>
@@ -34,12 +31,7 @@ export const DetailPostWidget: FC<Props> = async ({ post }) => {
                     <div className='flex justify-between items-center h-8'>
                         <time className='text-sm text-gray-500'>{formatDateToFull(post.createdAt)}</time>
 
-                        {isAdminAuthorized && (
-                            <div className='flex gap-4'>
-                                <EditPostButton id={post.id} />
-                                <DeletePostButton id={post.id} />
-                            </div>
-                        )}
+                        <PostAuthorButtons postId={post.id} />
                     </div>
                 </div>
             </section>
