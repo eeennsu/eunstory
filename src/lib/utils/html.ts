@@ -3,8 +3,27 @@ export const textSanitizing = (rawHTML: string): string => {
     return sanitize(rawHTML, {
         sanitizeHtml: {
             allowedAttributes: {
-                target: ['_blank'],
+                img: ['src', 'alt'],
             },
+            allowedTags: [
+                'p',
+                'h1',
+                'h2',
+                'h3',
+                'h4',
+                'h5',
+                'h6',
+                'strong',
+                'em',
+                's',
+                'ul',
+                'ol',
+                'li',
+                'br',
+                'img',
+                'pre',
+                'code',
+            ],
         },
     })
 }
