@@ -11,3 +11,5 @@ const PostListPage: FC = async () => {
 }
 
 export default PostListPage
+
+export const dynamic = 'force-dynamic'
