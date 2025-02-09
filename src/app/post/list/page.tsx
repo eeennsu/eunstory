@@ -1,5 +1,5 @@
-import { PostListBodyWidget, PostListHeadWidget } from '@/widgets/post/list'
 import type { FC } from 'react'
+import { PostListBodyWidget, PostListHeadWidget } from '@/widgets/post/list'
 
 const PostListPage: FC = async () => {
     return (

@@ -32,7 +32,7 @@ export const PostNavigationWidget: FC<Props> = ({ id, order }) => {
                     type='prev'
                 />
             ) : (
-                <div className='w-1/2' />
+                <div className='flex-[0.5]' />
             )}
             {postNav?.nextPost ? (
                 <PostNavigationItem
@@ -41,7 +41,7 @@ export const PostNavigationWidget: FC<Props> = ({ id, order }) => {
                     type='next'
                 />
             ) : (
-                <div className='w-1/2' />
+                <div className='flex-[0.5]' />
             )}
         </section>
     )

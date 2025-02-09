@@ -1,5 +1,4 @@
-import { ResponseGetPostIdListType } from '@/app/api/post/ids/route'
-import { serverRequestGetDetailPost, serverRequestGetVisiblePostIds } from '@/entities/post'
+import { serverRequestGetDetailPost } from '@/entities/post'
 import { UserCommentWidget, DetailPostWidget, PostNavigationWidget } from '@/widgets/post/detail'
 import type { FC } from 'react'
 

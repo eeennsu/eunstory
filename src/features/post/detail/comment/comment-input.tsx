@@ -97,7 +97,7 @@ export const CommentInput: FC<Props> = ({ postId, commentCount }) => {
                     className='border-none text-white rounded-lg'
                     size={'lg'}
                     variant={isSubmitting ? 'loading' : 'signature'}>
-                    {isSubmitting ? <LoaderCircle className='animate-spin' /> : '댓글 작성'}
+                    {isSubmitting ? <LoaderCircle className='animate-spin' /> : '작성'}
                 </Button>
             </div>
         </section>
