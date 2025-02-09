@@ -14,14 +14,17 @@ export const metadata: Metadata = {
     authors: [
         {
             name: '방은수',
-            url: SITE_URL,
+            url: 'https://github.com/eeennsu',
         },
     ],
     twitter: {
         title: '방은수 - 프론트엔드 개발자 블로그',
         description: 'Next.js 와 Typescript로 개발을 하는 프론트엔드 개발자 방은수의 블로그입니다.',
     },
-    robots: 'index, follow',
+    robots: {
+        index: true,
+        follow: true,
+    },
     alternates: {
         canonical: SITE_URL,
         languages: {
@@ -39,7 +42,7 @@ export const metadata: Metadata = {
     keywords:
         '프론트엔드 개발자, 방은수, 이력서, 포트폴리오, 블로그, Bang Eunsu, React.js, React, Next.js, Next, Typescript, ts, Frontend Developer, Resume, Portfolio',
     verification: {
-        google: 'iuUmYGMaAlJLTlxek5zq277cmScF6x6jFXJ_MqQcaWI',
+        google: 'kIt_sr7AcMn_DeNc6Ed3boJTDtXOtBRZQAFfeW-nI9U',
     },
 }
 
