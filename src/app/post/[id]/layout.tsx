@@ -3,8 +3,14 @@ import { FloatingMenu } from '@/features/post/detail/post'
 import { Metadata } from 'next'
 import { FC, PropsWithChildren } from 'react'
 
-export const generateMetadata = async ({ params }: { params: { id: string } }): Promise<Metadata> => {
-    const postId = params.id
+interface Props {
+    params: Promise<{
+        id: string
+    }>
+}
+
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
+    const postId = (await params)?.id
     const responsePost = await serverRequestGetDetailPost({ postId: postId, isPublished: true })
 
     if ('error' in responsePost) {

@@ -15,7 +15,7 @@ export const requestCreatePostComment = async ({
     comment: RequestCreatePostCommentType
 }) => {
     return generateRequest<RequestCreatePostCommentType, ResponseGetPostCommentListType>({
-        url: `/api/post/${postId}/comment`,
+        url: `/post/${postId}/comment`,
         method: 'POST',
         body: comment,
     })
@@ -28,7 +28,7 @@ export const requestEditPostComment = async ({
     userId,
 }: RequestEditPostCommentType & { postId: string }) => {
     return generateRequest<RequestEditPostCommentType, ResponseEditPostCommentType>({
-        url: `/api/post/${postId}/comment`,
+        url: `/post/${postId}/comment`,
         method: 'PATCH',
         body: {
             id: commentId,
@@ -44,7 +44,7 @@ export const requestDeletePostComment = async ({
     userId,
 }: RequestDeletePostCommentType & { postId: string }) => {
     return generateRequest<RequestDeletePostCommentType, {}>({
-        url: `/api/post/${postId}/comment`,
+        url: `/post/${postId}/comment`,
         method: 'DELETE',
         body: {
             id: commentId,

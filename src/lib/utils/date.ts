@@ -32,7 +32,7 @@ export const formatBeforeTime = (dateString: string | Date): string => {
 }
 
 export const formatDateToYMD = (date: Date | string) => {
-    return dayjs(date).format('YYYY.MM.DD')
+    return dayjs(date).format('YYYY년 MM월 DD일')
 }
 
 export const formatDateToFull = (date: Date | string) => {

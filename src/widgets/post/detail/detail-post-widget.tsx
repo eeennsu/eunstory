@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { PostAuthorButtons } from '@/features/post/detail/post'
 import { Badge } from '@/lib/ui/badge'
-import { formatDateToFull, textSanitizing } from '@/lib/utils'
+import { formatDateToYMD, textSanitizing } from '@/lib/utils'
 import { Post } from '@prisma/client'
 
 interface Props {
@@ -29,7 +29,7 @@ export const DetailPostWidget: FC<Props> = async ({ post }) => {
                     )}
 
                     <div className='flex justify-between items-center h-8'>
-                        <time className='text-sm text-gray-500'>{formatDateToFull(post.createdAt)}</time>
+                        <time className='text-sm text-gray-500'>{formatDateToYMD(post.createdAt)}</time>
 
                         <PostAuthorButtons postId={post.id} />
                     </div>

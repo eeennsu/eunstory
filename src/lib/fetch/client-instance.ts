@@ -1,3 +1,5 @@
+import { assertValue } from '../utils'
+
 export type RequestProps = {
     [key: string]: any
 }
@@ -23,11 +25,14 @@ export const generateRequest = async <TRequest extends RequestProps | undefined,
         ...config,
     }
 
-    if (body && typeof body !== 'undefined') {
+    if (!!body) {
         requestOption.body = JSON.stringify(body)
     }
 
-    const response = await fetch(url, requestOption)
+    const apiUrl =
+        typeof window === 'undefined' ? `${assertValue(process.env.NEXT_PUBLIC_API_URL)}/api${url}` : `/api${url}`
+
+    const response = await fetch(apiUrl, requestOption)
 
     if (!response.ok) {
         throw new Error(response.statusText)

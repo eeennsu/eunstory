@@ -1,14 +1,15 @@
-import { serverRequestGetDetailPost } from '@/entities/post'
+import { requestGetPostList, serverRequestGetDetailPost } from '@/entities/post'
 import { UserCommentWidget, DetailPostWidget, PostNavigationWidget } from '@/widgets/post/detail'
 import type { FC } from 'react'
 
 interface Props {
-    params: {
+    params: Promise<{
         id: string
-    }
+    }>
 }
 
-const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
+const DetailPostPage: FC<Props> = async ({ params }) => {
+    const id = (await params)?.id
     const responseDetailPost = await serverRequestGetDetailPost({ postId: id, isPublished: true })
 
     if ('error' in responseDetailPost) {
@@ -33,3 +34,23 @@ const DetailPostPage: FC<Props> = async ({ params: { id } }) => {
 }
 
 export default DetailPostPage
+
+// export const generateStaticParams = async () => {
+//     const responsePosts = await requestGetPostList({
+//         curPage: 1,
+//         perPage: 5,
+//         isPublished: true,
+//     })
+
+//     if ('error' in responsePosts) {
+//         return {
+//             notFound: true,
+//         }
+//     }
+
+//     return responsePosts?.posts.map((post) => ({
+//         params: {
+//             id: post?.id || '',
+//         },
+//     }))
+// }

@@ -7,15 +7,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '../../../../../../prisma/prisma-client'
 
 type Params = {
-    params: {
+    params: Promise<{
         id?: string
-    }
+    }>
 }
 
 // get detail post comment
 export const GET = async (_: NextRequest, { params }: Params) => {
     try {
-        const postId = params?.id
+        const postId = (await params)?.id
 
         if (!postId) {
             return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
@@ -89,7 +89,7 @@ export const POST = async (request: NextRequest, { params }: Params) => {
     }
 
     try {
-        const postId = params?.id
+        const postId = (await params)?.id
 
         if (!postId) {
             return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
@@ -136,7 +136,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
     }
 
     try {
-        const postId = params?.id
+        const postId = (await params)?.id
 
         if (!postId) {
             return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
@@ -187,7 +187,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
         return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
     }
 
-    const postId = params?.id
+    const postId = (await params)?.id
 
     if (!postId) {
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 })

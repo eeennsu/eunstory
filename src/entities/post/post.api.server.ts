@@ -3,7 +3,7 @@ import { ResponseGetActivePostCountType } from '@/app/api/post/active-count/rout
 import { ResponseGetPostListType } from '@/app/api/post/route'
 import { ResponseGetSearchedPostListType } from '@/app/api/post/search/route'
 import { ResponseGetPostTagListType } from '@/app/api/post/tags/route'
-import { getUrlFromServer, generateRequest } from '@/lib/fetch'
+import { generateRequest } from '@/lib/fetch'
 import { PaginationParams } from '../common'
 import { ResponseGetPostIdListType } from '@/app/api/post/ids/route'
 
@@ -12,7 +12,7 @@ export const serverRequestGetAllPostList = async ({ isPublished }: { isPublished
     params.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetPostListType>({
-        url: getUrlFromServer(`/api/post?${params.toString()}`),
+        url: `/post?${params.toString()}`,
         config: {
             cache: 'no-store',
         },
@@ -32,7 +32,7 @@ export const serverRequestGetSomePostList = async ({
     params.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetPostListType>({
-        url: getUrlFromServer(`/api/post?${params.toString()}`),
+        url: `/post?${params.toString()}`,
         config: {
             next: {
                 revalidate: 60 * 60, // 1 hours
@@ -50,7 +50,7 @@ export const serverRequestGetDetailPost = async ({ postId, isPublished }: { post
     params.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetDetailPostType>({
-        url: getUrlFromServer(`/api/post/${postId}?${params.toString()}`),
+        url: `/post/${postId}?${params.toString()}`,
         config: {
             next: {
                 revalidate: 60 * 60, // 1 hours
@@ -61,7 +61,7 @@ export const serverRequestGetDetailPost = async ({ postId, isPublished }: { post
 
 export const serverRequestGetVisiblePostIds = async () => {
     return generateRequest<undefined, ResponseGetPostIdListType>({
-        url: getUrlFromServer(`/api/post/ids`),
+        url: `/post/ids`,
         config: {
             next: {
                 revalidate: 60 * 60, // 1 hours
@@ -72,7 +72,7 @@ export const serverRequestGetVisiblePostIds = async () => {
 
 export const serverRequestGetPostTagList = async () => {
     return generateRequest<undefined, ResponseGetPostTagListType>({
-        url: getUrlFromServer(`/api/post/tags`),
+        url: `/post/tags`,
         config: {
             cache: 'no-store',
         },
@@ -84,7 +84,7 @@ export const serverRequestGetActivePostCount = async (recentlyMonth?: number) =>
     recentlyMonth && params.append('recently', recentlyMonth.toString())
 
     return generateRequest<undefined, ResponseGetActivePostCountType>({
-        url: getUrlFromServer(`/api/post/active-count?${params.toString()}`),
+        url: `/post/active-count?${params.toString()}`,
     })
 }
 
@@ -93,7 +93,7 @@ export const serverRequestGetPostListBySearch = async (keyword: string) => {
     params.append('keyword', keyword)
 
     return generateRequest<undefined, ResponseGetSearchedPostListType>({
-        url: getUrlFromServer(`/api/post/search?${params.toString()}`),
+        url: `/post/search?${params.toString()}`,
         config: {
             cache: 'no-store',
         },

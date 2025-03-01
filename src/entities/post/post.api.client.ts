@@ -14,7 +14,7 @@ export const requestGetAllPostList = async ({ isPublished }: { isPublished: bool
     params.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetPostListType>({
-        url: `/api/post?${params.toString()}`,
+        url: `/post?${params.toString()}`,
         config: {
             cache: 'no-store',
         },
@@ -36,7 +36,7 @@ export const requestGetPostList = async ({
     perPage && params.append('perPage', perPage.toString())
     isPublished && params.append('isPublished', isPublished.toString())
 
-    const url = params.size !== 0 ? `/api/post?${params.toString()}` : '/api/post'
+    const url = params.size !== 0 ? `/post?${params.toString()}` : '/post'
 
     return generateRequest<undefined, ResponseGetPostListType>({
         url,
@@ -45,7 +45,7 @@ export const requestGetPostList = async ({
 
 export const requestCreatePost = async (createdPost: RequestCreatePostType) => {
     return generateRequest<RequestCreatePostType, ResponseCreatePostType>({
-        url: '/api/post',
+        url: '/post',
         method: 'POST',
         body: createdPost,
     })
@@ -59,7 +59,7 @@ export const requestEditPost = async ({
     editedPost: RequestEditDetailPostType
 }) => {
     return generateRequest<RequestEditDetailPostType, ResponseEditDetailPostType>({
-        url: `/api/post/${postId}`,
+        url: `/post/${postId}`,
         method: 'PATCH',
         body: editedPost,
     })
@@ -69,7 +69,7 @@ export const requestDeletePost = async ({ postId, isPublished }: { postId: strin
     const searchParams = new URLSearchParams()
     searchParams.append('isPublished', String(isPublished))
 
-    return generateRequest<undefined, null>({ url: `/api/post/${postId}?${searchParams.toString()}`, method: 'DELETE' })
+    return generateRequest<undefined, null>({ url: `/post/${postId}?${searchParams.toString()}`, method: 'DELETE' })
 }
 
 export const requestGetDetailPost = async ({ postId, isPublished }: { postId: string; isPublished?: boolean }) => {
@@ -78,7 +78,7 @@ export const requestGetDetailPost = async ({ postId, isPublished }: { postId: st
     isPublished && searchParams.append('isPublished', isPublished.toString())
 
     return generateRequest<undefined, ResponseGetDetailPostType>({
-        url: `/api/post/${postId}?${searchParams.toString()}`,
+        url: `/post/${postId}?${searchParams.toString()}`,
     })
 }
 
@@ -88,7 +88,7 @@ type RequestEditPostListOrder = {
 
 export const requestEditPostListOrder = async ({ updatedSequences }: RequestEditPostListOrder) => {
     return generateRequest<RequestEditPostListOrder, {}>({
-        url: '/api/post',
+        url: '/post',
         method: 'PATCH',
         body: {
             updatedSequences,
@@ -101,6 +101,6 @@ export const requestGetPostNavigation = async ({ id, order }: { id: string; orde
     params.append('order', order.toString())
 
     return generateRequest<undefined, ResponseGetPostNavigationType>({
-        url: `/api/post/${id}/navigation?${params.toString()}`,
+        url: `/post/${id}/navigation?${params.toString()}`,
     })
 }

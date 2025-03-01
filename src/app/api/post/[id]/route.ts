@@ -7,26 +7,27 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '../../../../../prisma/prisma-client'
 
 type Params = {
-    params: {
+    params: Promise<{
         id?: string
-    }
+    }>
 }
 
 // get detail post
 export const GET = async (request: NextRequest, { params }: Params) => {
-    const id = params?.id
+    const postId = (await params)?.id
+
     const searchParams = request.nextUrl.searchParams
 
     const isPublished = searchParams.get('isPublished')?.toString() === 'true'
 
-    if (!id) {
+    if (!postId) {
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
     }
 
     try {
         const post = (await prisma.post.findFirst({
             where: {
-                id,
+                id: postId,
                 ...(isPublished && { order: { not: null } }),
             },
         })) as Post
@@ -50,9 +51,9 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
         return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
     }
 
-    const id = params?.id
+    const postId = (await params)?.id
 
-    if (!id) {
+    if (!postId) {
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
     }
 
@@ -87,7 +88,7 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
 
         const editedPost = (await prisma.post.update({
             where: {
-                id,
+                id: postId,
             },
             data: {
                 ...body,
@@ -117,9 +118,9 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
         return NextResponse.json({ error: 'Forbidden' }, { status: 401 })
     }
 
-    const id = params?.id
+    const postId = (await params)?.id
 
-    if (!id) {
+    if (!postId) {
         return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
     }
 
@@ -129,7 +130,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 
         const beDeletedPost = (await prisma.post.findFirst({
             where: {
-                id,
+                id: postId,
             },
         })) as Post
 
@@ -139,7 +140,7 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
 
         const softDeletedPost = (await prisma.post.update({
             where: {
-                id,
+                id: postId,
             },
             data: {
                 isActive: false,

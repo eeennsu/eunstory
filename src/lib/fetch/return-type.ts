@@ -1,9 +1,9 @@
 import type { NextRequest, NextResponse } from 'next/server'
 
 type Params = {
-    params: {
+    params: Promise<{
         [key: string]: string | undefined
-    }
+    }>
 }
 
 type NextApiFunction = (req: NextRequest, params: Params) => Promise<NextResponse>
