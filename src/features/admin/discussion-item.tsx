@@ -32,8 +32,8 @@ export const DiscussionItem: FC<Props> = ({ comment }) => {
                     <span className='text-gray-700 line-through'>{comment.post.title}</span>
                 )}
             </p>
-            <div className='flex justify-between mt-3 text-xs text-gray-400 tracking-wide'>
-                <span>수정여부: {comment?.updatedAt ? formatDateToFull(comment.updatedAt) : '없음'}</span>
+            <div className='flex justify-start mt-3 text-xs items-center gap-3 text-gray-400 tracking-wide'>
+                <span>수정여부: {comment?.updatedAt ? formatDateToFull(comment.updatedAt) : '없음'}</span> /
                 <span>삭제여부: {comment.deletedAt ? formatDateToFull(comment.deletedAt) : '없음'}</span>
             </div>
         </div>

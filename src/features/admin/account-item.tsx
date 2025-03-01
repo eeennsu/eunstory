@@ -8,26 +8,35 @@ interface Props {
 }
 
 export const AccountItem: FC<Props> = ({ account }) => {
-    const Comp = account.user?.url ? Link : 'div'
+    const { user } = account
+    const profileImage = user?.image || '/images/default-profile.png' // 기본 이미지 추가
+    const userName = user?.name || 'Anonymous'
+    const userEmail = user?.email || 'No email provided'
 
-    return (
-        <Comp
-            href={account.user?.url || '#'}
-            key={account.id}
-            prefetch={false}
-            className='flex flex-col items-center text-center rounded-lg p-5 hover:ring hover:ring-gray-700'>
+    const AccountContent = (
+        <div className='flex flex-col items-center text-center rounded-lg p-5 hover:ring hover:ring-gray-700'>
             <Image
-                src={account.user.image || ''}
-                alt='user-image'
+                src={profileImage}
+                alt={userName}
                 width={80}
                 height={80}
                 className='rounded-full mb-4 border-4 border-gray-600'
             />
-            <p className='text-xl font-semibold text-gray-200 mb-2'>{account.user.name || 'Anonymous'}</p>
-            <p className='text-sm text-gray-400 mb-4'>{account.user.email || 'No email provided'}</p>
+            <p className='text-xl font-semibold text-gray-200 mb-2'>{userName}</p>
+            <p className='text-sm text-gray-400 mb-4'>{userEmail}</p>
             <span className='bg-teal-500 text-gray-900 text-xs font-bold px-4 py-1 rounded-full'>
                 {account.provider}
             </span>
-        </Comp>
+        </div>
+    )
+
+    return user?.url ? (
+        <Link
+            href={user.url}
+            prefetch={false}>
+            {AccountContent}
+        </Link>
+    ) : (
+        AccountContent
     )
 }

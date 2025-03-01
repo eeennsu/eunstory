@@ -66,7 +66,6 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
         }
 
         // order 가 -1인것은, 임시저장된 포스트가 생성되기 위해 사용되는 값임.
-
         if (order === -1) {
             const lastPostOrder = (
                 await prisma.post.findFirst({

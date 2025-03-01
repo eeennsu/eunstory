@@ -1,6 +1,7 @@
 import { requestGetPostList, serverRequestGetDetailPost } from '@/entities/post'
 import { UserCommentWidget, DetailPostWidget, PostNavigationWidget } from '@/widgets/post/detail'
 import type { FC } from 'react'
+import prisma from '../../../../prisma/prisma-client'
 
 interface Props {
     params: Promise<{
@@ -35,22 +36,4 @@ const DetailPostPage: FC<Props> = async ({ params }) => {
 
 export default DetailPostPage
 
-// export const generateStaticParams = async () => {
-//     const responsePosts = await requestGetPostList({
-//         curPage: 1,
-//         perPage: 5,
-//         isPublished: true,
-//     })
-
-//     if ('error' in responsePosts) {
-//         return {
-//             notFound: true,
-//         }
-//     }
-
-//     return responsePosts?.posts.map((post) => ({
-//         params: {
-//             id: post?.id || '',
-//         },
-//     }))
-// }
+export const dynamicParams = true

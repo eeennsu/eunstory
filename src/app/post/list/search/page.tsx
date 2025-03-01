@@ -4,13 +4,13 @@ import { EmptyKeyword, SearchResult } from '@/shared/post/search'
 import { FC } from 'react'
 
 interface Props {
-    searchParams: {
+    searchParams: Promise<{
         keyword?: string
-    }
+    }>
 }
 
 const PostSearchPage: FC<Props> = async ({ searchParams }) => {
-    const keyword = searchParams?.keyword
+    const keyword = (await searchParams)?.keyword
 
     if (!keyword) {
         return <EmptyKeyword />
