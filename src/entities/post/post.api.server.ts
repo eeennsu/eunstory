@@ -75,41 +75,41 @@ export const serverRequestGetPostListBySearch = async (keyword: string) => {
     })
 }
 
-export const serverRequestGetDetailPost = async ({ postId, isPublished }: { postId: string; isPublished: boolean }) => {
-    if (!postId) {
-        throw new Error(`Post id must be required`)
-    }
-
-    const params = new URLSearchParams()
-    params.append('isPublished', isPublished.toString())
-
-    return generateRequest<undefined, ResponseGetDetailPostType>({
-        url: `/post/${postId}?${params.toString()}`,
-    })
-}
-
 // export const serverRequestGetDetailPost = async ({ postId, isPublished }: { postId: string; isPublished: boolean }) => {
 //     if (!postId) {
 //         throw new Error(`Post id must be required`)
 //     }
 
-//     try {
-//         const post = await prisma.post.findFirst({
-//             where: {
-//                 id: postId,
-//                 ...(isPublished && { order: { not: null } }),
-//             },
-//         })
+//     const params = new URLSearchParams()
+//     params.append('isPublished', isPublished.toString())
 
-//         if (!post) {
-//             throw new Error(`Post not found`)
-//         }
-
-//         console.log('success detail post title :', post.title)
-
-//         return { post }
-//     } catch (error) {
-//         console.error('❌ serverRequestGetDetailPost error:', error)
-//         return { error: 'Internal Server Error' }
-//     }
+//     return generateRequest<undefined, ResponseGetDetailPostType>({
+//         url: `/post/${postId}?${params.toString()}`,
+//     })
 // }
+
+export const serverRequestGetDetailPost = async ({ postId, isPublished }: { postId: string; isPublished: boolean }) => {
+    if (!postId) {
+        throw new Error(`Post id must be required`)
+    }
+
+    try {
+        const post = await prisma.post.findFirst({
+            where: {
+                id: postId,
+                ...(isPublished && { order: { not: null } }),
+            },
+        })
+
+        if (!post) {
+            throw new Error(`Post not found`)
+        }
+
+        console.log('success detail post title :', post.title)
+
+        return { post }
+    } catch (error) {
+        console.error('❌ serverRequestGetDetailPost error:', error)
+        return { error: 'Internal Server Error' }
+    }
+}

@@ -7,6 +7,12 @@ import {
 } from '@/app/api/post/[id]/comment/route'
 import { generateRequest } from '@/lib/fetch'
 
+export const requestGetCommentList = async ({ postId }: { postId: string }) => {
+    return generateRequest<undefined, ResponseGetPostCommentListType>({
+        url: `/post/${postId}/comment`,
+    })
+}
+
 export const requestCreatePostComment = async ({
     postId,
     comment,

@@ -1,5 +1,6 @@
 import { assertValue } from '@/lib/utils'
 import { PrismaClient } from '@prisma/client'
+
 import bcrypt from 'bcryptjs'
 
 export const createDefaultAdmin = async (prisma: PrismaClient) => {

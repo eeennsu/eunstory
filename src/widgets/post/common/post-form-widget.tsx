@@ -27,7 +27,7 @@ export const PostFormWidget: FC<Props> = ({ prevPost }) => {
     const pathname = usePathname()
     const temporarySavedPostId = params.get('id')
 
-    const { adminId: authorId, isAdminAuthorized } = useAdminSession()
+    const { sessionUserId: authorId, isAdminAuthorized } = useAdminSession()
     const { executeWithProgress, barRouter } = useProgressBar()
     const { toast } = useToast()
     const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false)

@@ -1,8 +1,8 @@
 import { getServerAuth } from '@/lib/auth'
-import { NextResponseData, REVALIDATE_TAGS } from '@/lib/fetch'
+import { NextResponseData } from '@/lib/fetch'
 import { mainPath } from '@/lib/route'
 import { Comment } from '@prisma/client'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '../../../../../../prisma/prisma-client'
 
@@ -117,7 +117,6 @@ export const POST = async (request: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to create comment' }, { status: 500 })
         }
 
-        revalidateTag(REVALIDATE_TAGS.POST_COMMENT)
         revalidatePath(mainPath.post.detail(postId))
 
         return NextResponse.json({ comment: createdComment }, { status: 201 })
@@ -169,7 +168,6 @@ export const PATCH = async (request: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to edit comment' }, { status: 500 })
         }
 
-        revalidateTag(REVALIDATE_TAGS.POST_COMMENT)
         revalidatePath(mainPath.post.detail(postId))
 
         return NextResponse.json({ comment: editedComment })
@@ -220,7 +218,6 @@ export const DELETE = async (request: NextRequest, { params }: Params) => {
             return NextResponse.json({ error: 'Failed to delete comment' }, { status: 500 })
         }
 
-        revalidateTag(REVALIDATE_TAGS.POST_COMMENT)
         revalidatePath(mainPath.post.detail(postId))
 
         return new NextResponse(null, { status: 204 })

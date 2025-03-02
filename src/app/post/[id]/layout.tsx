@@ -9,21 +9,21 @@ interface Props {
     }>
 }
 
-export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
-    const postId = (await params)?.id
-    const responsePost = await serverRequestGetDetailPost({ postId: postId, isPublished: true })
+// export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
+//     const postId = (await params)?.id
+//     const responsePost = await serverRequestGetDetailPost({ postId: postId, isPublished: true })
 
-    if ('error' in responsePost) {
-        return {
-            title: '방은수 블로그',
-        }
-    }
+//     if ('error' in responsePost) {
+//         return {
+//             title: '방은수 블로그',
+//         }
+//     }
 
-    return {
-        title: responsePost.post.title,
-        description: responsePost.post.summary,
-    }
-}
+//     return {
+//         title: responsePost.post.title,
+//         description: responsePost.post.summary,
+//     }
+// }
 
 const DetailPostLayout: FC<PropsWithChildren> = ({ children }) => {
     return (

@@ -33,7 +33,8 @@ export const useAdminSession = ({ isProtectedRoute = false, options = { required
     })
 
     const isAdminAuthorized = status === 'authenticated' && session?.user?.isAdmin === true
-    const adminId = (!!session?.user['@id'] && session?.user?.isAdmin === true && session.user['@id']) || undefined
+    const sessionUserId =
+        (!!session?.user['@id'] && session?.user?.isAdmin === true && session.user['@id']) || undefined
 
-    return { isAdminAuthorized, adminId, status }
+    return { isAdminAuthorized, sessionUserId, status }
 }

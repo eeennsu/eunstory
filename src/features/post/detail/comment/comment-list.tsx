@@ -2,14 +2,14 @@ import type { FC } from 'react'
 import { CommentItem } from './comment-item'
 import { getServerAuth } from '@/lib/auth'
 import { PostComment } from '@/entities/post-comment/post-comment.types'
+import { useAdminSession } from '@/lib/hooks'
 
 interface Props {
     comments: PostComment[]
 }
 
-export const CommentList: FC<Props> = async ({ comments }) => {
-    const { user } = await getServerAuth()
-    const currentUserId = user?.['@id']
+export const CommentList: FC<Props> = ({ comments }) => {
+    const { sessionUserId } = useAdminSession()
 
     const reducedComment = comments.reduce<PostComment[]>((acc, cur) => {
         if (!cur.parentId) {
@@ -31,7 +31,7 @@ export const CommentList: FC<Props> = async ({ comments }) => {
                     <CommentItem
                         key={comment?.id}
                         comment={comment}
-                        currentUserId={currentUserId}
+                        currentUserId={sessionUserId}
                     />
                 ))}
         </section>
