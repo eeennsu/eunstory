@@ -2,8 +2,6 @@ import { NextResponseData } from '@/lib/fetch'
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '../../../../../prisma/prisma-client'
 
-export const dynamic = 'force-dynamic'
-
 export const GET = async (_: NextRequest) => {
     try {
         const posts = await prisma.post.findMany({

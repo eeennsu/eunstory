@@ -1,11 +1,22 @@
-import { serverRequestGetPostTagList } from '@/entities/post'
+'use client'
+
+import { requestGetPostTagList } from '@/entities/post'
+import { useAsync } from '@/lib/hooks'
 import { Badge } from '@/lib/ui/badge'
-import type { FC } from 'react'
+import { useState, type FC } from 'react'
 
-export const PostTagsInfo: FC = async () => {
-    const tagsResponse = await serverRequestGetPostTagList()
+export const PostTagsInfo: FC = () => {
+    const [postTags, setPostTags] = useState<string[]>([])
+    const { isLoading, error } = useAsync(async () => {
+        const responseComments = await requestGetPostTagList()
 
-    const postTags = 'error' in tagsResponse ? [] : tagsResponse.tags
+        if ('error' in responseComments) {
+            setPostTags([])
+            return
+        }
+
+        setPostTags(responseComments.tags)
+    }, [])
 
     return (
         <section className='flex flex-col flex-grow gap-4'>
@@ -16,20 +27,26 @@ export const PostTagsInfo: FC = async () => {
                 </span>
             </h3>
 
-            {postTags.length !== 0 && (
-                <div className='custom-scrollbar max-h-[calc(100vh-600px)] p-3 bg-gray-800/60 rounded-sm h-full'>
-                    <div className='flex gap-2.5'>
-                        {postTags.map((tag, index) => (
-                            <Badge
-                                key={index}
-                                className='h-fit'
-                                variant={'tag'}>
-                                {tag}
-                            </Badge>
-                        ))}
-                    </div>
+            <div className='custom-scrollbar max-h-[calc(100vh-600px)] p-3 bg-gray-800/60 rounded-sm h-full'>
+                <div className='flex gap-2.5'>
+                    {isLoading
+                        ? Array.from({ length: 5 }, (_, index) => (
+                              <Badge
+                                  key={index}
+                                  className='h-6 w-9 animate-pulse'
+                                  variant={'tag'}></Badge>
+                          ))
+                        : !error &&
+                          postTags.map((tag, index) => (
+                              <Badge
+                                  key={index}
+                                  className='h-fit'
+                                  variant={'tag'}>
+                                  {tag}
+                              </Badge>
+                          ))}
                 </div>
-            )}
+            </div>
         </section>
     )
 }

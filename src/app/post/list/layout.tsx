@@ -1,5 +1,5 @@
 import { FloatingMenu } from '@/features/post/detail/post'
-import { PostListSidebarWidget } from '@/widgets/post/list/post-list-sidebar-widget'
+import { PostListSidebarWidget } from '@/widgets/post/list'
 import type { FC, PropsWithChildren } from 'react'
 
 const PostListLayout: FC<PropsWithChildren> = async ({ children }) => {

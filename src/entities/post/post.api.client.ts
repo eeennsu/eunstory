@@ -8,6 +8,7 @@ import { generateRequest } from '@/lib/fetch'
 import { Post } from '@prisma/client'
 import { PaginationParams } from '../common'
 import { ResponseGetPostNavigationType } from '@/app/api/post/[id]/navigation/route'
+import { ResponseGetActivePostCountType } from '@/app/api/post/active-count/route'
 
 export const requestGetAllPostList = async ({ isPublished }: { isPublished: boolean }) => {
     const params = new URLSearchParams()
@@ -15,9 +16,6 @@ export const requestGetAllPostList = async ({ isPublished }: { isPublished: bool
 
     return generateRequest<undefined, ResponseGetPostListType>({
         url: `/post?${params.toString()}`,
-        config: {
-            cache: 'no-store',
-        },
     })
 }
 
@@ -102,5 +100,20 @@ export const requestGetPostNavigation = async ({ id, order }: { id: string; orde
 
     return generateRequest<undefined, ResponseGetPostNavigationType>({
         url: `/post/${id}/navigation?${params.toString()}`,
+    })
+}
+
+export const requestGetPostTagList = async () => {
+    return generateRequest<undefined, { tags: string[] }>({
+        url: '/post/tags',
+    })
+}
+
+export const requestGetActivePostCount = async (recentlyMonth?: number) => {
+    const params = new URLSearchParams()
+    recentlyMonth && params.append('recently', recentlyMonth.toString())
+
+    return generateRequest<undefined, ResponseGetActivePostCountType>({
+        url: `/post/active-count?${params.toString()}`,
     })
 }

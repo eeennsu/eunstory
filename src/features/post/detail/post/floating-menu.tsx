@@ -13,7 +13,7 @@ interface Props {
 
 export const FloatingMenu: FC<Props> = ({ hasBackButton = true, scrollThreshold = 200 }) => {
     const { barRouter } = useProgressBar()
-    const [showScrollTop, setShowScrollTop] = useState(false)
+    const [showScrollTop, setShowScrollTop] = useState<boolean>(false)
 
     const handleScrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })

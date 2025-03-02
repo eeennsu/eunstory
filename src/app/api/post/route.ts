@@ -35,8 +35,7 @@ export const GET = async (request: NextRequest) => {
                 isActive: true,
                 ...(isPublished ? { order: { not: null } } : { order: null }),
                 ...(tag && {
-                    tags: { 
-                    },
+                    tags: {},
                 }),
             },
             orderBy: {

@@ -1,5 +1,3 @@
-// post list edit page
-
 import { serverRequestGetAllPostList } from '@/entities/post'
 import { EditPostOrderWidget } from '@/widgets/post/edit'
 import { FC } from 'react'
@@ -28,3 +26,5 @@ const EditPostListPage: FC = async () => {
 }
 
 export default EditPostListPage
+
+export const dynamic = 'force-dynamic'

@@ -1,7 +1,6 @@
 'use client'
 
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { Post } from '@prisma/client'
 import { useState, type FC } from 'react'
 import dynamic from 'next/dynamic'
 import { CustomSortableItem, Sortable } from '@/features/common/dnd/sortable'
@@ -16,16 +15,19 @@ interface Props {
 }
 
 export type DraggablePost = PostListItem & CustomSortableItem
+type DndMode = 'edit' | 'view'
 
 /* 
     DnDProvider를 dynamic을 사용하여 import 하는 이유
     --> 브라우저 환경에서만 작동하는 DOM 요소를 사용하기 때문에, SSR 환경에서는 제대로 작동하지 않을 수 있음
 */
 
-const DndProvider = dynamic(() => import('@/features/common/dnd').then((md) => md.DndProvider), { ssr: false })
+const DndProviderDynamic = dynamic(() => import('@/features/common/dnd').then((module) => module.DndProvider), {
+    ssr: false,
+})
 
 export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {
-    const [mode, setMode] = useState<'edit' | 'view'>('view')
+    const [mode, setMode] = useState<DndMode>('view')
     const [sortablePosts, setSortablePosts] = useState<DraggablePost[]>(
         allPosts.map((post, i) => ({ ...post, sequence: allPosts.length - i }))
     )
@@ -70,7 +72,7 @@ export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {
                         ))}
                     </div>
                 ) : (
-                    <DndProvider onDragEnd={handleDragEnd}>
+                    <DndProviderDynamic onDragEnd={handleDragEnd}>
                         <SortableContext
                             items={sortablePosts.map((post) => post.sequence)}
                             strategy={verticalListSortingStrategy}>
@@ -93,7 +95,7 @@ export const EditPostOrderWidget: FC<Props> = ({ allPosts, totalCount }) => {
                                 </Sortable>
                             ))}
                         </SortableContext>
-                    </DndProvider>
+                    </DndProviderDynamic>
                 )}
             </section>
         </div>

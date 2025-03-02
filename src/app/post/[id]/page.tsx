@@ -35,5 +35,3 @@ const DetailPostPage: FC<Props> = async ({ params }) => {
 }
 
 export default DetailPostPage
-
-export const dynamicParams = true

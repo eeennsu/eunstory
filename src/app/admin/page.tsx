@@ -1,8 +1,9 @@
-import { AdminCommentsWidget, AdminAccountsWidget } from '@/widgets/admin'
+import { AdminAccountsWidgetDynamic, AdminCommentsWidgetDynamic } from '@/widgets/admin'
 import { LayoutDashboard } from 'lucide-react'
+
 import type { FC } from 'react'
 
-const AdminPage: FC = async () => {
+const AdminPage: FC = () => {
     return (
         <main className='page-container pt-24 pb-10 gap-10'>
             <section className='flex gap-2 w-full items-center justify-center'>
@@ -10,8 +11,8 @@ const AdminPage: FC = async () => {
                 <LayoutDashboard />
             </section>
             <section className='flex flex-col gap-10'>
-                <AdminAccountsWidget />
-                <AdminCommentsWidget />
+                <AdminAccountsWidgetDynamic />
+                <AdminCommentsWidgetDynamic />
             </section>
         </main>
     )

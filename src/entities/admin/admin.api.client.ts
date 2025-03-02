@@ -10,9 +10,6 @@ export const requestGetAllCommentList = async ({ curPage, perPage }: PaginationP
 
     return generateRequest<undefined, ResponseGetAllCommentListType>({
         url: `/admin/comment?${params.toString()}`,
-        config: {
-            cache: 'no-store',
-        },
     })
 }
 
@@ -23,8 +20,5 @@ export const requestGetAllAccounts = async ({ curPage, perPage }: PaginationPara
 
     return generateRequest<undefined, ResponseGetAccountListType>({
         url: `/admin/account?${params.toString()}`,
-        config: {
-            cache: 'no-store',
-        },
     })
 }
