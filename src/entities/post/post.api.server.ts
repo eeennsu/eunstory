@@ -54,11 +54,25 @@ export const serverRequestGetSomePostList = async ({
             },
         })
 
+        console.log(
+            'posts:',
+            posts.map((post) => post.title)
+        )
+
         return { totalCount: isPublished ? totalCount : posts.length, posts }
     } catch (error) {
         console.error('serverRequestGetSomePostList error:', error)
         return { error: 'Internal Server Error' }
     }
+}
+
+export const serverRequestGetPostListBySearch = async (keyword: string) => {
+    const params = new URLSearchParams()
+    params.append('keyword', keyword)
+
+    return generateRequest<undefined, ResponseGetSearchedPostListType>({
+        url: `/post/search?${params.toString()}`,
+    })
 }
 
 export const serverRequestGetDetailPost = async ({ postId, isPublished }: { postId: string; isPublished: boolean }) => {
@@ -71,19 +85,31 @@ export const serverRequestGetDetailPost = async ({ postId, isPublished }: { post
 
     return generateRequest<undefined, ResponseGetDetailPostType>({
         url: `/post/${postId}?${params.toString()}`,
-        config: {
-            next: {
-                revalidate: 60 * 60, // 1 hours
-            },
-        },
     })
 }
 
-export const serverRequestGetPostListBySearch = async (keyword: string) => {
-    const params = new URLSearchParams()
-    params.append('keyword', keyword)
+// export const serverRequestGetDetailPost = async ({ postId, isPublished }: { postId: string; isPublished: boolean }) => {
+//     if (!postId) {
+//         throw new Error(`Post id must be required`)
+//     }
 
-    return generateRequest<undefined, ResponseGetSearchedPostListType>({
-        url: `/post/search?${params.toString()}`,
-    })
-}
+//     try {
+//         const post = await prisma.post.findFirst({
+//             where: {
+//                 id: postId,
+//                 ...(isPublished && { order: { not: null } }),
+//             },
+//         })
+
+//         if (!post) {
+//             throw new Error(`Post not found`)
+//         }
+
+//         console.log('success detail post title :', post.title)
+
+//         return { post }
+//     } catch (error) {
+//         console.error('❌ serverRequestGetDetailPost error:', error)
+//         return { error: 'Internal Server Error' }
+//     }
+// }
