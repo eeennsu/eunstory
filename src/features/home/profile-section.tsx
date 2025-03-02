@@ -1,3 +1,4 @@
+import { HOME_TITLE } from '@/shared/constants'
 import Image from 'next/image'
 import { FC } from 'react'
 
@@ -8,12 +9,11 @@ export const ProfileSection: FC = () => {
                 <Image
                     src='/images/main-me.jpeg' // 사진의 올바른 경로로 수정
                     alt='Eunsu Bang'
-                    layout='fill'
-                    objectFit='cover'
                     className='rounded-full'
+                    fill
                 />
             </figure>
-            <figcaption className='text-4xl font-bold text-gray-50'>👋 안녕하세요, 방은수입니다</figcaption>
+            <figcaption className='text-4xl font-bold text-gray-50'>{HOME_TITLE}</figcaption>
         </section>
     )
 }

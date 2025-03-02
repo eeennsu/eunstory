@@ -54,11 +54,6 @@ export const serverRequestGetSomePostList = async ({
             },
         })
 
-        console.log(
-            'posts:',
-            posts.map((post) => post.title)
-        )
-
         return { totalCount: isPublished ? totalCount : posts.length, posts }
     } catch (error) {
         console.error('serverRequestGetSomePostList error:', error)
@@ -75,6 +70,7 @@ export const serverRequestGetPostListBySearch = async (keyword: string) => {
     })
 }
 
+// deprecated: this function changed for below function by ssg
 // export const serverRequestGetDetailPost = async ({ postId, isPublished }: { postId: string; isPublished: boolean }) => {
 //     if (!postId) {
 //         throw new Error(`Post id must be required`)
@@ -104,8 +100,6 @@ export const serverRequestGetDetailPost = async ({ postId, isPublished }: { post
         if (!post) {
             throw new Error(`Post not found`)
         }
-
-        console.log('success detail post title :', post.title)
 
         return { post }
     } catch (error) {

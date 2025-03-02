@@ -46,8 +46,6 @@ export const GET = async (request: NextRequest) => {
             },
         })) as SearchedPost[]
 
-        console.log('posts', posts)
-
         if (!posts) {
             return NextResponse.json({ error: 'Posts not found' }, { status: 404 })
         }

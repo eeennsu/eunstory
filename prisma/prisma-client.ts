@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import { createDefaultAdmin } from './initialize-data'
 
 declare const globalThis: {
     prismaGlobal: PrismaClient

@@ -1,8 +1,8 @@
 import { assertValue } from '@/lib/utils'
 import { PrismaClient } from '@prisma/client'
-
 import bcrypt from 'bcryptjs'
 
+// deprecated: not using this function when initializing prisma
 export const createDefaultAdmin = async (prisma: PrismaClient) => {
     const adminId = assertValue(process.env.ADMIN_ID)
     const adminPassword = assertValue(process.env.ADMIN_PASSWORD)
